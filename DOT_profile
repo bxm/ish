@@ -6,6 +6,7 @@ alias vim='vi'
 stat() { git status "$@" ; }
 push() { git push "$@" ; }
 pull() { git pull "$@" ; }
+giff() { git diff "$@" ; }
 
 alias src='source "${HOME}/.profile"'
 
@@ -16,7 +17,7 @@ comm() {
 
 c() {
   case "$1" in
-    (comm|stat|push|pull|git) 
+    (comm|stat|push|pull|giff|git) 
       (
         cd "${HOME}/code/ish"
         "$@"

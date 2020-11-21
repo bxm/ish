@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-scan(){                                         
+multi_thread(){                                         
   seq -s $'\n'192.168.0. 0 254 \
     | tail +2 \
     | xargs -n1 -P64 -I% \
@@ -31,8 +31,12 @@ EOF
   exit
 }
 
-case "$1" in
-  (do       ) shift ; $* ;;
-  (port|ping) scan $*  ;;
-  (*        ) usage ;;
-esac
+main() {
+  case "$1" in
+    (do       ) shift ; $* ;;
+    (port|ping) multi_thread $* ;;
+    (*        ) usage ;;
+  esac
+}
+
+main "$@"
