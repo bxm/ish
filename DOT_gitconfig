@@ -1,0 +1,10 @@
+[include]
+  path = ~/.gitconfig_user
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+  pager = true
