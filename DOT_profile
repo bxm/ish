@@ -1,0 +1,27 @@
+alias ll='ls -l'
+alias lla='ll -a'
+alias lltr='ll -tr'
+alias vim='vi'
+
+stat() { git status "$@" ; }
+push() { git push "$@" ; }
+pull() { git pull "$@" ; }
+
+alias src='source "${HOME}/.profile"'
+
+comm() {
+  git commit -am "$*"
+  git push
+}
+
+c() {
+  case "$1" in
+    (comm|stat|push|pull|git) 
+      (
+        cd "${HOME}/code/ish"
+        "$@"
+      )
+      ;;
+     (*) echo "$1 not supported" ;; 
+  esac
+}
