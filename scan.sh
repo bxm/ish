@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 scan(){                                         
   seq -s $'\n'192.168.0. 0 254 \
     | tail +2 \
