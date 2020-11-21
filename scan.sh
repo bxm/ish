@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 scan(){                                         
-#  seq 1 254 \
-#    | sed 's/^/192.168.0./' \
   seq -s $'\n'192.168.0. 0 254 \
     | tail +2 \
     | xargs -n1 -P64 -I% \
