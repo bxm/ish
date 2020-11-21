@@ -22,7 +22,17 @@ ping(){
     && echo $1 up - $(getname $1)
 }
 
+usage() {
+  exec >&2
+<<EOF cat
+Usage: ${0##*/} [ping|port #]
+Perform a simple ping/port scan of the local network
+EOF
+  exit
+}
+
 case "$1" in
   (do       ) shift ; $* ;;
   (port|ping) scan $*  ;;
+  (*        ) usage ;;
 esac
