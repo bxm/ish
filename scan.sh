@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
+
 multi_thread(){                                         
   seq -s $'\n'192.168.0. 0 254 \
     | tail +2 \
     | xargs -n1 -P64 -I% \
        $0 do $* % \
     | sort -V
+  true
 }
 
 port(){
@@ -32,11 +34,22 @@ EOF
 }
 
 main() {
-  case "$1" in
-    (do       ) shift ; $* ;;
-    (port|ping) multi_thread $* ;;
-    (*        ) usage ;;
-  esac
+  if [ "$1" = do ] ; then shift ; "$@" ; return ; fi
+
+  while [ $# -gt 0 ] ; do
+    case "$1" in
+      (port) ACTION="$1" ; PARAM="$2" ; shift ;;
+      (ping) ACTION="$1" ;;
+      (-r?*|--range=?*) RANGE="${1#-r}" ; RANGE="${RANGE#*=}" ;;
+      (-r  |--range   ) RANGE="${2}" ; shift ;;
+      (*) usage ;;
+    esac
+    shift
+  done
+  # parse range func
+  # error if no action
+  # sane defaults for range and port?    
+  multi_thread $ACTION $PARAM
 }
 
 main "$@"
