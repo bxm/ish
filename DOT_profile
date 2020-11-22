@@ -10,6 +10,16 @@ giff() { git diff "$@" ; }
 
 alias src='source "${HOME}/.profile"'
 
+col() {
+  local COL
+  case "$1" in
+   (1) COL='$1' ;;
+   (2) COL='$1,$2' ;;
+   (3) COL='$1,$2,$' ;;
+  esac
+  awk "{print $COL}"
+}
+
 comm() {
   git commit -am "$*"
   git push
