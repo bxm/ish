@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
-multi_thread(){                                         
+multi_thread(){
   seq -s $'\n'192.168.0. 0 254 \
     | tail +2 \
     | xargs -n1 -P64 -I% \
        $0 do $* % \
     | sort -V
   true
-# flip params around so ip comes first 
+# flip params around so ip comes first
 # then we could have multiple ports
 }
 
@@ -20,8 +20,8 @@ port(){
 getname(){
   nslookup $1 | awk -F" " '$2 == "name" {print $NF}'
 }
-                                                  
-ping(){                                           
+
+ping(){
   command ping $1 -W1 -c1 >/dev/null 2>&1 \
     && echo $1 up - $(getname $1)
 }
@@ -39,6 +39,7 @@ parse_range() {
   # split off final octet
   #   if hyphen present is range otherwise single
   # generate three arrays, subnet, start octet, end octet
+  true
 }
 
 main() {
@@ -58,7 +59,7 @@ main() {
   done
   # parse range func
   # error if no action
-  # sane defaults for range and port?    
+  # sane defaults for range and port?
   multi_thread $ACTION $PARAM
 }
 
