@@ -51,6 +51,7 @@ main() {
       (port) ACTION="$1" ; PARAM="$2" ; shift ;;
       (ping) ACTION="$1" ;;
 # allow multiple ranges via assoc array
+# -- ash does not support arrays at all
       (-r?*|--range=?*) RANGE="${1#-r}" ; RANGE="${RANGE#*=}" ;;
       (-r  |--range   ) RANGE="${2}" ; shift ;;
       (*) usage ;;
