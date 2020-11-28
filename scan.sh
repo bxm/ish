@@ -9,6 +9,8 @@ multi_thread(){
   true
 # flip params around so ip comes first
 # then we could have multiple ports
+# that breaks the case, would need to split first param
+# like port/ping and put the rest after %
 }
 
 port(){
