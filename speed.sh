@@ -7,11 +7,11 @@ while [ ${ITER} -gt 0 ] ; do
 
   while [ ${SMOOTH} -gt 0 ] ; do
     : $((SMOOTH-=1))
-    printf "  ${ITER} / ${SMOOTH}\r" >&2
+    #printf "  ${ITER} / ${SMOOTH}\r" >&2
     ping 8.8.8.8 -c 1
     sleep 0.1
   done \
     | grep -oE time=[^\ ]+ \
-    | awk -F= '{n+=$NF ; i+=1} END {print "\n"n/i}'
+    | awk -F= '{n+=$NF ; i+=1 ; printf "%3f\r" n/i} END {print ""}' #END {print n/i"\n"}'
 
 done
