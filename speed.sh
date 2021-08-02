@@ -7,7 +7,7 @@ while [ ${ITER} -gt 0 ] ; do
 
   while [ ${SMOOTH} -gt 0 ] ; do
     : $((SMOOTH-=1))
-    echo "  ${ITER} / ${SMOOTH}\r\c" >&2
+    printf "  ${ITER} / ${SMOOTH}\r" >&2
     ping 8.8.8.8 -c 1
     sleep 0.1
   done \
