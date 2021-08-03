@@ -5,9 +5,11 @@ alias vim='vi'
 
 stat() { git status "$@" ; }
 push() { git push "$@" ; }
+pf() { push --force-with-lease "$@" ; }
 pull() { git pull "$@" ; }
 giff() { git diff "$@" ; }
 gco() { git checkout "$@" ; }
+gbr() { git branch "$@" ; }
 
 alias src='source "${HOME}/.profile"'
 
@@ -16,7 +18,7 @@ col() {
   case "$1" in
    (1) COL='$1' ;;
    (2) COL='$1,$2' ;;
-   (3) COL='$1,$2,$' ;;
+   (3) COL='$1,$2,$3' ;;
   esac
   awk "{print $COL}"
 }
@@ -28,7 +30,10 @@ comm() {
 
 c() {
   case "$1" in
-    (cd|comm|stat|push|pull|giff|git|gco) 
+    (cd) 
+      cd "${HOME}/code/ish"
+      ;;  
+    (*)
       (
         cd "${HOME}/code/ish"
         "$@"
