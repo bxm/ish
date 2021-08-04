@@ -5,6 +5,7 @@ alias vim='vi'
 
 stat() { git status "$@" ; }
 push() { git push "$@" ; }
+setup() { push origin HEAD ; }
 pf() { push --force-with-lease "$@" ; }
 pull() { git pull "$@" ; }
 giff() { git diff "$@" ; }
