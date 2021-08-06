@@ -1,5 +1,5 @@
 rand(){
-  strings /dev/random|grep -Eo "[1-6]" | head -1
+  strings /dev/random | grep -Eo "[1-6]" | head -1
 }
 
 roll(){
@@ -15,14 +15,14 @@ roll(){
 
   eval r="\$$i"
   r="${r//\// }"
-  top=".${r// *}."
-  top=" ${top//?/-} "
+  hline=".${r// *}."
+  hline=" ${hline//?/-} "
   clear
   echo
-  echo "$top"
+  echo "$hline"
   printf "| %s |\n| %s |\n| %s |" $r | sed 's/[.]/ /g'
   echo
-  echo "$top"
+  echo "$hline"
   echo
 }
 
