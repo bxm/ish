@@ -6,16 +6,23 @@ roll(){
   #i=$((RANDOM % 6 + 1))
   i=$(rand)
   set -- \
-    .../.o./... \
-    o../.../..o \
-    o../.o./..o \
-    o.o/.../o.o \
-    o.o/.o./o.o \
-    o.o/o.o/o.o
+    ...../..o../..... \
+    o..../...../....o \
+    o..../..o../....o \
+    o...o/...../o...o \
+    o...o/..o../o...o \
+    o...o/o...o/o...o
 
   eval r="\$$i"
   r="${r//\// }"
-  printf "%s\n%s\n%s\n\n" $r | sed 's/[.]/ /g'
+  top="${r// *}"
+  top=" ${top//?/-} "
+  clear
+  echo
+  echo "$top"
+  printf "|%s|\n|%s|\n|%s|\n" $r | sed 's/[.]/ /g'
+  echo "$top"
+  echo
 }
 
 basic(){
@@ -25,7 +32,14 @@ basic(){
 }
 
 main(){
-
-roll 
+  while true ; do
+    for x in a a a a a a ; do
+      sleep 0.1
+      roll 
+    done
+    unset ROLL
+    read -n1 -s ROLL
+    [ "$ROLL" = q ] && break  
+  done
 }
 main 
