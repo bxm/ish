@@ -15,12 +15,13 @@ roll(){
 
   eval r="\$$i"
   r="${r//\// }"
-  top="${r// *}"
+  top=".${r// *}."
   top=" ${top//?/-} "
   clear
   echo
   echo "$top"
-  printf "|%s|\n|%s|\n|%s|\n" $r | sed 's/[.]/ /g'
+  printf "| %s |\n| %s |\n| %s |" $r | sed 's/[.]/ /g'
+  echo
   echo "$top"
   echo
 }
@@ -33,13 +34,15 @@ basic(){
 
 main(){
   while true ; do
-    for x in a a a a a a ; do
+    for x in a a a a a ; do
+      roll
+      echo Rolling...
       sleep 0.1
-      roll 
     done
+    roll
     unset ROLL
     read -n1 -s ROLL
-    [ "$ROLL" = q ] && break  
+    [ "${ROLL/Q/q}" = q ] && break  
   done
 }
 main 
