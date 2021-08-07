@@ -1,5 +1,5 @@
 rand(){
-  strings /dev/random | grep -Eo "[1-6]" | head -1
+  strings /dev/urandom | grep -Eo "[1-6]" | head -1
 }
 
 size1(){
