@@ -3,24 +3,26 @@ rand(){
 }
 
 size1(){
-  echo \
-    ...../..o../..... \
-    o..../...../....o \
-    o..../..o../....o \
-    o...o/...../o...o \
-    o...o/..o../o...o \
-    o...o/o...o/o...o
+cat << EOF
+...../..o../.....
+o..../...../....o
+o..../..o../....o
+o...o/...../o...o
+o...o/..o../o...o
+o...o/o...o/o...o
+EOF
 }
 
 roll(){
   #i=$((RANDOM % 6 + 1))
+  [ "$1" = c ] && CLEAR=true
   i=$(rand)
   set -- $DIE
   eval r="\$$i"
   r="${r//\// }"
   hline=".${r// *}."
   hline=" ${hline//?/-} "
-  clear
+  $CLEAR && clear
   echo
   echo "$hline"
 #  printf "| %s |\n| %s |\n| %s |" $r | sed 's/[.]/ /g'
@@ -28,7 +30,7 @@ roll(){
     printf "| "
     printf "${line//./ }"
     printf " |"
-  echo
+    echo
   done
   echo "$hline"
   echo
@@ -40,18 +42,25 @@ basic(){
   eval echo $v \$$v
 }
 
+prompt(){
+  unset ROLL
+  printf "Roll again?"
+  read -n1 -s ROLL
+  echo
+  [ "${ROLL/Q/q}" = q ] && exit
+}
+
 main(){
   DIE="$(size1)"
   while true ; do
     for x in a a a a a ; do
-      roll
+      roll c
       echo Rolling...
       sleep 0.15
     done
-    roll
-    unset ROLL
-    read -n1 -s ROLL
-    [ "${ROLL/Q/q}" = q ] && break  
+
+    roll c
+    prompt || break
   done
 }
 main 
