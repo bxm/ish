@@ -23,8 +23,13 @@ roll(){
   clear
   echo
   echo "$hline"
-  printf "| %s |\n| %s |\n| %s |" $r | sed 's/[.]/ /g'
+#  printf "| %s |\n| %s |\n| %s |" $r | sed 's/[.]/ /g'
+  for line in $r ; do
+    printf "| "
+    printf "${line//./ }"
+    printf " |"
   echo
+  done
   echo "$hline"
   echo
 }
