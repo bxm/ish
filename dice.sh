@@ -76,7 +76,8 @@ prompt(){
   read -n1 -s REPLY
   case "${REPLY}" in
     ([qQnN]) echo ; false ;;
-    (*     ) true  ;;
+    ([1-9] ) DIE=$(size${REPLY}) ; true ;;
+    (*     ) true ;;
   esac
 }
 
