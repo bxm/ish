@@ -44,10 +44,10 @@ basic(){
 
 prompt(){
   unset ROLL
-  printf "Roll again?"
+  printf "Roll again? "
   read -n1 -s ROLL
-  echo
-  [ "${ROLL/Q/q}" = q ] && exit
+  echo $ROLL
+  [ "${ROLL/Q/q}" != q ]
 }
 
 main(){
