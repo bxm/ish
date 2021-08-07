@@ -12,46 +12,65 @@ o...o/..o../o...o
 o...o/o...o/o...o
 EOF
 }
+size2(){
+cat << EOF
+......../......../...().../......../........
+()....../......../......../......../......()
+()....../......../...().../......../......()
+()....()/......../......../......../()....()
+()....()/......../...().../......../()....()
+()....()/......../()....()/......../()....()
+EOF
+}
 
-roll(){
-  #i=$((RANDOM % 6 + 1))
-  [ "$1" = c ] && CLEAR=true
-  i=$(rand)
-  set -- $DIE
-  eval r="\$$i"
-  r="${r//\// }"
-  hline=".${r// *}."
-  hline=" ${hline//?/-} "
-  $CLEAR && clear
+draw_face(){
   echo
-  echo "$hline"
-#  printf "| %s |\n| %s |\n| %s |" $r | sed 's/[.]/ /g'
-  for line in $r ; do
+  echo "${H_LINE}"
+  for line in ${FACE} ; do
     printf "| "
     printf "${line//./ }"
     printf " |"
     echo
   done
-  echo "$hline"
+  echo "${H_LINE}"
   echo
+}
+
+roll(){
+  [ "${1}" = c ] && CLEAR=true || CLEAR=false
+  # RAND="$(rand)"
+  set -- ${DIE}
+  RAND=$((RANDOM % 6 + 1))
+  eval FACE="\$${RAND}" # assign the face value per the random number
+  FACE="${FACE//\// }"
+  H_LINE=".${FACE// *}."
+  H_LINE=" ${H_LINE//?/-} "
+  ${CLEAR} && clear
+  draw_face
 }
 
 basic(){
   v=$((RANDOM % 6 + 1))
   set -- one two three four five six
-  eval echo $v \$$v
+  eval echo ${v} \$${v}
 }
 
 prompt(){
-  unset ROLL
+  unset REPLY
   printf "Roll again? "
-  read -n1 -s ROLL
-  echo $ROLL
-  [ "${ROLL/Q/q}" != q ]
+  read -n1 -s REPLY
+  case "${REPLY}" in
+    ([qQnN]) echo ; false ;;
+    (*     ) true  ;;
+  esac
 }
 
 main(){
-  DIE="$(size1)"
+  case "${1}" in
+    ([1-2]) SIZE=size${1} ;;
+    (*    ) SIZE=size1    ;;
+  esac
+  DIE="$(${SIZE})"
   while true ; do
     for x in a a a a a ; do
       roll c
@@ -63,4 +82,4 @@ main(){
     prompt || break
   done
 }
-main 
+main "${@}"
