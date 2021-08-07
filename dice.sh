@@ -37,7 +37,10 @@ draw_face(){
 }
 
 roll(){
-  [ "${1}" = c ] && CLEAR=true || CLEAR=false
+  case "${1}" in
+    (clear) CLEAR=true ;;
+    (*    ) CLEAR=false ;;
+  esac
   # RAND="$(rand)"
   set -- ${DIE}
   RAND=$((RANDOM % 6 + 1))
@@ -66,19 +69,20 @@ prompt(){
 }
 
 main(){
+  # TODO proper param handling
   case "${1}" in
     ([1-2]) SIZE=size${1} ;;
     (*    ) SIZE=size1    ;;
   esac
   DIE="$(${SIZE})"
   while true ; do
-    for x in a a a a a ; do
-      roll c
+    for ANIMATE in 1 2 3 4 5 ; do
+      roll clear
       echo Rolling...
       sleep 0.15
     done
 
-    roll c
+    roll clear
     prompt || break
   done
 }
