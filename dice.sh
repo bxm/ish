@@ -103,11 +103,14 @@ prompt(){
 
 main(){
   # TODO proper param handling
+  while [ $# -gt 0 ] ; do
   
   case "${1}" in
     ([1-9]) SIZE=size${1} ;;
     (*    ) SIZE=size1    ;;
   esac
+  shift
+  done
   DIE="$(${SIZE})"
   while true ; do
     for ANIMATE in 1 2 3 4 5 ; do
