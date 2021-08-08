@@ -5,6 +5,9 @@ rand(){
 
 elaborate() {
   set -- $(${1})
+  # skip line defs to get pattern
+  # subshell preserves line defs
+  # to use in eval
   PATTERN=$(shift 5;echo "$@")
   for P in ${PATTERN} ; do
     for I in ${P//,/ } ; do
@@ -31,6 +34,10 @@ _inblanks1(){
 
 _outblanks(){
   sed 's/^/1,/;s/$/,1/'
+}
+
+_pad(){
+  sed -r 's/[^0-9, ]+/.&./'
 }
 
 size1(){
