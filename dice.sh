@@ -1,16 +1,17 @@
+# deprecated
 rand(){
   strings /dev/urandom | grep -Eo "[1-6]" | head -1
 }
 
-size1(){
-cat << EOF
-...../..o../.....
-o..../...../....o
-o..../..o../....o
-o...o/...../o...o
-o...o/..o../o...o
-o...o/o...o/o...o
-EOF
+elaborate() {
+  set -- $(${1})
+  PATTERN=$(shift 5;echo "$@")
+  for P in ${PATTERN} ; do
+    for I in ${P//,/ } ; do
+      eval printf "%s/" \$${I}
+    done
+    echo
+  done
 }
 
 _noblanks(){
@@ -24,7 +25,7 @@ cat <<EOF
 EOF
 }
 
-size1a(){
+size1(){
 cat << EOF
 .....
 ....o
@@ -35,26 +36,14 @@ $(_noblanks)
 EOF
 }
 
-elaborate() {
-  set -- $(${1})
-  PATTERN=$(shift 5;echo "$@")
-  # echo "${PATTERN}"
-  for P in ${PATTERN} ; do
-    for I in ${P//,/ } ; do
-      eval printf "%s/" \$${I}
-    done
-    echo
-  done
-}
-
 size2(){
 cat << EOF
-....../..()../......
-()..../....../....()
-()..../..()../....()
-()..()/....../()..()
-()..()/..()../()..()
-()..()/()..()/()..()
+......
+....XX
+..XX..
+XX....
+XX..XX
+$(_noblanks)
 EOF
 }
 
@@ -130,7 +119,7 @@ prompt(){
   read -n1 -s REPLY
   case "${REPLY}" in
     ([qQnN]) echo ; false ;;
-    ([1-9] ) DIE=$(size${REPLY}) ; true ;;
+    ([1-9] ) DIE="$(elaborate size${REPLY})" ; true ;;
     (*     ) true ;;
   esac
 }
@@ -146,15 +135,15 @@ main(){
   done
 
   #DIE="$(size${SIZE})"
-  DIE="$(elaborate size${SIZE}a)"
+  DIE="$(elaborate size${SIZE})"
   while true ; do
     for ANIMATE in 1 2 3 4 5 ; do
-      roll clear
+      roll xclear
       echo Rolling...
       sleep 0.15
     done
 
-    roll clear
+    roll xclear
     prompt || break
   done
 }
