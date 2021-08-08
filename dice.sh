@@ -60,13 +60,22 @@ draw_face(){
 }
 
 roll(){
-  case "${1}" in
-    (clear) CLEAR=true ;;
-    (*    ) CLEAR=false ;;
-  esac
-  # RAND="$(rand)"
+  CLEAR=false
+  while [ $# -gt 0 ] ; do
+    case "${1}" in
+      (clear) CLEAR=true ;;
+      (1-6  ) FORCE=${1} ;;
+      (*    ) CLEAR=false ;;
+    esac
+    shift
+  done
+
   set -- ${DIE}
-  RAND=$((RANDOM % 6 + 1))
+  if [ -z "${FORCE}" ] ; then
+    RAND=$((RANDOM % 6 + 1))
+  else
+    RAND="${FORCE}"
+  fi
   eval FACE="\$${RAND}" # assign the face value per the random number
   FACE="${FACE//\// }"
   H_LINE=".${FACE// *}."
@@ -94,6 +103,7 @@ prompt(){
 
 main(){
   # TODO proper param handling
+  
   case "${1}" in
     ([1-9]) SIZE=size${1} ;;
     (*    ) SIZE=size1    ;;
