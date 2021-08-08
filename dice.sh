@@ -13,6 +13,34 @@ o...o/o...o/o...o
 EOF
 }
 
+size1a(){
+cat << EOF
+.....
+....o
+..o..
+o....
+o...o
+1,3,1
+2,1,4
+2,3,4
+5,1,5
+5,3,5
+5,5,5
+EOF
+}
+
+elaborate() {
+  set -- $(${1})
+  PATTERN=$(shift 5;echo "$@")
+  # echo "${PATTERN}"
+  for P in ${PATTERN} ; do
+    for I in ${P//,/ } ; do
+      eval printf "%s/" \$${I}
+    done
+    echo
+  done
+}
+
 size2(){
 cat << EOF
 ....../..()../......
@@ -103,15 +131,16 @@ prompt(){
 
 main(){
   # TODO proper param handling
+  SIZE=1
   while [ $# -gt 0 ] ; do
-  
-  case "${1}" in
-    ([1-9]) SIZE=size${1} ;;
-    (*    ) SIZE=size1    ;;
-  esac
-  shift
+    case "${1}" in
+      ([1-9]) SIZE=${1} ;;
+    esac
+    shift
   done
-  DIE="$(${SIZE})"
+
+  #DIE="$(size${SIZE})"
+  DIE="$(elaborate size${SIZE}a)"
   while true ; do
     for ANIMATE in 1 2 3 4 5 ; do
       roll clear
