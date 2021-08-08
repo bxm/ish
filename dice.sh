@@ -54,6 +54,17 @@ _noblanks
 
 size2(){
 cat << EOF
+....
+..()
+.().
+()..
+()()
+EOF
+_noblanks
+}
+
+size3(){
+cat << EOF
 ......
 ....()
 ..()..
@@ -63,7 +74,7 @@ EOF
 _noblanks
 }
 
-size3(){
+size4(){
 cat << EOF
 ........
 ......()
@@ -74,13 +85,24 @@ EOF
 _noblanks | _inblanks1
 }
 
-size4(){
+size5(){
 cat << EOF | _pad
 ...........
 ........(@)
 ....(@)....
 (@)........
 (@).....(@)
+EOF
+_noblanks | _inblanks1 | _outblanks
+}
+
+size6(){
+cat << EOF | _pad
+:.........:
+::......(@)
+:...(@)...:
+(@)......::
+(@):...:(@)
 EOF
 _noblanks | _inblanks1 | _outblanks
 }
