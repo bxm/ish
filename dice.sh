@@ -8,6 +8,7 @@ elaborate() {
   # skip line defs to get pattern
   # subshell preserves line defs
   # to use in eval
+  # TODO: what if multi line?
   PATTERN=$(shift 5;echo "$@")
   for P in ${PATTERN} ; do
     for I in ${P//,/ } ; do
@@ -74,7 +75,7 @@ _noblanks | _inblanks1
 }
 
 size4(){
-cat << EOF
+cat << EOF | _pad
 ...........
 ........(@)
 ....(@)....
