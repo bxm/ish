@@ -32,19 +32,19 @@ cat << EOF
 ..o..
 o....
 o...o
-$(_noblanks)
 EOF
+_noblanks
 }
 
 size2(){
 cat << EOF
 ......
-....XX
-..XX..
-XX....
-XX..XX
-$(_noblanks)
+....()
+..()..
+()....
+()..()
 EOF
+_noblanks
 }
 
 size3(){
@@ -137,13 +137,13 @@ main(){
   #DIE="$(size${SIZE})"
   DIE="$(elaborate size${SIZE})"
   while true ; do
-    for ANIMATE in 1 2 3 4 5 ; do
-      roll xclear
+    for ANIMATE in 1 2 3 4 5 6 ; do
+      roll clear
       echo Rolling...
       sleep 0.15
     done
 
-    roll xclear
+    roll clear
     prompt || break
   done
 }
