@@ -133,11 +133,12 @@ prompt(){
 }
 
 main(){
-  # TODO proper param handling
   SIZE=1
+  DEBUG=false
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      ([1-9]) SIZE=${1} ;;
+      ([1-9]|[1-9][0-9]) SIZE=${1} ;;
+      (-d|--debug) DEBUG=true ;;
     esac
     shift
   done
@@ -145,13 +146,17 @@ main(){
   #DIE="$(size${SIZE})"
   DIE="$(elaborate size${SIZE})"
   while true ; do
-    for ANIMATE in 1 2 3 4 5 6 ; do
-      roll clear
-      echo Rolling...
+    for A in 1 2 3 4 5 6 ; do
+      if ${DEBUG} ; then
+        roll ${A}
+      else
+        roll clear
+        echo Rolling...
+      fi
       sleep 0.15
     done
 
-    roll clear
+    ${DEBUG} || roll clear
     prompt || break
   done
 }
