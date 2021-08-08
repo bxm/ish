@@ -41,6 +41,10 @@ _pad(){
   sed -r 's/[^0-9, ]+/.&./'
 }
 
+_expand(){
+  sed -r 's/[:]/:./g'
+}
+
 size1(){
 cat << EOF
 .....
@@ -97,7 +101,7 @@ _noblanks | _inblanks1 | _outblanks
 }
 
 size6(){
-cat << EOF | _pad
+cat << EOF | _pad | _expand
 :.........:
 ::......(@)
 :...(@)...:
@@ -112,7 +116,7 @@ draw_face(){
   echo "${H_LINE}"
   for line in ${FACE} ; do
     printf "| "
-    printf "${line//./ }"
+    printf "${line//[.:]/ }"
     printf " |"
     echo
   done
