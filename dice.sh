@@ -20,21 +20,21 @@ elaborate() {
 
 _noblanks(){
 cat <<EOF
-1,3,1
-2,1,4
-2,3,4
-5,1,5
-5,3,5
-5,5,5
+,1,,3,,1,
+,2,,1,,4,
+,2,,3,,4,
+,5,,1,,5,
+,5,,3,,5,
+,5,,5,,5,
 EOF
 }
 
-_inblanks1(){
-  sed 's/,/,1,/g'
+_inblanks(){
+  sed 's/,,/,,1,/g'
 }
 
 _outblanks(){
-  sed 's/^/1,/;s/$/,1/'
+  sed 's/^,/,1,/;s/,$/,1,/'
 }
 
 _pad(){
@@ -42,7 +42,7 @@ _pad(){
 }
 
 _expand(){
-  sed -r 's/[:]/:./g'
+  sed -r 's/[:]/:../g'
 }
 
 size1(){
@@ -86,29 +86,26 @@ cat << EOF
 ()......
 ()....()
 EOF
-_noblanks | _inblanks1
+_noblanks | _inblanks
 }
 
 size5(){
 cat << EOF | _pad
-...........
-........(@)
-....(@)....
-(@)........
-(@).....(@)
-EOF
-_noblanks | _inblanks1 | _outblanks
-}
-
-size6(){
-cat << EOF | _pad | _expand
 :.........:
 ::......(@)
 :...(@)...:
 (@)......::
 (@):...:(@)
 EOF
-_noblanks | _inblanks1 | _outblanks
+_noblanks | _inblanks | _outblanks
+}
+
+size6(){
+  size5 | _inblanks | _expand
+}
+
+size7(){
+  size6 | _outblanks | _pad | _pad
 }
 
 draw_face(){
