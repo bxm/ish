@@ -5,11 +5,8 @@ rand(){
 
 elaborate() {
   set -- $(${1})
-  # skip line defs to get pattern
-  # subshell preserves line defs
-  # to use in eval
-  # TODO: what if multi line?
-  PATTERN=$(shift 5;echo "$@")
+  # strip line defs to get pattern
+  PATTERN=$(echo "$@" | grep -Eo "[0-9,]+")
   for P in ${PATTERN} ; do
     for I in ${P//,/ } ; do
       eval printf "%s/" \$${I}
@@ -18,7 +15,7 @@ elaborate() {
   done
 }
 
-_noblanks(){
+_layout(){
 cat <<EOF
 ,1,,3,,1,
 ,2,,1,,4,
@@ -53,7 +50,7 @@ cat << EOF
 o....
 o...o
 EOF
-_noblanks
+_layout
 }
 
 size2(){
@@ -64,7 +61,7 @@ cat << EOF
 ()..
 ()()
 EOF
-_noblanks
+_layout
 }
 
 size3(){
@@ -75,7 +72,7 @@ cat << EOF
 ()....
 ()..()
 EOF
-_noblanks
+_layout
 }
 
 size4(){
@@ -86,7 +83,7 @@ cat << EOF
 ()......
 ()....()
 EOF
-_noblanks | _inblanks
+_layout | _inblanks
 }
 
 size5(){
@@ -97,7 +94,7 @@ cat << EOF | _pad
 (@)......::
 (@):...:(@)
 EOF
-_noblanks | _inblanks | _outblanks
+_layout | _inblanks | _outblanks
 }
 
 size6(){
