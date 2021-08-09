@@ -157,6 +157,7 @@ prompt(){
   unset REPLY
   printf "Roll again? "
   read -n1 -s REPLY
+  echo
   case "${REPLY}" in
     ([qQnN]) echo ; false ;;
     ([1-9] ) set_die "${REPLY}" ;;
