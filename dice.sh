@@ -56,12 +56,7 @@ o...o
 EOF
 }
 
-size1(){
-  _char_small  
-  _pattern_1_line
-}
-
-size3(){
+_char_medium(){
 cat << EOF
 :....:
 ::..()
@@ -69,15 +64,26 @@ cat << EOF
 ()..::
 ()::()
 EOF
+}
+
+size1(){
+  _char_small  
   _pattern_1_line
 }
 
-size2(){ # like 3 only smaller
-  size3 | _h_squash
+size2(){
+  _char_medium | _h_squash
+  _pattern_1_line
+}
+
+size3(){
+  _char_medium
+  _pattern_1_line
 }
 
 size4(){
-  size3 | _h_pad_in | _v_pad_in
+  _char_medium | _h_pad_in
+  _pattern_1_line | _v_pad_in
 }
 
 size5(){
