@@ -26,19 +26,19 @@ cat <<EOF
 EOF
 }
 
-_inblanks(){
+_inner_blanks(){
   sed 's/,,/,,1,/g'
 }
 
-_outblanks(){
+_outer_blanks(){
   sed 's/^,/,1,/;s/,$/,1,/'
 }
 
-_pad(){
+_h_pad_outer(){
   sed -r 's/[^0-9, ]+/.&./'
 }
 
-_expand(){
+_h_pad_inner(){
   sed -r 's/[:]/:../g'
 }
 
@@ -66,43 +66,36 @@ _layout
 
 size3(){
 cat << EOF
-......
-....()
-..()..
-()....
-()..()
+:....:
+::..()
+:.().:
+()..::
+()::()
 EOF
 _layout
 }
 
 size4(){
-cat << EOF
-........
-......()
-...()...
-()......
-()....()
-EOF
-_layout | _inblanks
+  size3 | _h_pad_inner | _inner_blanks
 }
 
 size5(){
-cat << EOF | _pad
+cat << EOF | _h_pad_outer
 :.........:
 ::......(@)
 :...(@)...:
 (@)......::
 (@):...:(@)
 EOF
-_layout | _inblanks | _outblanks
+_layout | _inner_blanks | _outer_blanks
 }
 
 size6(){
-  size5 | _inblanks | _expand
+  size5 | _inner_blanks | _h_pad_inner
 }
 
 size7(){
-  size6 | _outblanks | _pad | _pad
+  size6 | _outer_blanks | _h_pad_outer | _h_pad_outer
 }
 
 draw_face(){
@@ -112,9 +105,9 @@ draw_face(){
   ${CLEAR} && clear
   echo
   echo "${H_LINE}"
-  for line in ${FACE} ; do
+  for LINE in ${FACE} ; do
     printf "| "
-    printf "${line//[.:]/ }"
+    printf "${LINE//[.:]/ }"
     printf " |"
     echo
   done
