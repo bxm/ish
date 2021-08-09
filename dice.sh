@@ -118,22 +118,34 @@ draw_face(){
 roll(){
   CLEAR=false
   FORCE=0
+  NOT=0
+  ROLL=0
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      (clear) CLEAR=true ;;
-      ([1-6]) FORCE=${1} ;;
+      (clear ) CLEAR=true ;;
+      (![1-6]) NOT=${1/!} ;;
+      ([1-6] ) FORCE=${1} ;;
     esac
     shift
   done
-
+  ${DEBUG} && CLEAR=false
+  debug "NOT: ${NOT}"
+  debug "FORCE: ${FORCE}"
   set -- ${DIE}
   if [ "${FORCE}" -gt 0 ] ; then
     ROLL="${FORCE}"
   else
-    ROLL=$((RANDOM % 6 + 1))
+    while true ; do
+      ROLL=$((RANDOM % 6 + 1))
+      [ "${NOT}" -eq 0 ] && break
+      [ "${NOT}" -ne "${ROLL}" ] && break
+    done
   fi
+  debug "ROLL: ${ROLL}"
+
   eval FACE="\$${ROLL}" # assign the face value per the random number
   draw_face
+  return ${ROLL}
 }
 
 prompt(){
@@ -156,29 +168,37 @@ set_die(){
 }
 
 main_loop(){
+  LAST=0
   while true ; do
     for A in 1 2 3 4 5 6 ; do
-      if ${DEBUG} ; then
+      if ${TEST} ; then
         roll ${A}
       else
-        roll clear
+        roll clear !${LAST}
+        LAST=$?
         echo Rolling...
       fi
       sleep 0.15
     done
 
-    ${DEBUG} || roll clear
+    ${TEST} || roll clear
     prompt || break
   done
 }
 
+debug(){
+  ${DEBUG} && echo "DEBUG:$*"
+}
+
 process_params(){
   SIZE=1
+  TEST=false
   DEBUG=false
 
   while [ $# -gt 0 ] ; do
     case "${1}" in
       ([1-9]|[1-9][0-9]) SIZE=${1} ;;
+      (-t|--test ) TEST=true ;;
       (-d|--debug) DEBUG=true ;;
     esac
     shift
