@@ -157,19 +157,17 @@ roll(){
 }
 
 prompt(){
-  # TODO: remove -n1
-  #       add brief timeout
-  #       loop until not blank
-  #       - timeout gives 1 exit code
   unset REPLY
   printf "Roll again? "
-  read -n1 -s REPLY
-  echo
-  case "${REPLY}" in
-    ([qQnN]) echo ; false ;;
-    ([1-9] ) set_die "${REPLY}" ;;
-    (*     ) true ;;
-  esac
+  while true ; do
+    IFS= read -n1 -s REPLY
+    debug "REPLY: ${REPLY}"
+    case "${REPLY}" in
+      ([qQnN]) echo ; return 1 ;;
+      ([1-9] ) set_die "${REPLY}" ; return 0 ;;
+      ([a-zA-Z]|" ") echo ; return 0 ;;
+    esac
+  done
 }
 
 set_die(){
