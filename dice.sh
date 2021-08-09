@@ -4,7 +4,7 @@ rand(){
 }
 
 elaborate() {
-  set -- $(${1})
+  set -- $(size${1})
   # strip line defs to get pattern
   PATTERN=$(echo "$@" | grep -Eo "[0-9,]+")
   for P in ${PATTERN} ; do
@@ -155,9 +155,13 @@ prompt(){
   read -n1 -s REPLY
   case "${REPLY}" in
     ([qQnN]) echo ; false ;;
-    ([1-9] ) DIE="$(elaborate size${REPLY})" ; true ;;
+    ([1-9] ) set_die "${REPLY}" ;;
     (*     ) true ;;
   esac
+}
+
+set_die(){
+  DIE="$(elaborate ${1})"
 }
 
 main(){
@@ -171,8 +175,7 @@ main(){
     shift
   done
 
-  #DIE="$(size${SIZE})"
-  DIE="$(elaborate size${SIZE})"
+  set_die "${SIZE}"
   while true ; do
     for A in 1 2 3 4 5 6 ; do
       if ${DEBUG} ; then
