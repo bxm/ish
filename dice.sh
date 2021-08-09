@@ -158,18 +158,7 @@ set_die(){
   DIE="$(elaborate ${1})"
 }
 
-main(){
-  SIZE=1
-  DEBUG=false
-  while [ $# -gt 0 ] ; do
-    case "${1}" in
-      ([1-9]|[1-9][0-9]) SIZE=${1} ;;
-      (-d|--debug) DEBUG=true ;;
-    esac
-    shift
-  done
-
-  set_die "${SIZE}"
+main_loop(){
   while true ; do
     for A in 1 2 3 4 5 6 ; do
       if ${DEBUG} ; then
@@ -184,5 +173,25 @@ main(){
     ${DEBUG} || roll clear
     prompt || break
   done
+}
+
+process_params(){
+  SIZE=1
+  DEBUG=false
+
+  while [ $# -gt 0 ] ; do
+    case "${1}" in
+      ([1-9]|[1-9][0-9]) SIZE=${1} ;;
+      (-d|--debug) DEBUG=true ;;
+    esac
+    shift
+  done
+
+  set_die "${SIZE}"
+}
+
+main(){
+  process_params "${@}"
+  main_loop
 }
 main "${@}"
