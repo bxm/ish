@@ -3,25 +3,25 @@
 
 .DEFAULT_GOAL := help
 
-_icheck: # Inverted check of daemon (internal use)
+_icheck: # Inverted check of BusyBox daemon (internal use)
 	@! docker ps -f "Name=busybox" -q | grep .
 
-check: ## Check if daemon running
+check: ## Check if BusyBox daemon running
 	@docker ps -f "Name=busybox" -q | grep . && echo Running || echo Not running
 
-kill: ## Kill daemon
+kill: ## Kill BusyBox daemon
 	@docker kill busybox
 
-daemon: ## Start daemon
+daemon: ## Start BusyBox daemon
 	@docker run --rm -v ${PWD}:/code -w /code --name busybox -d -ti busybox:1.31.1 cat
 
-start: _icheck daemon check ## Start daemon if not running
+start: _icheck daemon check ## Start BusyBox daemon if not running
 
 run: start ## Synonym for start
 
-restart: kill daemon check ## Restart daemon
+restart: kill daemon check ## Restart BusyBox daemon
 
-login: ## Login to daemon
+login: ## Login to BusyBox daemon
 	@docker exec -ti busybox sh
 
 
