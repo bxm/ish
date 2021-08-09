@@ -106,6 +106,10 @@ size7(){
 }
 
 draw_face(){
+  FACE="${FACE//\// }"
+  H_LINE=".${FACE// *}."
+  H_LINE=" ${H_LINE//?/-} "
+  ${CLEAR} && clear
   echo
   echo "${H_LINE}"
   for line in ${FACE} ; do
@@ -136,17 +140,7 @@ roll(){
     ROLL=$((RANDOM % 6 + 1))
   fi
   eval FACE="\$${ROLL}" # assign the face value per the random number
-  FACE="${FACE//\// }"
-  H_LINE=".${FACE// *}."
-  H_LINE=" ${H_LINE//?/-} "
-  ${CLEAR} && clear
   draw_face
-}
-
-basic(){
-  v=$((RANDOM % 6 + 1))
-  set -- one two three four five six
-  eval echo ${v} \$${v}
 }
 
 prompt(){
