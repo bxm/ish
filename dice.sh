@@ -1,7 +1,4 @@
-# deprecated
-rand(){
-  strings /dev/urandom | grep -Eo "[1-6]" | head -1
-}
+#!/bin/env ash
 
 elaborate() {
   set -- $(size${1})
