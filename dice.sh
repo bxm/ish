@@ -1,4 +1,4 @@
-#!/bin/env ash
+#!/bin/sh
 
 elaborate() {
   set -- $(size${1})
