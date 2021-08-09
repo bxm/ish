@@ -6,7 +6,7 @@ rand(){
 elaborate() {
   set -- $(size${1})
   # strip line defs to get pattern
-  PATTERN=$(echo "$@" | grep -Eo "[0-9,]+")
+  PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+")
   for P in ${PATTERN} ; do
     for I in ${P//,/ } ; do
       eval printf "%s/" \$${I}
@@ -15,7 +15,27 @@ elaborate() {
   done
 }
 
-_layout(){
+_v_pad_in(){
+  sed 's/,,/,,1,/g'
+}
+
+_v_pad_out(){
+  sed 's/^,/,1,/;s/,$/,1,/'
+}
+
+_h_pad_out(){
+  sed -r 's/[^0-9, ]+/.&./'
+}
+
+_h_pad_in(){
+  sed 's/[:]/:../g'
+}
+
+_h_squash(){
+  sed 's/[:]//g'
+}
+
+_pattern_1_line(){
 cat <<EOF
 ,1,,3,,1,
 ,2,,1,,4,
@@ -26,21 +46,7 @@ cat <<EOF
 EOF
 }
 
-_v_pad_inner(){
-  sed 's/,,/,,1,/g'
-}
-
-_v_pad_outer(){
-  sed 's/^,/,1,/;s/,$/,1,/'
-}
-
-_h_pad_outer(){
-  sed -r 's/[^0-9, ]+/.&./'
-}
-
-_h_pad_inner(){
-  sed -r 's/[:]/:../g'
-}
+# TODO: these should be charset1, 2, 3 with sizes modifying those
 
 size1(){
 cat << EOF
@@ -50,18 +56,7 @@ cat << EOF
 o....
 o...o
 EOF
-_layout
-}
-
-size2(){
-cat << EOF
-....
-..()
-.().
-()..
-()()
-EOF
-_layout
+  _pattern_1_line
 }
 
 size3(){
@@ -72,30 +67,38 @@ cat << EOF
 ()..::
 ()::()
 EOF
-_layout
+  _pattern_1_line
+}
+
+size2(){ # like 3 only smaller
+  size3 | _h_squash
 }
 
 size4(){
-  size3 | _h_pad_inner | _v_pad_inner
+  size3 | _h_pad_in | _v_pad_in
 }
 
 size5(){
-cat << EOF | _h_pad_outer
+cat << EOF | _h_pad_out
 :.........:
 ::......(@)
 :...(@)...:
 (@)......::
 (@):...:(@)
 EOF
-_layout | _v_pad_inner | _v_pad_outer
+  _pattern_1_line | _v_pad_in | _v_pad_out
 }
 
 size6(){
-  size5 | _v_pad_inner | _h_pad_inner
+  size5 | _v_pad_in | _h_pad_in
 }
 
 size7(){
-  size6 | _v_pad_outer | _h_pad_outer | _h_pad_outer
+  size6 | _v_pad_out | _h_pad_out | _h_pad_out
+}
+
+size8() {
+  size5 | _h_squash
 }
 
 draw_face(){
@@ -137,6 +140,10 @@ roll(){
 }
 
 prompt(){
+  # TODO: remove -n1
+  #       add brief timeout
+  #       loop until not blank
+  #       - timeout gives 1 exit code
   unset REPLY
   printf "Roll again? "
   read -n1 -s REPLY
