@@ -46,7 +46,7 @@ EOF
 
 # TODO: these should be charset1, 2, 3 with sizes modifying those
 
-size1(){
+_char_small(){
 cat << EOF
 .....
 ....o
@@ -54,6 +54,10 @@ cat << EOF
 o....
 o...o
 EOF
+}
+
+size1(){
+  _char_small  
   _pattern_1_line
 }
 
