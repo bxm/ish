@@ -26,11 +26,11 @@ cat <<EOF
 EOF
 }
 
-_inner_blanks(){
+_v_pad_inner(){
   sed 's/,,/,,1,/g'
 }
 
-_outer_blanks(){
+_v_pad_outer(){
   sed 's/^,/,1,/;s/,$/,1,/'
 }
 
@@ -76,7 +76,7 @@ _layout
 }
 
 size4(){
-  size3 | _h_pad_inner | _inner_blanks
+  size3 | _h_pad_inner | _v_pad_inner
 }
 
 size5(){
@@ -87,15 +87,15 @@ cat << EOF | _h_pad_outer
 (@)......::
 (@):...:(@)
 EOF
-_layout | _inner_blanks | _outer_blanks
+_layout | _v_pad_inner | _v_pad_outer
 }
 
 size6(){
-  size5 | _inner_blanks | _h_pad_inner
+  size5 | _v_pad_inner | _h_pad_inner
 }
 
 size7(){
-  size6 | _outer_blanks | _h_pad_outer | _h_pad_outer
+  size6 | _v_pad_outer | _h_pad_outer | _h_pad_outer
 }
 
 draw_face(){
