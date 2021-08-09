@@ -4,7 +4,7 @@ elaborate() {
   debug "Elaborating size${1}"
   set -- $(size${1})
   # strip line defs to get pattern
-  PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+")
+  PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+,")
   for P in ${PATTERN} ; do
     for I in ${P//,/ } ; do
       eval printf "%s/" \$${I}
@@ -44,8 +44,6 @@ cat <<EOF
 EOF
 }
 
-# TODO: these should be charset1, 2, 3 with sizes modifying those
-
 _char_small(){
 cat << EOF
 .....
@@ -66,6 +64,16 @@ cat << EOF
 EOF
 }
 
+_char_large(){
+cat << EOF
+:.........:
+::......(@)
+:...(@)...:
+(@)......::
+(@):...:(@)
+EOF
+}
+
 size1(){
   _char_small  
   _pattern_1_line
@@ -82,18 +90,11 @@ size3(){
 }
 
 size4(){
-  _char_medium | _h_pad_in
-  _pattern_1_line | _v_pad_in
+  size3 | _h_pad_in | _v_pad_in
 }
 
 size5(){
-cat << EOF | _h_pad_out
-:.........:
-::......(@)
-:...(@)...:
-(@)......::
-(@):...:(@)
-EOF
+  _char_large | _h_pad_out
   _pattern_1_line | _v_pad_in | _v_pad_out
 }
 
@@ -103,10 +104,6 @@ size6(){
 
 size7(){
   size6 | _v_pad_out | _h_pad_out | _h_pad_out
-}
-
-size8() {
-  size5 | _h_squash
 }
 
 draw_face(){
