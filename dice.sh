@@ -1,6 +1,7 @@
 #!/bin/sh
 
 elaborate() {
+  debug "Elaborating size${1}"
   set -- $(size${1})
   # strip line defs to get pattern
   PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+")
@@ -187,7 +188,7 @@ main_loop(){
 }
 
 debug(){
-  ${DEBUG} && echo "DEBUG:$*"
+  ${DEBUG} && echo "DEBUG: $*" >&2
 }
 
 process_params(){
