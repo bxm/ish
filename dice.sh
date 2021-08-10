@@ -5,6 +5,7 @@ elaborate() {
   set -- $(size${1})
   # strip line defs to get pattern
   PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+,")
+  debug "PATTERN:\n${PATTERN}"
   for P in ${PATTERN} ; do
     for I in ${P//,/ } ; do
       eval printf "%s/" \$${I}
@@ -14,26 +15,32 @@ elaborate() {
 }
 
 _v_pad_in(){
+  # use embedded ,, as marker to insert blank lines
   sed 's/,,/,,1,/g'
 }
 
 _v_pad_out(){
+  # use leading and trailing , as marker to insert blank lines
   sed 's/^,/,1,/;s/,$/,1,/'
 }
 
 _h_pad_out(){
+  # anything that doesn't have the form of a pattern gets extra .
   sed -r 's/[^0-9, ]+/.&./'
 }
 
 _h_pad_in(){
+  # use : as a marker to insert extra .
   sed 's/[:]/:../g'
 }
 
 _h_squash(){
+  # remove any : markers
   sed 's/[:]//g'
 }
 
 _pattern_1_line(){
+# extraneous leading, trailing and embedded , are markers for _v_pad_in/out
 cat <<EOF
 ,1,,3,,1,
 ,2,,1,,4,
@@ -46,11 +53,11 @@ EOF
 
 _char_small(){
 cat << EOF
-.....
-....o
-..o..
-o....
-o...o
+:...:
+::..o
+:.o.:
+o..::
+o:.:o
 EOF
 }
 
@@ -74,8 +81,13 @@ cat << EOF
 EOF
 }
 
+size0(){
+  _char_small | _h_squash
+  _pattern_1_line
+}
+
 size1(){
-  _char_small  
+  _char_small
   _pattern_1_line
 }
 
@@ -107,7 +119,7 @@ size7(){
 }
 
 size8(){
-  size7 | _v_pad_in | _h_pad_in #| _h_pad_out
+  size7 | _v_pad_in | _h_pad_in
 }
 
 draw_face(){
@@ -168,7 +180,7 @@ prompt(){
     debug "REPLY: ${REPLY}"
     case "${REPLY}" in
       ([qQnN]) echo ; return 1 ;;
-      ([1-9] ) set_die "${REPLY}" ; return 0 ;;
+      ([0-9] ) set_die "${REPLY}" ; return 0 ;;
       ('['   ) : ;;
       ([\ -~]) return 0 ;;
     esac
@@ -177,6 +189,7 @@ prompt(){
 
 set_die(){
   DIE="$(elaborate ${1})"
+  debug "DIE:\n${DIE}"
 }
 
 main_loop(){
@@ -199,7 +212,7 @@ main_loop(){
 }
 
 debug(){
-  ${DEBUG} && echo "DEBUG: $*" >&2
+  ${DEBUG} && printf "## DEBUG ## >>$*<<\n" >&2
 }
 
 process_params(){
@@ -209,7 +222,7 @@ process_params(){
 
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      ([1-9]|[1-9][0-9]) SIZE=${1} ;;
+      ([0-9]|[1-9][0-9]) SIZE=${1} ;;
       (-t|--test ) TEST=true ;;
       (-d|--debug) DEBUG=true ;;
     esac
