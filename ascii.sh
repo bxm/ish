@@ -14,7 +14,7 @@ hex256(){
 
 main(){
 
-  hex256
+  hex256 | paste - - - - - -
 
 }
 

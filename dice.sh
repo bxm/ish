@@ -170,7 +170,7 @@ prompt(){
       ([qQnN]) echo ; return 1 ;;
       ([1-9] ) set_die "${REPLY}" ; return 0 ;;
       ('['   ) : ;;
-      ([\ -~]) echo ; return 0 ;;
+      ([\ -~]) return 0 ;;
     esac
   done
 }
@@ -188,7 +188,7 @@ main_loop(){
       else
         roll clear !${LAST}
         LAST=$?
-        echo Rolling...
+        printf "Rolling..."
       fi
       sleep 0.15
     done
