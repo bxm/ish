@@ -51,6 +51,18 @@ cat <<EOF
 EOF
 }
 
+_pattern_double_1_line(){
+# extraneous leading, trailing and embedded , are markers for _v_pad_in/out
+cat <<EOF
+,1,1,,3,3,,1,1,
+,2,2,,1,1,,4,4,
+,2,2,,3,3,,4,4,
+,5,5,,1,1,,5,5,
+,5,5,,3,3,,5,5,
+,5,5,,5,5,,5,5,
+EOF
+}
+
 _char_small(){
 cat << EOF
 :...:
@@ -78,6 +90,15 @@ cat << EOF
 :...(@)...:
 (@)......::
 (@):...:(@)
+EOF
+}
+_char_xlarge(){
+cat << EOF
+:.............:
+::........(@@@)
+:....(@@@)....:
+(@@@)........::
+(@@@):...:(@@@)
 EOF
 }
 
@@ -117,9 +138,13 @@ size6(){
 size7(){
   size6 | _v_pad_out | _h_pad_out | _h_pad_out
 }
-
 size8(){
   size7 | _v_pad_in | _h_pad_in
+}
+
+size9() {
+  _char_xlarge | _h_pad_in | _h_pad_out
+  _pattern_double_1_line | _v_pad_in | _v_pad_in | _v_pad_out
 }
 
 draw_face(){
