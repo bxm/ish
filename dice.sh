@@ -14,6 +14,23 @@ elaborate() {
   done
 }
 
+x_times() {
+  local i="${1:?}"
+  : "${2:?}"
+  shift
+  while [ "${i}" -gt 0 ] ; do
+    : $((i-=1))
+    "${@}"
+  done
+}
+
+_v_pad() {
+  case "${1:?}" in
+    (in ) x_times "${2:-1}" sed 's/,,/,,1,/g' ;;
+    (out) x_times "${2:-1}" sed 's/^,/,1,/;s/,$/,1,/' ;;
+  esac
+}
+
 _v_pad_in(){
   # use embedded ,, as marker to insert blank lines
   sed 's/,,/,,1,/g'
@@ -123,7 +140,7 @@ size3(){
 }
 
 size4(){
-  size3 | _h_pad_in | _v_pad_in
+  size3 | _h_pad_in | _v_pad in
 }
 
 size5(){
