@@ -106,6 +106,10 @@ size7(){
   size6 | _v_pad_out | _h_pad_out | _h_pad_out
 }
 
+size8(){
+  size7 | _v_pad_in | _h_pad_in #| _h_pad_out
+}
+
 draw_face(){
   FACE="${FACE//\// }"
   H_LINE=".${FACE// *}."
@@ -165,7 +169,8 @@ prompt(){
     case "${REPLY}" in
       ([qQnN]) echo ; return 1 ;;
       ([1-9] ) set_die "${REPLY}" ; return 0 ;;
-      ([a-zA-Z]|" ") echo ; return 0 ;;
+      ('['   ) : ;;
+      ([\ -~]) echo ; return 0 ;;
     esac
   done
 }
