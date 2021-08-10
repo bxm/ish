@@ -109,6 +109,7 @@ cat << EOF
 (@):...:(@)
 EOF
 }
+
 _char_xlarge(){
 cat << EOF
 :.............:
@@ -160,7 +161,7 @@ size8(){
 }
 
 size9() {
-  _char_xlarge | _h_pad_in | _h_pad_out
+  _char_xlarge | _h_pad_in | _h_pad_in | _h_pad_out
   _pattern_double_1_line | _v_pad_in | _v_pad_in | _v_pad_out
 }
 
