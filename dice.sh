@@ -61,12 +61,12 @@ _v_pad_out(){
 
 _h_pad_out(){
   # anything that doesn't have the form of a pattern gets extra .
-  sed -r 's/[^0-9, ]+/.&./'
+  x_sed 's/[^0-9, ]+/.&./' ${1}
 }
 
 _h_pad_in(){
   # use : as a marker to insert extra .
-  sed 's/[:]/:../g'
+  x_sed 's/[:]/:../g' ${1}
 }
 
 _h_squash(){
