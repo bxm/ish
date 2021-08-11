@@ -15,14 +15,32 @@ elaborate() {
 }
 
 x_times() {
-  local i="${1:?}"
-  : "${2:?}"
+  local i="${1:?Count missing}"
+  : "${2:?Command missing}"
   shift
   while [ "${i}" -gt 0 ] ; do
     : $((i-=1))
     "${@}"
   done
 }
+x_sed() {
+  debug x_sed "$@"
+  local i="${2:-1}"
+  local SED_CMD=''
+  while [ "${i}" -gt 0 ] ; do
+    : $((i-=1))
+    SED_CMD="${SED_CMD};$1"
+  done
+  sed -r "${SED_CMD}"
+}
+
+_pad(){
+  debug _pad "$@"
+  local DIR="${1:?}"
+  local LOC="${2:?}"
+  local TIM="${3:-1}"
+  _${DIR}_pad_${LOC} ${TIM}
+} 
 
 _v_pad() {
   case "${1:?}" in
@@ -33,12 +51,12 @@ _v_pad() {
 
 _v_pad_in(){
   # use embedded ,, as marker to insert blank lines
-  sed 's/,,/,,1,/g'
+  x_sed 's/,,/,,1,/g' ${1}
 }
 
 _v_pad_out(){
   # use leading and trailing , as marker to insert blank lines
-  sed 's/^,/,1,/;s/,$/,1,/'
+  x_sed 's/^,/,1,/;s/,$/,1,/' ${1}
 }
 
 _h_pad_out(){
@@ -259,10 +277,8 @@ debug(){
 }
 
 process_params(){
-  SIZE=1
-  TEST=false
-  DEBUG=false
 
+  debug process_params "$@"
   while [ $# -gt 0 ] ; do
     case "${1}" in
       ([0-9]|[1-9][0-9]) SIZE=${1} ;;
@@ -272,11 +288,16 @@ process_params(){
     shift
   done
 
-  set_die "${SIZE}"
 }
 
 main(){
+  SIZE=1
+  TEST=false
+  DEBUG=false
+
   process_params "${@}"
+  debug main "$@"
+  set_die "${SIZE}"
   main_loop
 }
 main "${@}"
