@@ -23,6 +23,7 @@ x_times() {
     "${@}"
   done
 }
+
 x_sed() {
   debug x_sed "$@"
   local i="${2:-1}"
@@ -41,13 +42,6 @@ _pad(){
   local TIM="${3:-1}"
   _${DIR}_pad_${LOC} ${TIM}
 } 
-
-_v_pad() {
-  case "${1:?}" in
-    (in ) x_times "${2:-1}" sed 's/,,/,,1,/g' ;;
-    (out) x_times "${2:-1}" sed 's/^,/,1,/;s/,$/,1,/' ;;
-  esac
-}
 
 _v_pad_in(){
   # use embedded ,, as marker to insert blank lines
@@ -74,7 +68,7 @@ _h_squash(){
   sed 's/[:]//g'
 }
 
-_pattern_1_line(){
+_patt_1_line(){
 # extraneous leading, trailing and embedded , are markers for _v_pad_in/out
 cat <<EOF
 ,1,,3,,1,
@@ -86,7 +80,7 @@ cat <<EOF
 EOF
 }
 
-_pattern_double_1_line(){
+_patt_double_1_line(){
 # extraneous leading, trailing and embedded , are markers for _v_pad_in/out
 cat <<EOF
 ,1,1,,3,3,,1,1,
@@ -140,47 +134,43 @@ EOF
 
 size0(){
   _char_small | _h_squash
-  _pattern_1_line
+  _patt_1_line
 }
 
 size1(){
   _char_small
-  _pattern_1_line
+  _patt_1_line
 }
 
 size2(){
   _char_medium | _h_squash
-  _pattern_1_line
+  _patt_1_line
 }
 
 size3(){
   _char_medium
-  _pattern_1_line
+  _patt_1_line
 }
 
 size4(){
-  size3 | _h_pad_in | _v_pad in
+  size3 | _pad h in | _pad v in
 }
 
 size5(){
-  _char_large | _h_pad_out
-  _pattern_1_line | _v_pad_in | _v_pad_out
+  _char_large | _pad h out
+  _patt_1_line | _pad v in | _pad v out
 }
 
 size6(){
-  size5 | _v_pad_in | _h_pad_in
+  size5 | _pad v in | _pad h in
 }
 
 size7(){
-  size6 | _v_pad_out | _h_pad_out | _h_pad_out
+  size6 | _pad v out | _pad h out 2
 }
 size8(){
-  size7 | _v_pad_in | _h_pad_in
-}
-
-size9() {
-  _char_xlarge | _h_pad_in | _h_pad_in | _h_pad_out
-  _pattern_double_1_line | _v_pad_in | _v_pad_in | _v_pad_out
+  _char_xlarge | _pad h in 2 | _pad h out
+  _patt_double_1_line | _pad v in 2 | _pad v out
 }
 
 draw_face(){
