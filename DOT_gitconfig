@@ -11,3 +11,4 @@
 
 [alias]
   co = checkout
+  l = log
