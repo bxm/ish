@@ -14,16 +14,6 @@ elaborate() {
   done
 }
 
-x_times() {
-  local i="${1:?Count missing}"
-  : "${2:?Command missing}"
-  shift
-  while [ "${i}" -gt 0 ] ; do
-    : $((i-=1))
-    "${@}"
-  done
-}
-
 x_sed() {
   debug x_sed "$@"
   local i="${2:-1}"
@@ -174,17 +164,16 @@ size8(){
 }
 
 draw_face(){
-  FACE="${FACE//\// }"
-  H_LINE=".${FACE// *}."
+  local FACE="${FACE//\// }"
+  local H_LINE=".${FACE// *}."
+  local LINE
   H_LINE=" ${H_LINE//?/-} "
   ${CLEAR} && clear
   echo
   echo "${H_LINE}"
   for LINE in ${FACE} ; do
-    printf "| "
-    printf "${LINE//[.:]/ }"
-    printf " |"
-    echo
+    LINE="| ${LINE//[.:]/ } |"
+    echo "${LINE}"
   done
   echo "${H_LINE}"
   echo
