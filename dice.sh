@@ -195,6 +195,10 @@ roll(){
   ${DEBUG} && CLEAR=false
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
+
+  # TODO use pseudo array so we can
+  #      refer to DIE by face elsewhere
+  #      like in draw face
   set -- ${DIE}
   if [ "${FORCE}" -gt 0 ] ; then
     ROLL="${FORCE}"
