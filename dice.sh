@@ -234,6 +234,17 @@ prompt(){
 set_die(){
   DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
+  local i=0
+  local e=''
+  for F in ${DIE} ; do
+    : $((i+=1))
+    e="${e} DIE_${i}"
+    eval DIE_${i}="${F}"
+  done
+  DIE_S=${i}
+  DIE_E="${e}"
+  debug DIE_S ${DIE_S}
+  debug DIE_E ${DIE_E}
 }
 
 main_loop(){
