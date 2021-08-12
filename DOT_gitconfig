@@ -11,4 +11,7 @@
 
 [alias]
   co = checkout
+  f = fetch
   l = log
+  oops = reset HEAD~1
+  rh = reset --hard
