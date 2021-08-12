@@ -1,5 +1,34 @@
 #!/bin/sh
 
+array_push(){
+  local a="${1:?Need array name}" # array name
+  local s='' # array size
+  local e='' # helpe var listing array elements
+  local s_var="${a}_S"
+  local e_var="${a}_E"
+  local push
+  local targ=''
+  eval s="\${$s_var:-0}"
+  eval e="\${$e_var}"
+  shift
+  for push in "$@" ; do
+    : $((s+=1))
+    eval ${a}_${s}="${push}"
+    e="$e ${a}_${s}"
+  done
+  #debug "params $@"
+  #debug a $a
+  #debug e $e
+  #debug s $s
+  #debug s_var $s_var
+  #debug e_var $e_var
+  #debug ARR_1 $ARR_1
+  #debug ARR_2 $ARR_2
+  #debug ARR_5 $ARR_5
+  eval $s_var="$s"
+  eval $e_var="$e"
+}
+
 elaborate() {
   debug "Elaborating size${1}"
   set -- $(size${1})
