@@ -1,5 +1,11 @@
 #!/bin/sh
 
+array_create(){
+  debug "array_create $@"
+  array_delete "${1}"
+  array_push "${@}"
+}
+
 array_delete(){
   debug "array_delete $@"
   local a="${1:?Need array name}" # array name
@@ -281,8 +287,7 @@ prompt(){
 set_die(){
   DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
-  array_delete DIE
-  array_push DIE ${DIE}
+  array_create DIE ${DIE}
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
 }
