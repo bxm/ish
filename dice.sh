@@ -1,8 +1,26 @@
 #!/bin/sh
 
+array_delete(){
+  debug "array_delete $@"
+  local a="${1:?Need array name}" # array name
+  # populate local vars
+  local e # helper var listing array elements
+  local s_var="${a}_S"
+  local e_var="${a}_E"
+  eval e="\"\${$e_var}\""
+  debug s_var: $s_var
+  debug e_var: $e_var
+  debug a: $a
+  debug e: $e
+  debug unset ${e} ${s_var} ${e_var}
+  unset ${e} ${s_var} ${e_var}
+
+}
+
 array_push(){
   debug "array_push $@"
   local a="${1:?Need array name}" # array name
+  # TODO: be opinionated about 'a' content (validate)
   # effectively ignore empty pushes
   local s='' # array size
   local e='' # helper var listing array elements
@@ -11,19 +29,19 @@ array_push(){
   local e_var="${a}_E"
   eval s="\"\${$s_var:-0}\""
   eval e="\"\${$e_var}\""
+  debug s_var: $s_var
+  debug e_var: $e_var
   shift # ditch array name, keep the rest
   debug a: $a s: $s
   while [ $# -gt 0 ] ; do 
     : $((s+=1))
-    eval ${a}_${s}="\"${1}\""
     debug eval ${a}_${s}="\"${1}\""
+    eval ${a}_${s}="\"${1}\""
     e="${e:+${e} }${a}_${s}"
     shift
   done
   debug a: $a s: $s
   debug e: $e
-  debug s_var: $s_var
-  debug e_var: $e_var
   # push local vars back to array
   eval $s_var="\"$s\""
   eval $e_var="\"$e\""
@@ -263,6 +281,7 @@ prompt(){
 set_die(){
   DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
+  array_delete DIE
   array_push DIE ${DIE}
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
