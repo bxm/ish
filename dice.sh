@@ -1,32 +1,32 @@
 #!/bin/sh
 
 array_push(){
+  debug "array_push $@"
   local a="${1:?Need array name}" # array name
+  # effectively ignore empty pushes
   local s='' # array size
-  local e='' # helpe var listing array elements
+  local e='' # helper var listing array elements
+  # populate local vars
   local s_var="${a}_S"
   local e_var="${a}_E"
-  local push
-  local targ=''
-  eval s="\${$s_var:-0}"
-  eval e="\${$e_var}"
-  shift
-  for push in "$@" ; do
+  eval s="\"\${$s_var:-0}\""
+  eval e="\"\${$e_var}\""
+  shift # ditch array name, keep the rest
+  debug a: $a s: $s
+  while [ $# -gt 0 ] ; do 
     : $((s+=1))
-    eval ${a}_${s}="${push}"
-    e="$e ${a}_${s}"
+    eval ${a}_${s}="\"${1}\""
+    debug eval ${a}_${s}="\"${1}\""
+    e="${e:+${e} }${a}_${s}"
+    shift
   done
-  #debug "params $@"
-  #debug a $a
-  #debug e $e
-  #debug s $s
-  #debug s_var $s_var
-  #debug e_var $e_var
-  #debug ARR_1 $ARR_1
-  #debug ARR_2 $ARR_2
-  #debug ARR_5 $ARR_5
-  eval $s_var="$s"
-  eval $e_var="$e"
+  debug a: $a s: $s
+  debug e: $e
+  debug s_var: $s_var
+  debug e_var: $e_var
+  # push local vars back to array
+  eval $s_var="\"$s\""
+  eval $e_var="\"$e\""
 }
 
 elaborate() {
@@ -263,15 +263,7 @@ prompt(){
 set_die(){
   DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
-  local i=0
-  local e=''
-  for F in ${DIE} ; do
-    : $((i+=1))
-    e="${e} DIE_${i}"
-    eval DIE_${i}="\"${F}\""
-  done
-  DIE_S=${i}
-  DIE_E="${e}"
+  array_push DIE ${DIE}
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
 }
