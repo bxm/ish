@@ -218,16 +218,17 @@ size8(){
 
 draw_face(){
   local FACEX
-  eval FACEX="\"\$DIE_${1}\""
-  debug FACEX: "$FACEX"
-  local FACE="${FACE//\// }"
-  local H_LINE=".${FACE// *}."
+  eval FACEX="\"\${DIE_${1}}\""
+  debug FACEX: "${FACEX}"
+  FACEX="${FACEX//\// }"
+  debug FACEX: "${FACEX}"
+  local H_LINE=".${FACEX// *}."
   local LINE
   H_LINE=" ${H_LINE//?/-} "
   ${CLEAR} && clear
   echo
   echo "${H_LINE}"
-  for LINE in ${FACE} ; do
+  for LINE in ${FACEX} ; do
     LINE="| ${LINE//[.:]/ } |"
     echo "${LINE}"
   done
@@ -252,10 +253,6 @@ roll(){
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
 
-  # TODO use pseudo array so we can
-  #      refer to DIE by face elsewhere
-  #      like in draw face
-  set -- ${DIE}
   if [ "${FORCE}" -gt 0 ] ; then
     ROLL="${FORCE}"
   else
@@ -267,7 +264,6 @@ roll(){
   fi
   debug "ROLL: ${ROLL}"
 
-  eval FACE="\$${ROLL}" # assign the face value per the random number
   draw_face "${ROLL}"
   return ${ROLL}
 }
