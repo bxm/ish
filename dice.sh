@@ -217,6 +217,9 @@ size8(){
 }
 
 draw_face(){
+  local FACEX
+  eval FACEX="\"\$DIE_${1}\""
+  debug FACEX: "$FACEX"
   local FACE="${FACE//\// }"
   local H_LINE=".${FACE// *}."
   local LINE
@@ -265,7 +268,7 @@ roll(){
   debug "ROLL: ${ROLL}"
 
   eval FACE="\$${ROLL}" # assign the face value per the random number
-  draw_face
+  draw_face "${ROLL}"
   return ${ROLL}
 }
 
