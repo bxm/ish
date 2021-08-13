@@ -1,7 +1,7 @@
 #!/bin/sh
 
-array_create(){
-  debug "array_create $@"
+array_new(){
+  debug "array_new $@"
   array_delete "${1}"
   array_push "${@}"
 }
@@ -287,7 +287,7 @@ prompt(){
 set_die(){
   DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
-  array_create DIE ${DIE}
+  array_new DIE ${DIE}
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
 }
