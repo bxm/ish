@@ -217,18 +217,18 @@ size8(){
 }
 
 draw_face(){
-  local FACEX
-  eval FACEX="\"\${DIE_${1}}\""
-  debug FACEX: "${FACEX}"
-  FACEX="${FACEX//\// }"
-  debug FACEX: "${FACEX}"
-  local H_LINE=".${FACEX// *}."
+  local FACE
+  eval FACE="\"\${DIE_${1}}\""
+  debug FACE: "${FACE}"
+  FACE="${FACE//\// }"
+  debug FACE: "${FACE}"
+  local H_LINE=".${FACE// *}."
   local LINE
   H_LINE=" ${H_LINE//?/-} "
   ${CLEAR} && clear
   echo
   echo "${H_LINE}"
-  for LINE in ${FACEX} ; do
+  for LINE in ${FACE} ; do
     LINE="| ${LINE//[.:]/ } |"
     echo "${LINE}"
   done
