@@ -2,6 +2,8 @@
 
 array_get(){
   debug "array_get $@"
+  # $1 expects to be array name but also tolerates
+  # being the full element label if $2 omitted
   local ar="${1:?}"
   local el="${2}"
   eval echo -n "\"\${${ar}${el:+_${el}}}\""
@@ -34,7 +36,6 @@ array_push(){
   debug "array_push $@"
   local a="${1:?Need array name}" # array name
   # TODO: be opinionated about 'a' content (validate)
-  # effectively ignore empty pushes
   local s='' # array size
   local e='' # helper var listing array elements
   # populate local vars
@@ -46,6 +47,7 @@ array_push(){
   debug e_var: $e_var
   shift # ditch array name, keep the rest
   debug a: $a s: $s
+  # while will short circuit and ignore empty pushes
   while [ $# -gt 0 ] ; do 
     : $((s+=1))
     debug eval ${a}_${s}="\"${1}\""
