@@ -303,7 +303,7 @@ set_die(){
 
 animate_loop(){
   LAST=0
-  for A in 1 2 3 4 5 6 ; do
+  for A in $(seq 1 6) ; do
     if ${TEST} ; then
       roll ${A}
       continue
@@ -333,24 +333,27 @@ process_params(){
   debug process_params "$@"
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      ([0-9]|[1-9][0-9]) SIZE=${1} ;;
+      ( [0-9]| [1-9][0-9]) SIZE=${1} ;;
+      (x[0-9]|x[1-9][0-9]) DICE=${1/x} ;;
       (-t|--test ) TEST=true ;;
       (-d|--debug) DEBUG=true ;;
       (-q|--quick) QUICK=true ;;
     esac
     shift
   done
-
+  debug DICE: "${DICE}" SIZE: "${SIZE}"
+  debug TEST: "${TEST}" QUICK: "${QUICK}"
 }
 
 main(){
   SIZE=1
+  DICE=1
   TEST=false
   DEBUG=false
   QUICK=false
 
-  process_params "${@}"
   debug main "$@"
+  process_params "${@}"
   set_die "${SIZE}"
   main_loop
 }
