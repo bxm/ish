@@ -1,17 +1,19 @@
 alias ll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
+alias v=vi
 
 vim() { vi "$@" ; }
 log() { git log "$@" ; }
 stat() { git status "$@" ; }
-push() { git push "$@" ; }
 setup() { push --set-upstream origin $(gbr --show-current) ; }
 pf() { push --force-with-lease "$@" ; }
 pull() { git pull "$@" ; }
+push() { git push "$@" ; }
 giff() { git diff "$@" ; }
 gco() { git checkout "$@" ; }
 gbr() { git branch "$@" ; }
+branch() { gbr --show-current "$@" ; }
 
 alias src='source "${HOME}/.profile"'
 
