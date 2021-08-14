@@ -1,5 +1,12 @@
 #!/bin/sh
 
+array_get(){
+  debug "array_get $@"
+  local ar="${1:?}"
+  local el="${2}"
+  eval echo -n "\"\${${ar}${el:+_${el}}}\""
+}
+
 array_new(){
   debug "array_new $@"
   array_delete "${1}"
@@ -217,7 +224,8 @@ size8(){
 }
 
 draw_face(){
-  local FACE
+  local FACE="$(array_get DIE ${1})"
+  #eval FACE="\"\${DIE_${1}}\""
   eval FACE="\"\${DIE_${1}}\""
   debug FACE: "${FACE}"
   FACE="${FACE//\// }"
@@ -284,27 +292,31 @@ prompt(){
 }
 
 set_die(){
-  DIE="$(elaborate ${1})"
+  local DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
   array_new DIE ${DIE}
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
 }
 
-main_loop(){
+animate_loop(){
   LAST=0
-  while true ; do
-    for A in 1 2 3 4 5 6 ; do
-      if ${TEST} ; then
-        roll ${A}
-      else
-        roll clear !${LAST}
-        LAST=$?
-        printf "Rolling..."
-      fi
-      sleep 0.15
-    done
+  for A in 1 2 3 4 5 6 ; do
+    if ${TEST} ; then
+      roll ${A}
+      continue
+    fi
+    ${QUICK} && break
+    roll clear !${LAST}
+    LAST=$?
+    printf "Rolling..."
+    sleep 0.15
+  done
+}
 
+main_loop(){
+  while true ; do
+    animate_loop
     ${TEST} || roll clear
     prompt || break
   done
@@ -322,6 +334,7 @@ process_params(){
       ([0-9]|[1-9][0-9]) SIZE=${1} ;;
       (-t|--test ) TEST=true ;;
       (-d|--debug) DEBUG=true ;;
+      (-q|--quick) QUICK=true ;;
     esac
     shift
   done
@@ -332,6 +345,7 @@ main(){
   SIZE=1
   TEST=false
   DEBUG=false
+  QUICK=false
 
   process_params "${@}"
   debug main "$@"
