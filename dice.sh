@@ -16,6 +16,7 @@ array_copy(){
   local source="${1:?Need source array name}"
   # target array name
   local target="${2:?Need target array name}"
+  is_array "${source}" || return 1
   # validate source vars (another func?)
   # populate local source array vars
   # iterate source, push into new target array
