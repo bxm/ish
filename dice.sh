@@ -247,14 +247,12 @@ size8(){
 }
 
 draw_face(){
+  local LINE
   local FACE="$(array_get DIE ${1})"
-  #eval FACE="\"\${DIE_${1}}\""
-  eval FACE="\"\${DIE_${1}}\""
   debug FACE: "${FACE}"
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
   local H_LINE=".${FACE// *}."
-  local LINE
   H_LINE=" ${H_LINE//?/-} "
   ${CLEAR} && clear
   echo
