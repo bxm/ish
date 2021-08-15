@@ -3,12 +3,11 @@
 is_array(){
   local a="${1:?Need array name}"
   local e # helper var listing array elements
-  local s
-  local s_var="${a}_S"
-  local e_var="${a}_E"
-  eval e="\"\${$e_var}\""
-  eval s="\"\${$s_var}\""
+  local s # array size
+  eval e="\"\${${a}_E}\""
+  eval s="\"\${${a}_S}\""
   [ -n "${e}" ] && [ -n "${s}" ]
+  # could also validate all elements exist
 }
 
 array_copy(){
@@ -16,8 +15,8 @@ array_copy(){
   local source="${1:?Need source array name}"
   # target array name
   local target="${2:?Need target array name}"
-  is_array "${source}" || return 1
   # validate source vars (another func?)
+  is_array "${source}" || return 1
   # populate local source array vars
   # iterate source, push into new target array
 }
