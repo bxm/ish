@@ -1,9 +1,10 @@
 alias ll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
-alias v=vi
+alias v=vim
+alias vi=vim
 
-vim() { vi "$@" ; }
+vim() { nvim "$@" ; }
 log() { git log "$@" ; }
 stat() { git status "$@" ; }
 setup() { push --set-upstream origin $(gbr --show-current) ; }
