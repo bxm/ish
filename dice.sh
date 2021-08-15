@@ -10,15 +10,27 @@ is_array(){
   # could also validate all elements exist
 }
 
-array_copy(){
+array_paste(){
   # source array name
   local source="${1:?Need source array name}"
   # target array name
   local target="${2:?Need target array name}"
   # validate source vars (another func?)
   is_array "${source}" || return 1
+  
+  #local ti=0 # counter for target array
+ # for source elements
+ # split index off
+ # use index to get element name for target
+ # target+=incoming
   # populate local source array vars
-  # iterate source, push into new target array
+  local ss_var="${a}_S"
+  local ae_var="${a}_E"
+  eval s="\"\${$s_var:-0}\""
+  eval e="\"\${$e_var}\""
+  debug s_var: $s_var
+  debug e_var: $e_var
+  # populate local source array vars
 }
 
 array_get(){
@@ -50,6 +62,24 @@ array_delete(){
   debug e: $e
   debug unset ${e} ${s_var} ${e_var}
   unset ${e} ${s_var} ${e_var}
+
+}
+
+array_dump(){
+  debug "array_dump $@"
+  local a="${1:?Need array name}" # array name
+  # populate local vars
+  local e # helper var listing array elements
+  local s_var="${a}_S"
+  local e_var="${a}_E"
+  eval e="\"\${$e_var}\""
+  debug s_var: $s_var
+  debug e_var: $e_var
+  debug a: $a
+  debug e: $e
+  for element in $e ; do
+    eval echo "\"\$${element}\""
+  done
 
 }
 
@@ -246,6 +276,26 @@ size8(){
   _patt_double_1_line | _pad v in 2 | _pad v out
 }
 
+make_face(){
+  
+  local LINE
+  local FACE="$(array_get DIE ${1})"
+  local FACE_NO="${2}"
+  local FA=FACE_$FACE_NO
+  debug FA: $FA
+  debug FACE: "${FACE}"
+  FACE="${FACE//\// }"
+  debug FACE: "${FACE}"
+  local H_LINE=".${FACE// *}."
+  H_LINE=" ${H_LINE//?/-} "
+  array_new ${FA} "$H_LINE"
+  for LINE in ${FACE} ; do
+    debug LINE: "$LINE"
+    array_push $FA "| ${LINE//[.:]/ } |"
+  done
+  array_push ${FA} "$H_LINE"
+}
+
 draw_face(){
   local LINE
   local FACE="$(array_get DIE ${1})"
@@ -254,6 +304,8 @@ draw_face(){
   debug FACE: "${FACE}"
   local H_LINE=".${FACE// *}."
   H_LINE=" ${H_LINE//?/-} "
+  #array_create FACE 
+  # create numbered array of face
   ${CLEAR} && clear
   echo
   echo "${H_LINE}"
@@ -286,14 +338,19 @@ roll(){
     ROLL="${FORCE}"
   else
     while true ; do
-      ROLL=$((RANDOM % 6 + 1))
+      ROLL=$((RANDOM % DIE_S + 1))
       [ "${NOT}" -eq 0 ] && break
       [ "${NOT}" -ne "${ROLL}" ] && break
     done
   fi
   debug "ROLL: ${ROLL}"
 
-  draw_face "${ROLL}"
+  #draw_face "${ROLL}"
+  make_face "${ROLL}" 1
+  ${CLEAR} && clear
+  echo
+  array_dump FACE_1
+  echo
   return ${ROLL}
 }
 
