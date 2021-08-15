@@ -115,7 +115,7 @@ array_push(){
 
 elaborate() {
   debug "Elaborating size${1}"
-  set -- $(size${1})
+  set -- $(size${1} 2>/dev/null || size1)
   # strip line defs to get pattern
   PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+,")
   debug "PATTERN:\n${PATTERN}"
@@ -279,9 +279,9 @@ size8(){
 make_face(){
   
   local LINE
-  local FACE="$(array_get DIE ${1})"
-  local FACE_NO="${2}"
-  local FA=FACE_$FACE_NO
+  local FACE="$(array_get DIE ${1:?})"
+  local FACE_NO="${2:?}"
+  local FA=FACE_$FACE_NO # face array pointer
   debug FA: $FA
   debug FACE: "${FACE}"
   FACE="${FACE//\// }"
@@ -333,23 +333,31 @@ roll(){
   ${DEBUG} && CLEAR=false
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
+ 
+  local i=0
+  while [ $i -lt $DICE ] ; do
+    debug i: $i
+    : $((i++))
+    if [ "${FORCE}" -gt 0 ] ; then
+      ROLL="${FORCE}"
+    else
+      while true ; do
+        ROLL=$((RANDOM % DIE_S + 1))
+	break
+        #[ "${NOT}" -eq 0 ] && break
+        #[ "${NOT}" -ne "${ROLL}" ] && break
+      done
+    fi
+    
+    debug "ROLL: ${ROLL}"
 
-  if [ "${FORCE}" -gt 0 ] ; then
-    ROLL="${FORCE}"
-  else
-    while true ; do
-      ROLL=$((RANDOM % DIE_S + 1))
-      [ "${NOT}" -eq 0 ] && break
-      [ "${NOT}" -ne "${ROLL}" ] && break
-    done
-  fi
-  debug "ROLL: ${ROLL}"
-
-  #draw_face "${ROLL}"
-  make_face "${ROLL}" 1
+    #draw_face "${ROLL}"
+    make_face "${ROLL}" $i
+  done
   ${CLEAR} && clear
   echo
   array_dump FACE_1
+  array_dump FACE_2
   echo
   return ${ROLL}
 }
