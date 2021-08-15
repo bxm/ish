@@ -1,5 +1,26 @@
 #!/bin/sh
 
+is_array(){
+  local a="${1:?Need array name}"
+  local e # helper var listing array elements
+  local s
+  local s_var="${a}_S"
+  local e_var="${a}_E"
+  eval e="\"\${$e_var}\""
+  eval s="\"\${$s_var}\""
+  [ -n "${e}" ] && [ -n "${s}" ]
+}
+
+array_copy(){
+  # source array name
+  local source="${1:?Need source array name}"
+  # target array name
+  local target="${2:?Need target array name}"
+  # validate source vars (another func?)
+  # populate local source array vars
+  # iterate source, push into new target array
+}
+
 array_get(){
   debug "array_get $@"
   # $1 expects to be array name but also tolerates
