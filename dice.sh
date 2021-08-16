@@ -365,8 +365,16 @@ roll(){
   debug face_list: $face_list
   ${CLEAR} && clear
   echo
-  array_dump FACE_1
-  array_dump FACE_2
+  indexes="$(seq 1 $FACE_1_S)"
+  for l in $indexes ; do
+    for f in $face_list ; do
+      eval echo -n "\"\$${f}_${l}\""
+    done
+    echo
+  done
+    
+  #array_dump FACE_1
+  #array_dump FACE_2
   echo
   return ${ROLL}
 }
