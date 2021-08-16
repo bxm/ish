@@ -4,6 +4,10 @@ augroup vimrc-remember-cursor-position
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
+noremap <silent> <C-Q> :wq<CR>
+vnoremap <silent> <C-Q> <C-C>:wq<CR>
+inoremap <silent> <C-Q> <C-O>:wq<CR>
+
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
