@@ -312,6 +312,7 @@ show_face_list(){
   do_clear
   echo
   indexes="$(seq 1 $FACE_1_S)"
+  # iterate face lists array element list
   for l in $indexes ; do
     for f in $face_list ; do
       eval echo -n "\"\$${f}_${l}\""
