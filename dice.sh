@@ -81,7 +81,7 @@ array_push(){
   shift # ditch array name, keep the rest
   debug a: $a s: $s
   # while will short circuit and ignore empty pushes
-  while [ $# -gt 0 ] ; do 
+  while [ $# -gt 0 ] ; do
     : $((s++))
     debug eval ${a}_${s}="\"${1}\""
     eval ${a}_${s}="\"${1}\""
@@ -126,7 +126,7 @@ _pad(){
   local LOC="${2:?}"
   local TIM="${3:-1}"
   _${DIR}_pad_${LOC} ${TIM}
-} 
+}
 
 _v_pad_in(){
   # use embedded ,, as marker to insert blank lines
@@ -259,7 +259,7 @@ size8(){
 }
 
 make_face(){
-  
+
   local LINE
   local FACE="$(array_get DIE ${1:?})"
   local FACE_NO="${2:?}"
@@ -282,7 +282,7 @@ build_face_list(){
   # have multiple face lists (array obv)
   # use ttysize and face width to determine
   # when to start populating next list
-  # 
+  #
   local i=0
   while [ $i -lt $DICE ] ; do
     debug i: $i
@@ -298,10 +298,9 @@ build_face_list(){
         debug re-roll
       done
     fi
-    
+
     debug "ROLL: ${ROLL}"
 
-    #draw_face "${ROLL}"
     make_face "${ROLL}" $i
     face_list="${face_list:+${face_list} } FACE_$i"
   done
@@ -318,7 +317,7 @@ show_face_list(){
       eval echo -n "\"\$${f}_${l}\""
     done
     echo
-  done
+  done # | sed 's/||/|/g;s/-  -/- -/g' # questionable way to squeeze more in
   echo
 }
 
@@ -337,7 +336,7 @@ roll(){
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
 
-  build_face_list 
+  build_face_list
   show_face_list
 
   return ${ROLL}
@@ -397,6 +396,12 @@ do_clear(){
   ${TEST} && return
   ${DEBUG} && return
   clear
+}
+
+get_tty() {
+  local TTY=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
+  export COLUMNS="${TTY// *}"
+  export LINES="${TTY//* }"
 }
 
 process_params(){
