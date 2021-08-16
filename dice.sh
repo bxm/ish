@@ -278,22 +278,8 @@ make_face(){
   array_push ${FA} "$H_LINE"
 }
 
-roll(){
-  FORCE=0
-  NOT=0
-  ROLL=0
-  while [ $# -gt 0 ] ; do
-    case "${1}" in
-      (![1-6]) NOT=${1/!} ;;
-      ([1-6] ) FORCE=${1} ;;
-    esac
-    shift
-  done
-  debug "NOT: ${NOT}"
-  debug "FORCE: ${FORCE}"
- 
+build_face_list(){
   local i=0
-  local face_list=''
   while [ $i -lt $DICE ] ; do
     debug i: $i
     : $((i++))
@@ -316,6 +302,25 @@ roll(){
     face_list="${face_list:+${face_list} } FACE_$i"
   done
   debug face_list: $face_list
+}
+
+roll(){
+  local FORCE=0
+  local NOT=0
+  local ROLL=0
+  local face_list=''
+  while [ $# -gt 0 ] ; do
+    case "${1}" in
+      (![1-6]) NOT=${1/!} ;;
+      ([1-6] ) FORCE=${1} ;;
+    esac
+    shift
+  done
+  debug "NOT: ${NOT}"
+  debug "FORCE: ${FORCE}"
+
+  build_face_list 
+
   do_clear
   echo
   indexes="$(seq 1 $FACE_1_S)"
