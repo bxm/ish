@@ -279,19 +279,16 @@ make_face(){
 }
 
 roll(){
-  CLEAR=false
   FORCE=0
   NOT=0
   ROLL=0
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      (clear ) CLEAR=true ;;
       (![1-6]) NOT=${1/!} ;;
       ([1-6] ) FORCE=${1} ;;
     esac
     shift
   done
-  ${DEBUG} && CLEAR=false
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
  
@@ -319,7 +316,7 @@ roll(){
     face_list="${face_list:+${face_list} } FACE_$i"
   done
   debug face_list: $face_list
-  ${CLEAR} && clear
+  do_clear
   echo
   indexes="$(seq 1 $FACE_1_S)"
   for l in $indexes ; do
@@ -364,7 +361,7 @@ animate_loop(){
       continue
     fi
     ${QUICK} && break
-    roll clear !${LAST}
+    roll !${LAST}
     LAST=$?
     printf "Rolling..."
     sleep 0.15
@@ -374,13 +371,19 @@ animate_loop(){
 main_loop(){
   while true ; do
     animate_loop
-    ${TEST} || roll clear
+    ${TEST} || roll
     prompt || break
   done
 }
 
 debug(){
   ${DEBUG} && printf "## DEBUG ## >>$*<<\n" >&2
+}
+
+do_clear(){
+  ${TEST} && return
+  ${DEBUG} && return
+  clear
 }
 
 process_params(){
