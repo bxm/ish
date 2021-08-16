@@ -10,7 +10,7 @@ is_array(){
   # could also validate all elements exist
 }
 
-array_paste(){
+array_paste(){ # abandoned
   # source array name
   local source="${1:?Need source array name}"
   # target array name
@@ -51,6 +51,7 @@ array_new(){
 array_delete(){
   debug "array_delete $@"
   local a="${1:?Need array name}" # array name
+  is_array $a || return
   # populate local vars
   local e # helper var listing array elements
   local s_var="${a}_S"
@@ -68,6 +69,7 @@ array_delete(){
 array_dump(){
   debug "array_dump $@"
   local a="${1:?Need array name}" # array name
+  is_array $a || return
   # populate local vars
   local e # helper var listing array elements
   local s_var="${a}_S"
@@ -77,6 +79,9 @@ array_dump(){
   debug e_var: $e_var
   debug a: $a
   debug e: $e
+  for element in $e ; do
+    debug eval echo "\"\$${element}\""
+  done
   for element in $e ; do
     eval echo "\"\$${element}\""
   done
@@ -100,7 +105,7 @@ array_push(){
   debug a: $a s: $s
   # while will short circuit and ignore empty pushes
   while [ $# -gt 0 ] ; do 
-    : $((s+=1))
+    : $((s++))
     debug eval ${a}_${s}="\"${1}\""
     eval ${a}_${s}="\"${1}\""
     e="${e:+${e} }${a}_${s}"
@@ -335,6 +340,7 @@ roll(){
   debug "FORCE: ${FORCE}"
  
   local i=0
+  local face_list=''
   while [ $i -lt $DICE ] ; do
     debug i: $i
     : $((i++))
@@ -343,9 +349,10 @@ roll(){
     else
       while true ; do
         ROLL=$((RANDOM % DIE_S + 1))
-	break
-        #[ "${NOT}" -eq 0 ] && break
-        #[ "${NOT}" -ne "${ROLL}" ] && break
+	      [ $DICE -ne 1 ] && break
+        [ "${NOT}" -eq 0 ] && break
+        [ "${NOT}" -ne "${ROLL}" ] && break
+        debug re-roll
       done
     fi
     
@@ -353,7 +360,9 @@ roll(){
 
     #draw_face "${ROLL}"
     make_face "${ROLL}" $i
+    face_list="${face_list:+${face_list} } FACE_$i"
   done
+  debug face_list: $face_list
   ${CLEAR} && clear
   echo
   array_dump FACE_1
