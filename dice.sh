@@ -283,10 +283,13 @@ build_face_list(){
   # use ttysize and face width to determine
   # when to start populating next list
   #
-  local i=0
-  while [ $i -lt $DICE ] ; do
-    debug i: $i
-    : $((i++))
+  local die_no=0
+  local row_no=0
+  
+  while [ $die_no -lt $DICE ] ; do
+    debug die_no: $die_no
+    debug row_no: $row_no
+    : $((die_no++))
     if [ "${FORCE}" -gt 0 ] ; then
       ROLL="${FORCE}"
     else
@@ -301,8 +304,8 @@ build_face_list(){
 
     debug "ROLL: ${ROLL}"
 
-    make_face "${ROLL}" $i
-    face_list="${face_list:+${face_list} } FACE_$i"
+    make_face "${ROLL}" $die_no
+    face_list="${face_list} FACE_$die_no"
   done
   debug face_list: $face_list
 }
