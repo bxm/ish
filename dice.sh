@@ -304,6 +304,19 @@ build_face_list(){
   debug face_list: $face_list
 }
 
+show_face_list(){
+  do_clear
+  echo
+  indexes="$(seq 1 $FACE_1_S)"
+  for l in $indexes ; do
+    for f in $face_list ; do
+      eval echo -n "\"\$${f}_${l}\""
+    done
+    echo
+  done
+  echo
+}
+
 roll(){
   local FORCE=0
   local NOT=0
@@ -320,18 +333,8 @@ roll(){
   debug "FORCE: ${FORCE}"
 
   build_face_list 
+  show_face_list
 
-  do_clear
-  echo
-  indexes="$(seq 1 $FACE_1_S)"
-  for l in $indexes ; do
-    for f in $face_list ; do
-      eval echo -n "\"\$${f}_${l}\""
-    done
-    echo
-  done
-    
-  echo
   return ${ROLL}
 }
 
