@@ -1,3 +1,5 @@
+
+# vi: set ft=bash
 alias ll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
@@ -46,4 +48,8 @@ c() {
       ;;
      (*) echo "$1 not supported" ;; 
   esac
+}
+
+vd() { # edit dot file based on prefix
+  true
 }

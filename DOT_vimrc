@@ -7,6 +7,10 @@ augroup END
 noremap <silent> <C-Q> :wq<CR>
 vnoremap <silent> <C-Q> <C-C>:wq<CR>
 inoremap <silent> <C-Q> <C-O>:wq<CR>
+ 
+noremap <silent> <C-X> :q<CR>
+vnoremap <silent> <C-X> <C-C>:q<CR>
+inoremap <silent> <C-X> <C-O>:q<CR>
 
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
