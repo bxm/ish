@@ -269,6 +269,7 @@ make_face(){
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
   local H_LINE=".${FACE// *}."
+  face_width=${#H_LINE}
   H_LINE=" ${H_LINE//?/-} "
   array_new ${FA} "$H_LINE"
   for LINE in ${FACE} ; do
@@ -285,7 +286,8 @@ build_face_list(){
   #
   local die_no=0
   local row_no=0
-  
+  local face_width=0
+
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
     debug row_no: $row_no
@@ -305,6 +307,7 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
+    debug face_width: $face_width
     face_list="${face_list} FACE_$die_no"
   done
   debug face_list: $face_list
@@ -338,7 +341,8 @@ roll(){
   done
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
-
+  get_tty
+  debug COLUMNS: $COLUMNS
   build_face_list
   show_face_list
 
@@ -403,8 +407,8 @@ do_clear(){
 
 get_tty() {
   local TTY=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
-  export COLUMNS="${TTY// *}"
-  export LINES="${TTY//* }"
+  COLUMNS="${TTY// *}"
+  LINES="${TTY//* }"
 }
 
 process_params(){
