@@ -279,6 +279,10 @@ make_face(){
 }
 
 build_face_list(){
+  # have multiple face lists (array obv)
+  # use ttysize and face width to determine
+  # when to start populating next list
+  # 
   local i=0
   while [ $i -lt $DICE ] ; do
     debug i: $i
