@@ -309,11 +309,12 @@ build_face_list(){
 }
 
 show_face_list(){
+  local width=0
   get_tty
   do_clear
   echo
   indexes="$(seq 1 $FACE_1_S)"
-  debug face_width: $face_width
+  debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
   for l in $indexes ; do
     for f in $face_list ; do
@@ -369,10 +370,10 @@ set_die(){
   debug fpart: "$fpart"
   H_LINE=".${fpart}."
   H_LINE=" ${H_LINE//?/-} "
-  face_width="${#H_LINE}"
+  FACE_WIDTH="${#H_LINE}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
-  debug face_width: $face_width
+  debug FACE_WIDTH: $FACE_WIDTH
 }
 
 animate_loop(){
@@ -437,7 +438,7 @@ main(){
   TEST=false
   DEBUG=false
   QUICK=false
-  face_width=0
+  FACE_WIDTH=0
 
   debug main "$@"
   process_params "${@}"
