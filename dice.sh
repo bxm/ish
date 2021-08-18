@@ -278,7 +278,7 @@ make_face(){
 
 build_face_list(){
   # have multiple face lists (array obv)
-  # use ttysize and face width to determine
+  # use line and face width to determine
   # when to start populating next list
   #
   local die_no=0
@@ -303,9 +303,9 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
-    face_list="${face_list} FACE_$die_no"
+    FACE_LIST="${FACE_LIST} FACE_$die_no"
   done
-  debug face_list: $face_list
+  debug FACE_LIST: $FACE_LIST
 }
 
 show_face_list(){
@@ -313,12 +313,12 @@ show_face_list(){
   get_tty
   do_clear
   echo
-  indexes="$(seq 1 $FACE_1_S)"
+  local lines="$(seq 1 $FACE_1_S)"
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
-  for l in $indexes ; do
-    for f in $face_list ; do
-      eval echo -n "\"\$${f}_${l}\""
+  for line in $lines ; do
+    for face in $FACE_LIST ; do
+      eval echo -n "\"\$${face}_${line}\""
     done
     echo
   done # | sed 's/||/|/g;s/-  -/- -/g' # questionable way to squeeze more in
@@ -329,7 +329,7 @@ roll(){
   local FORCE=0
   local NOT=0
   local ROLL=0
-  local face_list=''
+  local FACE_LIST=''
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (![1-6]) NOT=${1/!} ;;
