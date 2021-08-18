@@ -268,8 +268,6 @@ make_face(){
   debug FACE: "${FACE}"
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
-  local H_LINE=".${FACE// *}."
-  H_LINE=" ${H_LINE//?/-} "
   array_new ${FA} "$H_LINE"
   for LINE in ${FACE} ; do
     debug LINE: "$LINE"
@@ -369,7 +367,9 @@ set_die(){
   array_new DIE ${DIE}
   local fpart="${DIE_1//\/*}"
   debug fpart: "$fpart"
-  face_width="${#fpart}"
+  H_LINE=".${fpart}."
+  H_LINE=" ${H_LINE//?/-} "
+  face_width="${#H_LINE}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
   debug face_width: $face_width
