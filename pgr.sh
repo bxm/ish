@@ -7,13 +7,12 @@ get_tty() {
 main(){
   i=0
   get_tty
-  PAGE=$(((LINES * 9)/10))
-  echo $PAGE $LINES
+  PAGE=$(((LINES * 8)/10))
   while read L ; do
     : $((i++))
     echo "${L:- }"
     [ $i -lt $PAGE ] && continue
-    read -s -n1 -p: <&1
+    read -s -n1 -p% <&1
     echo -e "\r\c"
     case "$REPLY" in
       ([qQ]) break ;;
