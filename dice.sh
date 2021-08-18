@@ -269,7 +269,6 @@ make_face(){
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
   local H_LINE=".${FACE// *}."
-  face_width=${#H_LINE}
   H_LINE=" ${H_LINE//?/-} "
   array_new ${FA} "$H_LINE"
   for LINE in ${FACE} ; do
@@ -286,7 +285,6 @@ build_face_list(){
   #
   local die_no=0
   local row_no=0
-  local face_width=0
 
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
@@ -307,16 +305,17 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
-    debug face_width: $face_width
     face_list="${face_list} FACE_$die_no"
   done
   debug face_list: $face_list
 }
 
 show_face_list(){
+  get_tty
   do_clear
   echo
   indexes="$(seq 1 $FACE_1_S)"
+  debug face_width: $face_width
   # iterate face lists array element list
   for l in $indexes ; do
     for f in $face_list ; do
@@ -368,8 +367,11 @@ set_die(){
   local DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
   array_new DIE ${DIE}
+  local f="${DIE_1}"
+  face_width="${#DIE_1}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
+  debug face_width: $face_width
 }
 
 animate_loop(){
@@ -434,6 +436,7 @@ main(){
   TEST=false
   DEBUG=false
   QUICK=false
+  face_width=0
 
   debug main "$@"
   process_params "${@}"
