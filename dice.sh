@@ -367,8 +367,9 @@ set_die(){
   local DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
   array_new DIE ${DIE}
-  local f="${DIE_1}"
-  face_width="${#DIE_1}"
+  local fpart="${DIE_1//\/*}"
+  debug fpart: "$fpart"
+  face_width="${#fpart}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
   debug face_width: $face_width
