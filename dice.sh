@@ -283,7 +283,7 @@ build_face_list(){
   #
   local die_no=0
   local row_no=0
-
+  array_new FACE_LIST$row_no
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
     debug row_no: $row_no
@@ -304,6 +304,7 @@ build_face_list(){
 
     make_face "${ROLL}" $die_no
     FACE_LIST="${FACE_LIST} FACE_$die_no"
+    array_push FACE_LIST$row_no FACE_$die_no
   done
   debug FACE_LIST: $FACE_LIST
 }
