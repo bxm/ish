@@ -7,7 +7,9 @@ get_tty() {
 main(){
   i=0
   get_tty
-  PAGE=$(((LINES * 8)/10))
+  FULL=$(( LINES * 8 / 10)) # actually 80% of tty
+  HALF=$(( LINES / 2 ))
+  PAGE=$FULL
   while read L ; do
     : $((i++))
     echo "${L:- }"
@@ -17,6 +19,8 @@ main(){
     case "$REPLY" in
       ([qQ]) break ;;
       ([1-9]) : $((i-=REPLY)) ;;
+      ([hH]) PAGE=$HALF i=0 ;;
+      ([fF]) PAGE=$FULL i=0 ;;
       ([a-zA-Z\ ]) i=0 ;;
       (*) : $((i--)) ;;
     esac
