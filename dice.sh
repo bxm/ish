@@ -101,10 +101,13 @@ elaborate() {
   # strip line defs to get pattern
   PATTERN=$(echo "$@" | grep -Eo ",[0-9,]+,")
   debug "PATTERN:\n${PATTERN}"
+  local h_line=".-${1//?/-}-."
   for P in ${PATTERN} ; do
+    printf "%s/" "$h_line"
     for I in ${P//,/ } ; do
-      eval printf "%s/" \$${I}
+      eval printf "\|.%s.\|/" "\$${I}"
     done
+    printf "%s/" "$h_line"
     echo
   done
 }
@@ -269,15 +272,16 @@ make_face(){
   debug FA: $FA
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
-  array_new ${FA} "$H_LINE"
+  #array_new ${FA} # "$H_LINE"
 
-  debug --- for LINE in ${FACE}
-  for LINE in ${FACE} ; do
-    debug LINE: "$LINE"
-    array_push $FA "| ${LINE//[.:]/ } |"
-  done
-  debut --- end for
-  array_push ${FA} "$H_LINE"
+  array_new $FA ${FACE}
+  #debug --- for LINE in ${FACE}
+  #for LINE in ${FACE} ; do
+    #debug LINE: "$LINE"
+    #array_push $FA "| ${LINE//[.:]/ } |"
+  #done
+  #debug --- end for
+  #array_push ${FA} "$H_LINE"
 }
 
 build_face_list(){
@@ -319,11 +323,14 @@ show_face_list(){
   do_clear
   echo
   local lines="$(seq 1 $FACE_1_S)"
+  local fl
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
   for line in $lines ; do
     for face in $FACE_LIST ; do
-      eval echo -n "\"\$${face}_${line}\""
+      eval fl="\"\$${face}_${line}\""
+      #eval echo -n "\"\$${face}_${line}\""
+      echo -n "${fl//[.:]/ }"
     done
     echo
   done # | sed 's/||/|/g;s/-  -/- -/g' # questionable way to squeeze more in
