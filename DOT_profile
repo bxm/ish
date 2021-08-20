@@ -1,5 +1,5 @@
-
 # vi: set ft=bash
+export GIT_PAGER=pgr
 alias ll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'

@@ -259,20 +259,24 @@ size8(){
 }
 
 make_face(){
-
+  debug make_face "$@"
   local LINE
   local FACE="$(array_get DIE ${1:?})"
   local FACE_NO="${2:?}"
   local FA=FACE_$FACE_NO # face array pointer
-  debug FA: $FA
   debug FACE: "${FACE}"
+  debug FACE_NO: "${FACE_NO}"
+  debug FA: $FA
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
   array_new ${FA} "$H_LINE"
+
+  debug --- for LINE in ${FACE}
   for LINE in ${FACE} ; do
     debug LINE: "$LINE"
     array_push $FA "| ${LINE//[.:]/ } |"
   done
+  debut --- end for
   array_push ${FA} "$H_LINE"
 }
 
@@ -283,7 +287,7 @@ build_face_list(){
   #
   local die_no=0
   local row_no=0
-  array_new FACE_LIST$row_no
+  #array_new FACE_LIST$row_no
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
     debug row_no: $row_no
@@ -304,7 +308,7 @@ build_face_list(){
 
     make_face "${ROLL}" $die_no
     FACE_LIST="${FACE_LIST} FACE_$die_no"
-    array_push FACE_LIST$row_no FACE_$die_no
+    #array_push FACE_LIST$row_no FACE_$die_no
   done
   debug FACE_LIST: $FACE_LIST
 }

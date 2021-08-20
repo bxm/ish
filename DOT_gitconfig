@@ -15,3 +15,8 @@
   l = log
   oops = reset HEAD~1
   rh = reset --hard
+[color "diff"]
+	meta = blue
+	plain = white
+[color "status"]
+	header = white

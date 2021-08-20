@@ -8,7 +8,8 @@ main(){
   i=0
   get_tty
   FULL=$(( LINES * 8 / 10)) # actually 80% of tty
-  HALF=$(( LINES / 2 ))
+  HALF=$(( LINES * 45 / 100 ))
+  # echo $FULL $HALF
   PAGE=$FULL
   while read L ; do
     : $((i++))
