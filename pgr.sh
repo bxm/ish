@@ -11,7 +11,7 @@ main(){
   HALF=$(( LINES * 45 / 100 ))
   # echo $FULL $HALF
   PAGE=$FULL
-  while read L ; do
+  sed 's:\\:\\\\:g' | while read L ; do
     : $((i++))
     echo "${L:- }"
     [ $i -lt $PAGE ] && continue
