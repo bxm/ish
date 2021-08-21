@@ -1,3 +1,4 @@
+# vi: set ft=gitconfig
 [include]
   path = ~/.gitconfig_user
 
@@ -12,7 +13,8 @@
 [alias]
   co = checkout
   f = fetch
-  l = log
+  lg = log --pretty=format:'%C(bold cyan)%h%Creset %C(brightyellow)%ar %Cgreen%s%Creset %Cblue[%an]%Creset' --date=short
+  l = log --pretty=format:'%C(bold cyan)%h%Creset %C(brightyellow)%ar %Cgreen%s%Creset %Cblue[%an]%Creset' --date=short -10
   oops = reset HEAD~1
   rh = reset --hard
 [color "diff"]
