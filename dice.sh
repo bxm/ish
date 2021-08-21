@@ -1,12 +1,19 @@
 #!/bin/sh
 
 is_array(){
+  debug "is_array $@"
   local a="${1:?Need array name}"
   local e # helper var listing array elements
   local s # array size
   eval e="\"\${${a}_E}\""
   eval s="\"\${${a}_S}\""
-  [ -n "${e}" ] && [ -n "${s}" ]
+  if [ -n "${e}" ] && [ -n "${s}" ] ; then
+    debug is an array
+    true
+  else
+    debug is not an array
+    false
+  fi
   # could also validate all elements exist
 }
 
@@ -275,6 +282,10 @@ make_face(){
   #array_new ${FA} # "$H_LINE"
 
   array_new $FA ${FACE}
+  is_array XDIE_${SIZE}_$1 || array_new XDIE_${SIZE}_$1 $FACE
+  #array_new XDIE_$1 $FACE
+  # TODO: need to clear this when changing size?
+  # or create per size? lot of vars though
   #debug --- for LINE in ${FACE}
   #for LINE in ${FACE} ; do
     #debug LINE: "$LINE"
@@ -311,10 +322,15 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
-    FACE_LIST="${FACE_LIST} FACE_$die_no"
+    # run make face for all die sides
+    # one time when die defined (or JIT it here
+    # with guard to avoid doing twice?)
+    #FACE_LIST="${FACE_LIST} FACE_$die_no"
+    DIE_LIST="${DIE_LIST} XDIE_${SIZE}_$ROLL"
     #array_push FACE_LIST$row_no FACE_$die_no
   done
   debug FACE_LIST: $FACE_LIST
+  debug DIE_LIST: $DIE_LIST
 }
 
 show_face_list(){
@@ -322,12 +338,14 @@ show_face_list(){
   get_tty
   do_clear
   echo
+  # FIXME get line count from DIE somehow or record it when doing th array
   local lines="$(seq 1 $FACE_1_S)"
   local fl
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
   for line in $lines ; do
-    for face in $FACE_LIST ; do
+    #for face in $FACE_LIST ; do
+    for face in $DIE_LIST ; do
       eval fl="\"\$${face}_${line}\""
       #eval echo -n "\"\$${face}_${line}\""
       echo -n "${fl//[.:]/ }"
@@ -342,6 +360,7 @@ roll(){
   local NOT=0
   local ROLL=0
   local FACE_LIST=''
+  local DIE_LIST=''
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (![1-6]) NOT=${1/!} ;;
@@ -367,7 +386,7 @@ prompt(){
     debug "REPLY: ${REPLY}"
     case "${REPLY}" in
       ([qQnN]) echo ; return 1 ;;
-      ([0-9] ) set_die "${REPLY}" ; return 0 ;;
+      ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ; return 0 ;;
       ('['   ) : ;;
       ([\ -~]) return 0 ;;
     esac
