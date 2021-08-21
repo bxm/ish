@@ -380,7 +380,7 @@ roll(){
 
 prompt(){
   unset REPLY
-  printf "Roll again? "
+  printf "Roll again (x$DICE)? "
   while true ; do
     IFS= read -n1 -s REPLY
     debug "REPLY: ${REPLY}"
@@ -388,6 +388,8 @@ prompt(){
       ([qQnN]) echo ; return 1 ;;
       ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ; return 0 ;;
       ('['   ) : ;;
+      (D     ) : $((DICE++)) ; return 0;;
+      (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ; return 0;;
       ([\ -~]) return 0 ;;
     esac
   done
