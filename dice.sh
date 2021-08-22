@@ -236,6 +236,32 @@ cat << EOF
 EOF
 }
 
+_char_segment(){
+cat << EOF
+.###.
+#:.:#
+#..::
+::..#
+:...:
+EOF
+}
+
+_patt_seg(){
+cat << EOF
+,4,4,4,4,4,
+,1,4,1,3,1,
+,1,4,1,4,1,
+,2,2,1,4,4,
+,1,3,1,4,1,
+,1,3,1,2,1,
+EOF
+}
+
+sizeseg(){
+  _char_segment
+  _patt_seg
+}
+
 sizemvp(){
   _char_mvp
   _patt_mvp
@@ -467,6 +493,7 @@ process_params(){
     case "${1}" in
       ( [0-9]| [1-9][0-9]) SIZE=${1} ;;
       (x[0-9]|x[1-9][0-9]) DICE=${1/x} ;;
+      (s | seg   | -s | --seg  ) SIZE=seg ;;
       (m | mvp   | -m | --mvp  ) SIZE=mvp ;;
       (t | test  | -t | --test ) TEST=true ;;
       (d | debug | -d | --debug) DEBUG=true ;;
