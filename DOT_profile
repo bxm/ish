@@ -5,6 +5,8 @@ alias lla='ll -a'
 alias lltr='ll -tr'
 alias v=vim
 alias vi=vim
+alias ff=fg
+alias f=fg
 
 vim() { nvim "$@" ; }
 log() { git log "$@" ; }
