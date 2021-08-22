@@ -32,9 +32,14 @@ col() {
   awk "{print $COL}"
 }
 
-comm() {
-  git commit -am "$*"
+comms() {
+  local flag="${flag}"
+  git commit ${flag} -m "$*" || return
   git push
+}
+
+comm() {
+  flag="-a" comms "$*"
 }
 
 c() {
