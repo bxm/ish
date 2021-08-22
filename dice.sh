@@ -427,6 +427,7 @@ prompt(){
       ([qQnN]) echo ; return 1 ;;
       ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ; return 0 ;;
       (M     ) SIZE=mvp ; set_die "${SIZE}" ; return 0 ;;
+      (S     ) SIZE=seg ; set_die "${SIZE}" ; return 0 ;;
       (D     ) : $((DICE++)) ; return 0;;
       (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ; return 0;;
       ([\ -~]) return 0 ;;
