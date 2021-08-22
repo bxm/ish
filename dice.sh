@@ -493,4 +493,5 @@ main(){
   set_die "${SIZE}"
   main_loop
 }
+
 main "${@}"
