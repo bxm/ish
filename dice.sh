@@ -163,6 +163,10 @@ _h_squash(){
   sed 's/[:]//g'
 }
 
+_patt_mvp(){
+  seq 1 6 | sed 's/.*/,&,/'
+}
+
 _patt_1_line(){
 # extraneous leading, trailing and embedded , are markers for _v_pad_in/out
 cat <<EOF
@@ -185,6 +189,10 @@ cat <<EOF
 ,5,5,,3,3,,5,5,
 ,5,5,,5,5,,5,5,
 EOF
+}
+
+_char_mvp(){
+  seq 1 6
 }
 
 _char_small(){
@@ -225,6 +233,11 @@ cat << EOF
 (@@@)......::
 (@@@):.:(@@@)
 EOF
+}
+
+sizemvp(){
+  _char_mvp
+  _patt_mvp
 }
 
 size0(){
@@ -385,9 +398,10 @@ prompt(){
     IFS= read -n1 -s REPLY
     debug "REPLY: ${REPLY}"
     case "${REPLY}" in
+      ('['   ) : ;; # cursor key suppression
       ([qQnN]) echo ; return 1 ;;
       ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ; return 0 ;;
-      ('['   ) : ;;
+      (M     ) SIZE=mvp ; set_die "${SIZE}" ; return 0 ;;
       (D     ) : $((DICE++)) ; return 0;;
       (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ; return 0;;
       ([\ -~]) return 0 ;;
@@ -455,9 +469,10 @@ process_params(){
     case "${1}" in
       ( [0-9]| [1-9][0-9]) SIZE=${1} ;;
       (x[0-9]|x[1-9][0-9]) DICE=${1/x} ;;
-      (-t|--test ) TEST=true ;;
-      (-d|--debug) DEBUG=true ;;
-      (-q|--quick) QUICK=true ;;
+      (m | mvp   | -m | --mvp  ) SIZE=mvp ;;
+      (t | test  | -t | --test ) TEST=true ;;
+      (d | debug | -d | --debug) DEBUG=true ;;
+      (q | quick | -q | --quick) QUICK=true ;;
     esac
     shift
   done
