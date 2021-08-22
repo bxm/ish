@@ -14,7 +14,7 @@
   co = checkout
   f = fetch
   lg = log --pretty=format:'%C(bold cyan)%h%Creset %C(brightyellow)%ad %Cgreen%<(29,trunc)%s%Creset %Cblue[%an]%Creset' --date=short
-  l = log --pretty=format:'%C(bold cyan)%h%Creset %C(brightyellow)%ad %Cgreen%<(29,trunc)%s%Creset %Cblue[%an]%Creset' --date=short -10
+  l = log --pretty=format:'%C(bold cyan)%h%Creset %C(brightyellow)%ad %Cgreen%<(29,trunc)%s%Creset %Cblue[%an]%Creset' --date=short -7
   oops = reset HEAD~1
   rh = reset --hard
 [color "diff"]
