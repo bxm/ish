@@ -1,6 +1,8 @@
 #!/bin/sh
 
 is_array(){
+  # check if passed array exists
+  # TODO could also validate all elements exist
   debug "is_array $@"
   local a="${1:?Need array name}"
   local e # helper var listing array elements
@@ -14,7 +16,6 @@ is_array(){
     debug is not an array
     false
   fi
-  # could also validate all elements exist
 }
 
 array_get(){
@@ -297,8 +298,6 @@ make_face(){
   array_new $FA ${FACE}
   is_array XDIE_${SIZE}_$1 || array_new XDIE_${SIZE}_$1 $FACE
   #array_new XDIE_$1 $FACE
-  # TODO: need to clear this when changing size?
-  # or create per size? lot of vars though
   #debug --- for LINE in ${FACE}
   #for LINE in ${FACE} ; do
     #debug LINE: "$LINE"
@@ -309,10 +308,10 @@ make_face(){
 }
 
 build_face_list(){
-  # have multiple face lists (array obv)
+  # TODO: have multiple face lists (array obv)
   # use line and face width to determine
   # when to start populating next list
-  #
+  # -- better to do nearer display time?
   local die_no=0
   local row_no=0
   #array_new FACE_LIST$row_no
@@ -463,7 +462,6 @@ get_tty() {
 }
 
 process_params(){
-
   debug process_params "$@"
   while [ $# -gt 0 ] ; do
     case "${1}" in
