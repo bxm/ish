@@ -22,8 +22,8 @@ main(){
       ([1-9]) : $((i-=REPLY)) ;;
       ([hH]) PAGE=$HALF i=0 ;;
       ([fF]) PAGE=$FULL i=0 ;;
-      ([a-zA-Z\ ]) i=0 ;;
-      (*) : $((i--)) ;;
+      ([a-z\ ]) i=0 ;;
+      (*) : $((i--)) ;; # need to do something with arrow keys like in dice
     esac
   done
 }
