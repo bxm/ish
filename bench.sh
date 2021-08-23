@@ -11,6 +11,7 @@ main(){
     shift
     loop "$@"
   else
+    [ $# -le 0 ] && return 1
     time "$0" --spawn "$@"
   fi
 }
