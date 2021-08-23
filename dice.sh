@@ -323,6 +323,7 @@ make_face(){
 
   array_new $FA ${FACE}
   is_array XDIE_${SIZE}_$1 || array_new XDIE_${SIZE}_$1 $FACE
+  eval DIE_LINES=\$XDIE_${SIZE}_${1}_S
   #array_new XDIE_$1 $FACE
   #debug --- for LINE in ${FACE}
   #for LINE in ${FACE} ; do
@@ -377,7 +378,8 @@ show_face_list(){
   do_clear
   echo
   # FIXME get line count from DIE somehow or record it when doing th array
-  local lines="$(seq 1 $FACE_1_S)"
+  #local lines="$(seq 1 $FACE_1_S)"
+  local lines="$(seq 1 $DIE_LINES)"
   local fl
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
@@ -399,6 +401,7 @@ roll(){
   local ROLL=0
   local FACE_LIST=''
   local DIE_LIST=''
+  local DIE_LINES=0
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (![1-6]) NOT=${1/!} ;;
