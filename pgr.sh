@@ -15,16 +15,19 @@ main(){
     : $((i++))
     echo "${L:- }"
     [ $i -lt $PAGE ] && continue
-    read -s -n1 -p% <&1
-    echo -e "\r\c"
-    case "$REPLY" in
-      ([qQ]) break ;;
-      ([1-9]) : $((i-=REPLY)) ;;
-      ([hH]) PAGE=$HALF i=0 ;;
-      ([fF]) PAGE=$FULL i=0 ;;
-      ([a-z\ ]) i=0 ;;
-      (*) : $((i--)) ;; # need to do something with arrow keys like in dice
-    esac
+    while true ; do
+      read -s -n1 -p% <&1
+      echo -e "\r\c"
+      case "$REPLY" in
+        ([qQ]) break 2 ;;
+        ([1-9]) : $((i-=REPLY)) ; break ;;
+        ([hH]) PAGE=$HALF i=0 ; break ;;
+        ([fF]) PAGE=$FULL i=0 ; break ;;
+        ([a-z\ ]) i=0 ; break ;;
+        ([A-Z[]) : ;;
+        (*) : $((i--)) ; break ;; # need to do something with arrow keys like in dice
+      esac
+    done
   done
 }
 
