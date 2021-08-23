@@ -1,7 +1,8 @@
 get_tty() {
   local TTY=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
-  COLUMNS="${TTY// *}"
-  LINES="${TTY//* }"
+  local TAB=$'\t'
+  COLUMNS="${TTY//[ ${TAB}]*}"
+  LINES="${TTY//*[ ${TAB}]}"
 }
 
 main(){
@@ -9,7 +10,6 @@ main(){
   get_tty
   FULL=$(( LINES * 8 / 10)) # actually 80% of tty
   HALF=$(( LINES * 45 / 100 ))
-  # echo $FULL $HALF
   PAGE=$FULL
   sed 's:\\:\\\\:g' | while read L ; do
     : $((i++))
