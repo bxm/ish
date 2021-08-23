@@ -398,19 +398,19 @@ roll(){
 
 prompt(){
   unset REPLY
-  printf "Roll again (x$DICE)? "
   while true ; do
+    printf "\rRoll again (${SIZE}x$DICE)? "
     IFS= read -n1 -s REPLY
     debug "REPLY: ${REPLY}"
     case "${REPLY}" in
       ('['   ) : ;; # cursor key suppression
       ([qQnN]) echo ; return 1 ;;
-      ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ; return 0 ;;
-      (M     ) SIZE=mvp ; set_die "${SIZE}" ; return 0 ;;
-      (S     ) SIZE=seg ; set_die "${SIZE}" ; return 0 ;;
-      (D     ) : $((DICE++)) ; return 0;;
-      (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ; return 0;;
-      ([\ -~]) return 0 ;;
+      ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ;;
+      (M     ) SIZE=mvp ; set_die "${SIZE}" ;;
+      (S     ) SIZE=seg ; set_die "${SIZE}" ;;
+      (D     ) : $((DICE++)) ;;
+      (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ;;
+      ([\ -~]) return 0 ;; # all alpha and symbol
     esac
   done
 }
