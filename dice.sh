@@ -19,12 +19,11 @@ is_array(){
 }
 
 array_get(){
+  # store array element in given variable
   debug "array_get $@"
-  # $1 expects to be array name but also tolerates
-  # being the full element label if $2 omitted
-  local ar="${1:?}"
-  local el="${2}"
-  eval echo -n "\"\${${ar}${el:+_${el}}}\""
+  local element="${1:?}"
+  local var="${2:?}"
+  eval $var="\"\$${element}\""
 }
 
 array_new(){
@@ -311,7 +310,8 @@ size8(){
 make_face(){
   debug make_face "$@"
   local LINE
-  local FACE="$(array_get DIE ${1:?})"
+  local FACE
+  array_get DIE_${1:?} FACE
   debug FACE: "${FACE}"
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
@@ -358,11 +358,13 @@ show_face_list(){
   echo
   local lines="$(seq 1 $DIE_LINES)"
   local fl
+  local face
+  local line
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
   for line in $lines ; do
     for face in $DIE_LIST ; do
-      eval fl="\"\$${face}_${line}\""
+      array_get ${face}_${line} fl
       echo -n "${fl//[.:]/ }"
     done
     echo
