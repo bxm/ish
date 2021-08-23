@@ -356,15 +356,16 @@ show_face_list(){
   get_tty
   do_clear
   echo
-  local lines="$(seq 1 $DIE_LINES)"
+  local die_lines="$(seq 1 $DIE_LINES)"
   local fl
-  local face
-  local line
+  local die_face
+  local die_line
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
-  for line in $lines ; do
-    for face in $DIE_LIST ; do
-      array_get ${face}_${line} fl
+  for die_line in $die_lines ; do
+    for die_face in $DIE_LIST ; do
+      array_get ${die_face}_${die_line} fl
+      # replace filler chars with space
       echo -n "${fl//[.:]/ }"
     done
     echo
