@@ -20,12 +20,14 @@ main(){
       echo -e "\r\c"
       case "$REPLY" in
         ([qQ]) break 2 ;;
+        ($'\r') : $((i--)) ; break ;;
+        ([A-D]) : $((i--)) ; break ;;
         ([1-9]) : $((i-=REPLY)) ; break ;;
         ([hH]) PAGE=$HALF i=0 ; break ;;
         ([fF]) PAGE=$FULL i=0 ; break ;;
         ([a-z\ ]) i=0 ; break ;;
         ([A-Z[]) : ;;
-        (*) : $((i--)) ; break ;; # need to do something with arrow keys like in dice
+        (*) : ;; #$((i--)) ; break ;;
       esac
     done
   done
