@@ -312,26 +312,12 @@ make_face(){
   debug make_face "$@"
   local LINE
   local FACE="$(array_get DIE ${1:?})"
-  local FACE_NO="${2:?}"
-  local FA=FACE_$FACE_NO # face array pointer
   debug FACE: "${FACE}"
-  debug FACE_NO: "${FACE_NO}"
-  debug FA: $FA
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
-  #array_new ${FA} # "$H_LINE"
 
-  array_new $FA ${FACE}
   is_array XDIE_${SIZE}_$1 || array_new XDIE_${SIZE}_$1 $FACE
   eval DIE_LINES=\$XDIE_${SIZE}_${1}_S
-  #array_new XDIE_$1 $FACE
-  #debug --- for LINE in ${FACE}
-  #for LINE in ${FACE} ; do
-    #debug LINE: "$LINE"
-    #array_push $FA "| ${LINE//[.:]/ } |"
-  #done
-  #debug --- end for
-  #array_push ${FA} "$H_LINE"
 }
 
 build_face_list(){
@@ -341,7 +327,6 @@ build_face_list(){
   # -- better to do nearer display time?
   local die_no=0
   local row_no=0
-  #array_new FACE_LIST$row_no
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
     debug row_no: $row_no
@@ -361,14 +346,8 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
-    # run make face for all die sides
-    # one time when die defined (or JIT it here
-    # with guard to avoid doing twice?)
-    #FACE_LIST="${FACE_LIST} FACE_$die_no"
     DIE_LIST="${DIE_LIST} XDIE_${SIZE}_$ROLL"
-    #array_push FACE_LIST$row_no FACE_$die_no
   done
-  debug FACE_LIST: $FACE_LIST
   debug DIE_LIST: $DIE_LIST
 }
 
@@ -377,17 +356,13 @@ show_face_list(){
   get_tty
   do_clear
   echo
-  # FIXME get line count from DIE somehow or record it when doing th array
-  #local lines="$(seq 1 $FACE_1_S)"
   local lines="$(seq 1 $DIE_LINES)"
   local fl
   debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
   for line in $lines ; do
-    #for face in $FACE_LIST ; do
     for face in $DIE_LIST ; do
       eval fl="\"\$${face}_${line}\""
-      #eval echo -n "\"\$${face}_${line}\""
       echo -n "${fl//[.:]/ }"
     done
     echo
