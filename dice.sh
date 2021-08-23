@@ -399,7 +399,7 @@ roll(){
 prompt(){
   unset REPLY
   while true ; do
-    printf "\rRoll again (${SIZE}x$DICE)? "
+    printf "\rRoll again (${SIZE} x$DICE)? "
     IFS= read -n1 -s REPLY
     debug "REPLY: ${REPLY}"
     case "${REPLY}" in
