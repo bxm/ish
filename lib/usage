@@ -1,0 +1,2 @@
+readlink $0
+# split off dir and use to get to lib
