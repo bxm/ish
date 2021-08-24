@@ -11,6 +11,13 @@ main(){
   FULL=$(( LINES * 8 / 10)) # actually 80% of tty
   HALF=$(( LINES * 45 / 100 ))
   PAGE=${FULL}
+  # write out to temp file
+  # use head/tail to slide around inside
+  # to allow back scroll?
+
+  # print a screen full of bewline before clear
+  # to preserve sxroll back
+  clear
   sed 's:\\:\\\\:g' | while read L ; do
     : $((i++))
     echo "${L:- }"
