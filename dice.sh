@@ -10,12 +10,11 @@ is_array(){
   eval e="\"\${${a}_E}\""
   eval s="\"\${${a}_S}\""
   if [ -n "${e}" ] && [ -n "${s}" ] ; then
-    debug is an array
-    true
-  else
-    debug is not an array
-    false
+    debug $a looks arrayish
+    return 0
   fi
+  debug $a is not an array
+  false
 }
 
 array_get(){
@@ -454,7 +453,8 @@ main_loop(){
 }
 
 debug(){
-  ${DEBUG} && printf "## DEBUG ## >>$*<<\n" >&2
+  ${DEBUG} || return 0
+  printf "## DEBUG ## >>$*<<\n" >&2
 }
 
 do_clear(){
