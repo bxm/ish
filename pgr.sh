@@ -1,21 +1,21 @@
 get_tty() {
-  local TTY=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
-  local TAB=$'\t'
-  COLUMNS="${TTY//[ ${TAB}]*}"
-  LINES="${TTY//*[ ${TAB}]}"
+  local tty=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
+  local tab=$'\t'
+  COLUMNS="${tty//[ ${tab}]*}"
+  LINES="${tty//*[ ${tab}]}"
 }
 
-nice_clear(){
-  local l=$LINES
-  local s=''
-  while [ $((l--)) -gt 1 ] ; do
+nice_clear(){ # clear, preserving scroll back
+  local LINES # local of global
+  while [ $(( LINES-- )) -gt 1 ] ; do
     echo
   done
   clear
 }
 
 main(){
-  i=0
+  local i=0
+  local line
   get_tty
   FULL=$(( LINES * 8 / 10)) # actually 80% of tty
   HALF=$(( LINES * 45 / 100 ))
@@ -23,13 +23,13 @@ main(){
   # write out to temp file
   # use head/tail to slide around inside
   # to allow back scroll?
+  # print current line/total in prompt (rhs it?)
 
-  # print a screen full of bewline before clear
-  # to preserve sxroll back
   nice_clear
-  sed 's:\\:\\\\:g' | while read L ; do
+
+  sed 's:\\:\\\\:g' | while read line ; do
     : $((i++))
-    echo "${L:- }"
+    echo "${line:- }" # space to cover % prompt
     [ ${i} -lt ${PAGE} ] && continue
     while true ; do
       read -s -n1 -p% <&1
