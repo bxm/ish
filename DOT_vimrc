@@ -4,10 +4,39 @@ augroup vimrc-remember-cursor-position
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
+au BufNewFile *.sh 0r ~/.vim/skel/skel.sh
+
+highlight ExtraWhitespace ctermbg=88 guibg=red
+highlight GoWhitespace ctermbg=32 guibg=red
+highlight AllTabs ctermbg=22 guibg=green
+highlight LineNr ctermfg=darkgrey ctermbg=236
+
+" highlight trailing whitespace and literal tabs
+syntax match ExtraWhitespace /\s\+$/ containedin=ALL
+syntax match AllTabs /\t/ containedin=ALL
+
+function! RemoveTrailingWhitespace()
+  let save_cursor = getcurpos() " save current cursor position
+  if search('\v\s+$',"n") " check for offenders, to prevent error from %s
+    execute '%s/\v\s+$//g'
+  endif
+  call setpos('.', save_cursor) " put the cursor back where it started
+endfunction
+
+function! ProtectBashVars()
+  let save_cursor = getcurpos() " save current cursor position
+  if search('\v[$]([A-Za-z0-9_]+)',"n") " check for offenders, to prevent error from %s
+    execute '%s/\v[$]([A-Za-z0-9_]+)/${\1}/gc'
+  endif
+  call setpos('.', save_cursor) " put the cursor back where it started
+endfunction
+
+let @w=':call RemoveTrailingWhitespace()'
+
 noremap <silent> <C-Q> :wq<CR>
 vnoremap <silent> <C-Q> <C-C>:wq<CR>
 inoremap <silent> <C-Q> <C-O>:wq<CR>
- 
+
 noremap <silent> <C-X> :q<CR>
 vnoremap <silent> <C-X> <C-C>:q<CR>
 inoremap <silent> <C-X> <C-O>:q<CR>
@@ -16,11 +45,15 @@ noremap <silent> <C-P> :set paste<CR>
 vnoremap <silent> <C-P> <C-C>:set paste<CR>
 inoremap <silent> <C-P> <C-O>:set paste<CR>
 
+autocmd FileType sh noremap <silent> <C-V>:call ProtectBashVars()<CR>
+autocmd FileType sh vnoremap <silent> <C-V> <C-C>:call ProtectBashVars()<CR>
+autocmd FileType sh inoremap <silent> <C-V> <C-O>:call ProtectBashVars()<CR>
+
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 
-nnoremap <silent> <Space> :nohl<CR>
+nnoremap <silent> <Space> :silent :nohl<CR>
 
 filetype plugin indent on
 " On pressing tab, insert 2 spaces
