@@ -1,2 +1,4 @@
 readlink $0
 # split off dir and use to get to lib
+# use a skel file to set up lib helper 
+# and source debug
