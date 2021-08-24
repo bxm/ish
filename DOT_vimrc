@@ -32,6 +32,7 @@ function! ProtectBashVars()
 endfunction
 
 let @w=":call RemoveTrailingWhitespace()\<CR>"
+autocmd FileType sh let @p=":call ProtectBashVars()\<CR>"
 
 noremap <silent> <C-Q> :wq<CR>
 vnoremap <silent> <C-Q> <C-C>:wq<CR>
@@ -44,10 +45,6 @@ inoremap <silent> <C-X> <C-O>:q<CR>
 noremap <silent> <C-P> :set paste<CR>
 vnoremap <silent> <C-P> <C-C>:set paste<CR>
 inoremap <silent> <C-P> <C-O>:set paste<CR>
-
-autocmd FileType sh noremap <silent> <C-V>:call ProtectBashVars()<CR>
-autocmd FileType sh vnoremap <silent> <C-V> <C-C>:call ProtectBashVars()<CR>
-autocmd FileType sh inoremap <silent> <C-V> <C-O>:call ProtectBashVars()<CR>
 
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
