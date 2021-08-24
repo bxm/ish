@@ -31,7 +31,7 @@ function! ProtectBashVars()
   call setpos('.', save_cursor) " put the cursor back where it started
 endfunction
 
-let @w=':call RemoveTrailingWhitespace()'
+let @w=":call RemoveTrailingWhitespace()\<CR>"
 
 noremap <silent> <C-Q> :wq<CR>
 vnoremap <silent> <C-Q> <C-C>:wq<CR>
