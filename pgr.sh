@@ -5,6 +5,15 @@ get_tty() {
   LINES="${TTY//*[ ${TAB}]}"
 }
 
+nice_clear(){
+  local l=$LINES
+  local s=''
+  while [ $((l--)) -gt 1 ] ; do
+    echo
+  done
+  clear
+}
+
 main(){
   i=0
   get_tty
@@ -17,7 +26,7 @@ main(){
 
   # print a screen full of bewline before clear
   # to preserve sxroll back
-  clear
+  nice_clear
   sed 's:\\:\\\\:g' | while read L ; do
     : $((i++))
     echo "${L:- }"
