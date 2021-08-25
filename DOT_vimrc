@@ -1,3 +1,4 @@
+set scrolloff=5
 " Remember cursor position
 augroup vimrc-remember-cursor-position
     autocmd!
