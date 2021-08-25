@@ -6,8 +6,8 @@ get_tty() {
 }
 
 nice_clear(){ # clear, preserving scroll back
-  local LINES # local of global
-  while [ $(( LINES-- )) -gt 1 ] ; do
+  local lines=$LINES # local copy of global
+  while [ $(( lines-- )) -gt 1 ] ; do
     echo
   done
   clear
