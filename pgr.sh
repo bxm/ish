@@ -49,4 +49,9 @@ main(){
   done
 }
 
+# TODO temp remove escape codes
+#      detect wrapped lines
+#      count as multiple decrements
+#      truncate really long (screenful)?
+
 main "$@"
