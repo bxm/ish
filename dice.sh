@@ -46,7 +46,6 @@ array_delete(){
   debug e: ${e}
   debug unset ${e} ${s_var} ${e_var}
   unset ${e} ${s_var} ${e_var}
-
 }
 
 array_dump(){
@@ -68,7 +67,6 @@ array_dump(){
   for element in ${e} ; do
     eval echo "\"\$${element}\""
   done
-
 }
 
 array_push(){
@@ -190,6 +188,17 @@ cat <<EOF
 EOF
 }
 
+_patt_seg(){
+cat << EOF
+,4,4,4,4,4,
+,1,4,1,3,1,
+,1,4,1,4,1,
+,2,2,1,4,4,
+,1,3,1,4,1,
+,1,3,1,2,1,
+EOF
+}
+
 _char_mvp(){
   seq 1 6
 }
@@ -241,17 +250,6 @@ cat << EOF
 #..::
 ::..#
 :...:
-EOF
-}
-
-_patt_seg(){
-cat << EOF
-,4,4,4,4,4,
-,1,4,1,3,1,
-,1,4,1,4,1,
-,2,2,1,4,4,
-,1,3,1,4,1,
-,1,3,1,2,1,
 EOF
 }
 
@@ -419,11 +417,9 @@ set_die(){
   local DIE="$(elaborate ${1})"
   debug "DIE:\n${DIE}"
   array_new DIE ${DIE}
-  local fpart="${DIE_1//\/*}"
-  debug fpart: "$fpart"
-  H_LINE=".${fpart}."
-  H_LINE=" ${H_LINE//?/-} "
-  FACE_WIDTH="${#H_LINE}"
+  local first_line="${DIE_1//\/*}"
+  debug first_line: "$first_line"
+  FACE_WIDTH="${#first_line}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
   debug FACE_WIDTH: $FACE_WIDTH
