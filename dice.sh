@@ -304,6 +304,16 @@ size8(){
   _patt_double_1_line | _pad v in 2 | _pad v out
 }
 
+how_many(){
+  get_tty
+  debug how_many "$@"
+
+  debug COLUMNS $COLUMNS
+
+  local per_line=$((COLUMNS / $1))
+  debug per_line $per_line
+}
+
 make_face(){
   debug make_face "$@"
   local LINE
@@ -350,14 +360,12 @@ build_face_list(){
 
 show_face_list(){
   local width=0
-  get_tty
   do_clear
   echo
   local die_lines="$(seq 1 $DIE_LINES)"
   local fl
   local die_face
   local die_line
-  debug FACE_WIDTH: $FACE_WIDTH
   # iterate face lists array element list
   for die_line in $die_lines ; do
     for die_face in $DIE_LIST ; do
@@ -415,14 +423,16 @@ prompt(){
 
 set_die(){
   local DIE="$(elaborate ${1})"
+  local face_width
   debug "DIE:\n${DIE}"
   array_new DIE ${DIE}
   local first_line="${DIE_1//\/*}"
   debug first_line: "$first_line"
-  FACE_WIDTH="${#first_line}"
+  face_width="${#first_line}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
-  debug FACE_WIDTH: $FACE_WIDTH
+  debug face_width: $face_width
+  how_many $face_width
 }
 
 animate_loop(){
@@ -489,7 +499,6 @@ main(){
   TEST=false
   DEBUG=false
   QUICK=false
-  FACE_WIDTH=0
 
   debug main "$@"
   process_params "${@}"
