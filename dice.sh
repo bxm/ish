@@ -430,7 +430,7 @@ prompt(){
       (S     ) SIZE=seg ; set_die "${SIZE}" ;;
       (D     ) : $((DICE++)) ;;
       (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ;;
-      ([\ -~]) return 0 ;; # all alpha and symbol
+      ([\ -~]) echo ; return 0 ;; # all alpha and symbol
     esac
   done
 }
@@ -466,6 +466,8 @@ animate_loop(){
 
 main_loop(){
   while true ; do
+    do_clear
+    echo -e "Working..."
     animate_loop
     ${TEST} || roll
     prompt || break
