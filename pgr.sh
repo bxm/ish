@@ -13,6 +13,10 @@ nice_clear(){ # clear, preserving scroll back
   clear
 }
 
+prompt(){
+  true
+}
+
 main(){
   local i=0
   local line
@@ -29,13 +33,13 @@ main(){
 
   sed 's:\\:\\\\:g' | while read line ; do
     : $((i++))
-    echo "${line:- }" # space to cover % prompt
+    echo "${line}" 
     [ ${i} -lt ${PAGE} ] && continue
     while true ; do
       read -s -n1 -p% <&1
-      echo -e "\r\c"
+      echo -e "\r \b\c"
       case "${REPLY}" in
-        ([qQ]) break 2 ;;
+        ([qQ]) exit ;;
         ($'\r') : $((i--)) ; break ;;
         ([A-D]) : $((i--)) ; break ;;
         ([1-9]) : $((i-=REPLY)) ; break ;;
@@ -43,13 +47,13 @@ main(){
         ([fF]) PAGE=${FULL} i=0 ; break ;;
         ([a-z\ ]) i=0 ; break ;;
         ([A-Z[]) : ;;
-        (*) : ;; #$((i--)) ; break ;;
+        (*) : ;;
       esac
     done
   done
 }
 
-# TODO temp remove escape codes
+# TODO temp remove escape codes?
 #      detect wrapped lines
 #      count as multiple decrements
 #      truncate really long (screenful)?
