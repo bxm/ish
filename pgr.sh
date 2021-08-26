@@ -14,7 +14,21 @@ nice_clear(){ # clear, preserving scroll back
 }
 
 prompt(){
-  true
+  while true ; do
+    read -s -n1 -p% <&1
+    echo -e "\r \b\c"
+    case "${REPLY}" in
+      ([qQ]   ) exit ;;
+      ($'\r'  ) : $((i--)) ; break ;;
+      ([A-D]  ) : $((i--)) ; break ;;
+      ([1-9]  ) : $((i-=REPLY)) ; break ;;
+      ([hH]   ) PAGE=${HALF} i=0 ; break ;;
+      ([fF]   ) PAGE=${FULL} i=0 ; break ;;
+      ([a-z\ ]) i=0 ; break ;;
+      ([A-Z[] ) continue ;;
+      (*      ) continue ;;
+    esac
+  done
 }
 
 main(){
@@ -35,21 +49,7 @@ main(){
     : $((i++))
     echo "${line}" 
     [ ${i} -lt ${PAGE} ] && continue
-    while true ; do
-      read -s -n1 -p% <&1
-      echo -e "\r \b\c"
-      case "${REPLY}" in
-        ([qQ]) exit ;;
-        ($'\r') : $((i--)) ; break ;;
-        ([A-D]) : $((i--)) ; break ;;
-        ([1-9]) : $((i-=REPLY)) ; break ;;
-        ([hH]) PAGE=${HALF} i=0 ; break ;;
-        ([fF]) PAGE=${FULL} i=0 ; break ;;
-        ([a-z\ ]) i=0 ; break ;;
-        ([A-Z[]) : ;;
-        (*) : ;;
-      esac
-    done
+    prompt
   done
 }
 
