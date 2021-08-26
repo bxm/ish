@@ -328,17 +328,11 @@ make_face(){
 }
 
 build_face_list(){
-  # TODO: have multiple face lists (array obv)
-  # use line and face width to determine
-  # when to start populating next list
-  # -- better to do nearer display time?
   local die_no=0
-  local row_no=0
   local die_list=''
   array_new DIE_LIST
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
-    debug row_no: $row_no
     : $((die_no++))
     if [ "${FORCE}" -gt 0 ] ; then
       ROLL="${FORCE}"
@@ -355,9 +349,6 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
-    # if die no mod how many /per line count
-    # equals 0 push die list, emoty local dl
-    # final push outside loop if not empty
     die_list="${die_list} XDIE_${SIZE}_$ROLL"
     local mod
     debug die_no $die_no PER_LINE $PER_LINE
