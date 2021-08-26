@@ -116,23 +116,23 @@ elaborate() {
   done
 }
 
-x_sed() {
+x_sed() { # perform sed action multiple times
   debug x_sed "$@"
   local i="${2:-1}"
-  local SED_CMD=''
+  local sed_cmd=''
   while [ "${i}" -gt 0 ] ; do
     : $((i-=1))
-    SED_CMD="${SED_CMD};$1"
+    sed_cmd="${sed_cmd};$1"
   done
-  sed -r "${SED_CMD}"
+  sed -r "${sed_cmd}"
 }
 
 _pad(){
   debug _pad "$@"
-  local DIR="${1:?}"
-  local LOC="${2:?}"
-  local TIM="${3:-1}"
-  _${DIR}_pad_${LOC} ${TIM}
+  local dir="${1:?}"
+  local loc="${2:?}"
+  local tim="${3:-1}"
+  _${dir}_pad_${loc} ${tim}
 }
 
 _v_pad_in(){
@@ -164,8 +164,8 @@ _patt_mvp(){
   seq 1 6 | sed 's/.*/,&,/'
 }
 
-_patt_1_line(){
 # extraneous leading, trailing and embedded , are markers for _v_pad_in/out
+_patt_1_line(){
 cat <<EOF
 ,1,,3,,1,
 ,2,,1,,4,
@@ -177,7 +177,6 @@ EOF
 }
 
 _patt_double_1_line(){
-# extraneous leading, trailing and embedded , are markers for _v_pad_in/out
 cat <<EOF
 ,1,1,,3,3,,1,1,
 ,2,2,,1,1,,4,4,
