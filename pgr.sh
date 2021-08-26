@@ -32,27 +32,24 @@ prompt(){
 }
 
 set_page_size(){
-  get_tty
   FULL=$(( LINES * 8 / 10)) # actually 80% of tty
   HALF=$(( LINES * 45 / 100 ))
   PAGE=${FULL}
 }
 
-is_long_line(){
-:
-}
-
-set_increment(){
-:
+get_increment(){
+  return 1
 }
 
 read_pipeline(){
   local i=0
-  local inc=1
+  local inc
   local line
   sed 's:\\:\\\\:g' | while read line ; do
+    get_increment "$line"
+    inc=$?
     : $((i+=inc))
-    echo "${line}" 
+    echo "${line}"
     [ ${i} -lt ${PAGE} ] && continue
     prompt
   done
@@ -63,6 +60,7 @@ main(){
   # use head/tail to slide around inside
   # to allow back scroll?
   # print current line/total in prompt (rhs it?)
+  get_tty
   set_page_size
   nice_clear
   read_pipeline
