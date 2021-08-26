@@ -6,7 +6,7 @@ get_tty() {
 }
 
 nice_clear(){ # clear, preserving scroll back
-  local lines=$LINES # local copy of global
+  local lines=${LINES} # local copy of global
   while [ $(( lines-- )) -gt 1 ] ; do
     echo
   done
@@ -32,13 +32,17 @@ prompt(){
 }
 
 set_page_size(){
-  FULL=$(( LINES * 8 / 10)) # actually 80% of tty
-  HALF=$(( LINES * 45 / 100 ))
+  #FULL=$(( LINES * 8 / 10)) # actually 80% of tty
+  #HALF=$(( LINES * 45 / 100 ))
+  FULL=$LINES
+  HALF=$(( LINES / 2 ))
   PAGE=${FULL}
 }
 
 get_increment(){
-  return 1
+  [ $(($1 % COLUMNS)) -eq 0 ]
+  local t=$(($1 / COLUMNS + $?))
+  [ $t -eq 0 ] && return 1 || return $t
 }
 
 read_pipeline(){
@@ -46,7 +50,7 @@ read_pipeline(){
   local inc
   local line
   sed 's:\\:\\\\:g' | while read line ; do
-    get_increment "$line"
+    get_increment "${#line}"
     inc=$?
     : $((i+=inc))
     echo "${line}"
