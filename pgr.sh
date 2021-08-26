@@ -38,22 +38,25 @@ set_page_size(){
   PAGE=${FULL}
 }
 
-main(){
+read_pipeline(){
   local i=0
   local line
-  # write out to temp file
-  # use head/tail to slide around inside
-  # to allow back scroll?
-  # print current line/total in prompt (rhs it?)
-  set_page_size
-  nice_clear
-
   sed 's:\\:\\\\:g' | while read line ; do
     : $((i++))
     echo "${line}" 
     [ ${i} -lt ${PAGE} ] && continue
     prompt
   done
+}
+
+main(){
+  # write out to temp file
+  # use head/tail to slide around inside
+  # to allow back scroll?
+  # print current line/total in prompt (rhs it?)
+  set_page_size
+  nice_clear
+  read_pipeline
 }
 
 # TODO temp remove escape codes?
