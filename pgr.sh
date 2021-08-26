@@ -31,18 +31,21 @@ prompt(){
   done
 }
 
-main(){
-  local i=0
-  local line
+set_page_size(){
   get_tty
   FULL=$(( LINES * 8 / 10)) # actually 80% of tty
   HALF=$(( LINES * 45 / 100 ))
   PAGE=${FULL}
+}
+
+main(){
+  local i=0
+  local line
   # write out to temp file
   # use head/tail to slide around inside
   # to allow back scroll?
   # print current line/total in prompt (rhs it?)
-
+  set_page_size
   nice_clear
 
   sed 's:\\:\\\\:g' | while read line ; do
