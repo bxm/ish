@@ -19,8 +19,8 @@ prompt(){
     echo -e "\r \b\c"
     case "${REPLY}" in
       ([qQ]   ) exit ;;
-      ($'\r'  ) : $((i--)) ; break ;;
-      ([A-D]  ) : $((i--)) ; break ;;
+      ($'\r'  ) : $((i-=inc)) ; break ;;
+      ([A-D]  ) : $((i-=inc)) ; break ;;
       ([1-9]  ) : $((i-=REPLY)) ; break ;;
       ([hH]   ) PAGE=${HALF} i=0 ; break ;;
       ([fF]   ) PAGE=${FULL} i=0 ; break ;;
@@ -38,11 +38,20 @@ set_page_size(){
   PAGE=${FULL}
 }
 
+is_long_line(){
+:
+}
+
+set_increment(){
+:
+}
+
 read_pipeline(){
   local i=0
+  local inc=1
   local line
   sed 's:\\:\\\\:g' | while read line ; do
-    : $((i++))
+    : $((i+=inc))
     echo "${line}" 
     [ ${i} -lt ${PAGE} ] && continue
     prompt
