@@ -34,8 +34,8 @@ prompt(){
 set_page_size(){
   #FULL=$(( LINES * 8 / 10)) # actually 80% of tty
   #HALF=$(( LINES * 45 / 100 ))
-  FULL=$LINES
-  HALF=$(( LINES / 2 ))
+  FULL=$(( LINES - 2))
+  HALF=$(( FULL / 2 ))
   PAGE=${FULL}
 }
 
@@ -45,18 +45,30 @@ get_increment(){
   [ $t -eq 0 ] && return 1 || return $t
 }
 
+get_incrementx(){
+  local c="$(echo -n "$1" | clean)"
+  [ $((${#c} % COLUMNS)) -eq 0 ]
+  local t=$((${#c} / COLUMNS + $?))
+  [ $t -eq 0 ] && return 1 || return $t
+}
+
 read_pipeline(){
   local i=0
   local inc
   local line
   sed 's:\\:\\\\:g' | while read line ; do
     get_increment "${#line}"
+    #get_incrementx "${line}"
     inc=$?
     : $((i+=inc))
     echo "${line}"
     [ ${i} -lt ${PAGE} ] && continue
     prompt
   done
+}
+
+clean(){
+  sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g'
 }
 
 main(){
