@@ -310,8 +310,8 @@ how_many(){
 
   debug COLUMNS $COLUMNS
 
-  local per_line=$((COLUMNS / $1))
-  debug per_line $per_line
+  PER_LINE=$((COLUMNS / $1))
+  debug PER_LINE $PER_LINe
 }
 
 make_face(){
@@ -334,6 +334,8 @@ build_face_list(){
   # -- better to do nearer display time?
   local die_no=0
   local row_no=0
+  local die_list=''
+  array_new DIE_LIST
   while [ $die_no -lt $DICE ] ; do
     debug die_no: $die_no
     debug row_no: $row_no
@@ -353,8 +355,22 @@ build_face_list(){
     debug "ROLL: ${ROLL}"
 
     make_face "${ROLL}" $die_no
-    DIE_LIST="${DIE_LIST} XDIE_${SIZE}_$ROLL"
+    # if die no mod how many /per line count
+    # equals 0 push die list, emoty local dl
+    # final push outside loop if not empty
+    die_list="${die_list} XDIE_${SIZE}_$ROLL"
+    local mod
+    debug die_no $die_no PER_LINE $PER_LINE
+    : $((mod = die_no % PER_LINE ))
+    debug mod $mod
+    if [ $mod -eq 0 ] ; then
+      array_push DIE_LIST "${die_list}"
+      die_list=''
+    fi
   done
+  if [ -n "${die_list}" ] ; then
+    array_push DIE_LIST "${die_list}"
+  fi
   debug DIE_LIST: $DIE_LIST
 }
 
@@ -367,15 +383,23 @@ show_face_list(){
   local die_face
   local die_line
   # iterate face lists array element list
-  for die_line in $die_lines ; do
-    for die_face in $DIE_LIST ; do
-      array_get ${die_face}_${die_line} fl
-      # replace filler chars with space
-      echo -n "${fl//[.:]/ }"
-    done
-    echo
-  done # | sed 's/||/|/g;s/-  -/- -/g' # questionable way to squeeze more in
-  echo
+  # think we go through die lists here
+  # like for bb in die list e
+  # array get to var 
+  # then do lines, faces from that var
+  for dl in $DIE_LIST_E ; do
+    debug dl: $dl
+    array_get $dl dla
+    debug dla: $dla
+    for die_line in $die_lines ; do
+      for die_face in $dla ; do
+        array_get ${die_face}_${die_line} fl
+        # replace filler chars with space
+        echo -n "${fl//[.:]/ }"
+      done
+      echo
+    done # | sed 's/||/|/g;s/-  -/- -/g' # questionable way to squeeze more in
+  done
 }
 
 roll(){
