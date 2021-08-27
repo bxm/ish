@@ -86,5 +86,6 @@ main(){
 #      detect wrapped lines
 #      count as multiple decrements
 #      truncate really long (screenful)?
+# ll --color ~/code/ish | awk '{n = $0 ; sub(/\x1B\[[0-9;]{1,}[A-Za-z]/,"",n) ; print length(n),$0}'
 
 main "$@"
