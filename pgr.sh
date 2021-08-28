@@ -53,31 +53,27 @@ get_incrementx(){
 }
 
 add_length(){
-  #awk '{n = $0 ; gsub(/\x1B\[[0-9;]{1,}[A-Za-z]/,"",n) ; print length(n),$0,n}'
   awk '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
 
+}
+
+fix_bslash(){
+  sed 's:\\:\\\\:g'
 }
 
 read_pipeline(){
   local i=0
   local inc
   local line
-  sed 's:\\:\\\\:g' | add_length | while read len line ; do
+  fix_bslash | add_length | while read len line ; do
     get_increment "${len}"
-    #get_incrementx "${line}"
     inc=$?
     : $((i+=inc))
-    #echo "${line}" >foob
     echo "${line}"
     [ ${i} -lt ${PAGE} ] && continue
     prompt
   done
 }
-
-clean(){
-  sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g'
-}
-
 
 main(){
   # write out to temp file
@@ -90,10 +86,6 @@ main(){
   read_pipeline
 }
 
-# TODO temp remove escape codes?
-#      detect wrapped lines
-#      count as multiple decrements
-#      truncate really long (screenful)?
-# ll --color ~/code/ish | awk '{n = $0 ; sub(/\x1B\[[0-9;]{1,}[A-Za-z]/,"",n) ; print length(n),$0}'
+# TODO truncate really long (screenful)?
 
 main "$@"
