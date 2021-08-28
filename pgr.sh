@@ -56,8 +56,8 @@ read_pipeline(){
   local i=0
   local inc
   local line
-  sed 's:\\:\\\\:g' | while read line ; do
-    get_increment "${#line}"
+  sed 's:\\:\\\\:g' | add_length | while read len line ; do
+    get_increment "${len}"
     #get_incrementx "${line}"
     inc=$?
     : $((i+=inc))
@@ -69,6 +69,10 @@ read_pipeline(){
 
 clean(){
   sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g'
+}
+
+add_length(){
+  awk '{n = $0 ; sub(/\x1B\[[0-9;]{1,}[A-Za-z]/,"",n) ; print length(n),$0}'
 }
 
 main(){
