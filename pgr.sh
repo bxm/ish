@@ -52,6 +52,12 @@ get_incrementx(){
   [ $t -eq 0 ] && return 1 || return $t
 }
 
+add_length(){
+  #awk '{n = $0 ; gsub(/\x1B\[[0-9;]{1,}[A-Za-z]/,"",n) ; print length(n),$0,n}'
+  awk '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
+
+}
+
 read_pipeline(){
   local i=0
   local inc
@@ -61,6 +67,7 @@ read_pipeline(){
     #get_incrementx "${line}"
     inc=$?
     : $((i+=inc))
+    #echo "${line}" >foob
     echo "${line}"
     [ ${i} -lt ${PAGE} ] && continue
     prompt
@@ -71,9 +78,6 @@ clean(){
   sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g'
 }
 
-add_length(){
-  awk '{n = $0 ; sub(/\x1B\[[0-9;]{1,}[A-Za-z]/,"",n) ; print length(n),$0}'
-}
 
 main(){
   # write out to temp file
