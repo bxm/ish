@@ -32,9 +32,7 @@ prompt(){
 }
 
 set_page_size(){
-  #FULL=$(( LINES * 8 / 10)) # actually 80% of tty
-  #HALF=$(( LINES * 45 / 100 ))
-  FULL=$(( LINES - 2))
+  FULL=$(( LINES - 1)) # allow for prompt
   HALF=$(( FULL / 2 ))
   PAGE=${FULL}
 }
