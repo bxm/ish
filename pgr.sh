@@ -72,6 +72,16 @@ main(){
   # use head/tail to slide around inside
   # to allow back scroll?
   # print current line/total in prompt (rhs it?)
+
+  # what if read whole input to array?
+  # would be slow to start if did whole thing.
+  # but loading on demand might work.. 
+  # app memory limit?
+  # how to manage navigating .. would need to know 
+  # index for top line of screen as that is redraw
+  # point, if pressing up arrow or like 'b' for screen
+  # so us e bottom row index - (FULL0)
+  # 
   get_tty
   set_page_size
   nice_clear
