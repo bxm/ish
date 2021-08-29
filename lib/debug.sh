@@ -2,5 +2,5 @@
 
 debug(){
   ${DEBUG:-false} || return 0
-  printf "## DEBUG ## >>$*<<\n" >&2
+  printf "## DEBUG ## >>%s<<\n" "$*" >&2
 }
