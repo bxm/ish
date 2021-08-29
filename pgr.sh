@@ -75,13 +75,13 @@ main(){
 
   # what if read whole input to array?
   # would be slow to start if did whole thing.
-  # but loading on demand might work.. 
+  # but loading on demand might work..
   # app memory limit?
-  # how to manage navigating .. would need to know 
+  # how to manage navigating .. would need to know
   # index for top line of screen as that is redraw
   # point, if pressing up arrow or like 'b' for screen
-  # so us e bottom row index - (FULL0)
-  # 
+  # get top with :: bottom row index - (FULL-1)
+  #
   get_tty
   set_page_size
   nice_clear
