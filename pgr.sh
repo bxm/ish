@@ -38,19 +38,13 @@ set_page_size(){
 }
 
 get_increment(){
-  [ $(($1 % COLUMNS)) -eq 0 ]
-  local t=$(($1 / COLUMNS + $?))
-  [ $t -eq 0 ] && return 1 || return $t
+  [ $((${1} % COLUMNS)) -eq 0 ]
+  local t=$((${1} / COLUMNS + $?))
+  [ ${t} -eq 0 ] && return 1
+  return ${t}
 }
 
-get_incrementx(){
-  local c="$(echo -n "$1" | clean)"
-  [ $((${#c} % COLUMNS)) -eq 0 ]
-  local t=$((${#c} / COLUMNS + $?))
-  [ $t -eq 0 ] && return 1 || return $t
-}
-
-add_length(){
+prepend_length(){
   awk '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
 
 }
@@ -63,7 +57,7 @@ read_pipeline(){
   local i=0
   local inc
   local line
-  fix_bslash | add_length | while read len line ; do
+  fix_bslash | prepend_length | while read len line ; do
     get_increment "${len}"
     inc=$?
     : $((i+=inc))
