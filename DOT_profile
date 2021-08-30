@@ -8,7 +8,7 @@ alias vi=vim
 alias ff=fg
 alias f=fg
 
-vim() { nvim "$@" ; }
+vim() { nvim -p "$@" ; }
 log() { git log "$@" ; }
 stat() { git status "$@" ; }
 setup() { push --set-upstream origin $(gbr --show-current) ; }
