@@ -1,17 +1,17 @@
-get_tty() {
-  local tty=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
-  local tab=$'\t'
-  COLUMNS="${tty//[ ${tab}]*}"
-  LINES="${tty//*[ ${tab}]}"
-}
+#!/usr/bin/env sh
 
-nice_clear(){ # clear, preserving scroll back
-  local lines=${LINES} # local copy of global
-  while [ $(( lines-- )) -gt 1 ] ; do
-    echo
-  done
-  clear
+###
+adlib(){
+  local realname="$(readlink -f "$0")"
+  local libdir="${realname%/*}/lib"
+	while [ $# -gt 0 ] ; do
+		local libname="${1%.sh}.sh"
+		source "$libdir/$libname" || continue
+    debug added "$libdir/$libname"
+		shift
+	done
 }
+###
 
 prompt(){
   while true ; do
@@ -84,10 +84,10 @@ main(){
   #
   get_tty
   set_page_size
-  nice_clear
+  nice_clear 1
   read_pipeline
 }
 
 # TODO truncate really long (screenful)?
-
+adlib debug tty
 main "$@"
