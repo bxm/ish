@@ -2,12 +2,12 @@
 
 ###
 adlib(){
-  local realname="$(readlink -f "$0")"
+  local realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
 	while [ $# -gt 0 ] ; do
 		local libname="${1%.sh}.sh"
-		source "$libdir/$libname" || continue
-    debug added "$libdir/$libname"
+		source "${libdir}/${libname}" || continue
+    debug added "${libdir}/${libname}"
 		shift
 	done
 }
@@ -44,11 +44,13 @@ get_increment(){
   [ $((${1} % COLUMNS)) -eq 0 ]
   # add 1 to line split by columns - ie rounding up
   local lines=$((${1} / COLUMNS + $?))
-  debug lines: $lines = $1 / $COLUMNS + 0~1
+  debug lines: ${lines} = ${1} / ${COLUMNS} + 0~1
   return ${lines}
 }
 
 prepend_length(){
+  # strip colour chars to get visible length
+  # prepending value to original text
   awk '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
 }
 
@@ -62,6 +64,7 @@ read_pipeline(){
   local line
   fix_bslash | prepend_length | while read len line ; do
     echo "${line}"
+    debug len: ${len}
     get_increment "${len}"
     inc=$? # used in prompt func
     # ostensibly adding 1 per line, but counting
