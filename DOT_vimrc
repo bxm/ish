@@ -8,13 +8,14 @@ augroup END
 au BufNewFile *.sh 0r ~/.vim/skel/skel.sh
 
 highlight ExtraWhitespace ctermbg=88 guibg=red
-highlight GoWhitespace ctermbg=32 guibg=red
 highlight AllTabs ctermbg=22 guibg=green
 highlight LineNr ctermfg=darkgrey ctermbg=236
 
 " highlight trailing whitespace and literal tabs
-syntax match ExtraWhitespace /\s\+$/ containedin=ALL
-syntax match AllTabs /\t/ containedin=ALL
+"match ExtraWhitespace /\s\+$/
+"match AllTabs /\t/
+match errorMsg /\s\+$/
+"match errorMsg /\t/
 
 function! RemoveTrailingWhitespace()
   let save_cursor = getcurpos() " save current cursor position
