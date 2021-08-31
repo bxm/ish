@@ -38,10 +38,13 @@ set_page_size(){
 }
 
 get_increment(){
+  # empty lines need to increment 1
+  [ ${1} -eq 0 ] && return 1
+  # if wrapped line does not fit exactly in screen
   [ $((${1} % COLUMNS)) -eq 0 ]
-  local t=$((${1} / COLUMNS + $?))
-  [ ${t} -eq 0 ] && return 1
-  return ${t}
+  # add 1 to line split by columns - ie rounding up
+  local lines=$((${1} / COLUMNS + $?))
+  return ${lines}
 }
 
 prepend_length(){
@@ -54,7 +57,7 @@ fix_bslash(){
 }
 
 read_pipeline(){
-  local i=0
+  local i=0 # rolling count of lines
   local inc
   local line
   fix_bslash | prepend_length | while read len line ; do
@@ -89,5 +92,6 @@ main(){
 }
 
 # TODO truncate really long (screenful)?
-adlib debug tty
+adlib debug tty array
+
 main "$@"
