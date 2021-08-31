@@ -49,7 +49,6 @@ get_increment(){
 
 prepend_length(){
   awk '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
-
 }
 
 fix_bslash(){
@@ -57,14 +56,16 @@ fix_bslash(){
 }
 
 read_pipeline(){
-  local i=0 # rolling count of lines
+  local i=0 # how far down a page we have drawn
   local inc
   local line
   fix_bslash | prepend_length | while read len line ; do
-    get_increment "${len}"
-    inc=$?
-    : $((i+=inc))
     echo "${line}"
+    get_increment "${len}"
+    inc=$? # used in prompt func
+    # ostensibly adding 1 per line, but counting
+    # wrapped lines as more, so as not to overscroll
+    : $((i+=inc))
     [ ${i} -lt ${PAGE} ] && continue
     prompt
   done
