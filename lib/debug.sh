@@ -10,6 +10,6 @@ debug(){
         shift
       done
       ;;
-    (* ) printf "## DEBUG: ## >>%s<<\n" "$*" >&2 ;;
+    (* ) printf "## DEBUG ## >>%s<<\n" "$*" >&2 ;;
   esac
 }
