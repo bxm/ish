@@ -44,6 +44,7 @@ get_increment(){
   [ $((${1} % COLUMNS)) -eq 0 ]
   # add 1 to line split by columns - ie rounding up
   local lines=$((${1} / COLUMNS + $?))
+  debug lines: $lines = $1 / $COLUMNS + 0~1
   return ${lines}
 }
 
