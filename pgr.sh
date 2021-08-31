@@ -76,6 +76,13 @@ read_pipeline(){
   done
 }
 
+check_parama(){
+  while [ $# -gt 0 ] ; do
+    true
+    shift
+  done
+}
+
 main(){
   # write out to temp file
   # use head/tail to slide around inside
