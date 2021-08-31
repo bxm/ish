@@ -19,12 +19,12 @@ prompt(){
     echo -e "\r \b\c"
     case "${REPLY}" in
       ([qQ]   ) exit ;;
-      ($'\r'  ) : $((i-=inc)) ; break ;;
-      ([A-D]  ) : $((i-=inc)) ; break ;;
-      ([1-9]  ) : $((i-=REPLY)) ; break ;;
-      ([hH]   ) PAGE=${HALF} i=0 ; break ;;
-      ([fF]   ) PAGE=${FULL} i=0 ; break ;;
-      ([a-z\ ]) i=0 ; break ;;
+      ($'\r'  ) : $((drawn-=inc)) ; break ;;
+      ([A-D]  ) : $((drawn-=inc)) ; break ;;
+      ([1-9]  ) : $((drawn-=REPLY)) ; break ;;
+      ([hH]   ) PAGE=${HALF} drawn=0 ; break ;;
+      ([fF]   ) PAGE=${FULL} drawn=0 ; break ;;
+      ([a-z\ ]) drawn=0 ; break ;;
       ([A-Z[] ) continue ;;
       (*      ) continue ;;
     esac
@@ -56,7 +56,7 @@ fix_bslash(){
 }
 
 read_pipeline(){
-  local i=0 # how far down a page we have drawn
+  local drawn=0 # how far down a page we have drawn
   local inc
   local line
   fix_bslash | prepend_length | while read len line ; do
@@ -65,8 +65,9 @@ read_pipeline(){
     inc=$? # used in prompt func
     # ostensibly adding 1 per line, but counting
     # wrapped lines as more, so as not to overscroll
-    : $((i+=inc))
-    [ ${i} -lt ${PAGE} ] && continue
+    : $((drawn+=inc))
+    # only prompt if we have filled the screen
+    [ ${drawn} -lt ${PAGE} ] && continue
     prompt
   done
 }
