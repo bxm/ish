@@ -55,12 +55,13 @@ bar(){
   debug bar "$@"
   local count
   local floor="${1:-0}"
-  local col=$((COLUMNS+floor))
+  local col=$((COLUMNS+floor-5))
   while read count ; do
+    printf "%4s " "$count"
     [ $count -gt $col ] && count=$col
     while [ $count -gt $floor ] ; do
       echo -n "#"
-      : $((count--))
+      : $((count=count * 95 / 100))
     done
     echo
   done
