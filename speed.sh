@@ -31,10 +31,21 @@ speed_ping(){
   done
 }
 
+speed_dl(){
+  debug speed_dl "$@"
+  unset REPLY
+  while read -s -n1 -t0.2 REPLY || true ; do
+    debug -v REPLY
+    [ "${REPLY}" = q ] && break
+    time wget http://example.com/ -T3 -o /dev/null -O /dev/null 2>&1 | grep real
+  done | awk '{gsub(/s/,"",$NF); print $NF}'
+}
+
 main(){
   debug main "$@"
-  case "$1" in
-    (ping) shift ; speed_ping "$@" ;;
+  case "${1}" in
+    (p|ping) shift ; speed_ping "$@" ;;
+    (d|dl  ) shift ; speed_dl   "$@" ;;
   esac
 }
 
