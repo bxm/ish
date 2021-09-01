@@ -15,6 +15,7 @@ speed_ping(){
   debug speed_ping "$@"
   SMOOTH=${1:-3}
   ITER=${2:-5}
+  smooth=$SMOOTH
 
   debug -v SMOOTH ITER
   while [ ${ITER} -gt 0 ] ; do
@@ -26,7 +27,8 @@ speed_ping(){
       sleep 0.1
     done \
       | grep -oE time=[^\ ]+ \
-      | awk -F= '{n+=$NF ; i+=1 ; print $NF,n,i,n/i}'
+      | awk -v "max=$smooth" -F= '{n+=$NF ; i+=1 ; if (i==max) {print int(n/i)}}' | bar 15
+      #| awk -F= '{n+=$NF ; i+=1 ; print $NF,n,i,n/i}'
 
   done
 }
@@ -49,15 +51,30 @@ speed_dl(){
   done | awk '{gsub(/s/,"",$NF); print $NF}'
 }
 
+bar(){
+  debug bar "$@"
+  local count
+  local floor="${1:-0}"
+  local col=$((COLUMNS+floor))
+  while read count ; do
+    [ $count -gt $col ] && count=$col
+    while [ $count -gt $floor ] ; do
+      echo -n "#"
+      : $((count--))
+    done
+    echo
+  done
+}
 main(){
   debug main "$@"
+  get_tty
   case "${1}" in
     (p|ping) shift ; speed_ping "$@" ;;
     (d|dl  ) shift ; speed_dl   "$@" ;;
   esac
 }
 
-adlib debug
+adlib debug tty
 
 main "$@"
 
