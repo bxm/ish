@@ -32,12 +32,18 @@ speed_ping(){
 }
 
 speed_dl(){
+  local label="${1:-small}"
+  local url_large='http://212.183.159.230/5MB.zip'
+  local url_small='http://example.com/'
+  local url=''
+  eval url="\"\$url_$label\""
+  : "${url:?}"
   debug speed_dl "$@"
   unset REPLY
   while read -s -n1 -t0.2 REPLY || true ; do
     debug -v REPLY
     [ "${REPLY}" = q ] && break
-    time wget http://example.com/ -T3 -o /dev/null -O /dev/null 2>&1 | grep real
+    time wget "$url" -T3 -o /dev/null -O /dev/null 2>&1 | grep real
   done | awk '{gsub(/s/,"",$NF); print $NF}'
 }
 
