@@ -18,7 +18,7 @@ speed_ping(){
   smooth=$SMOOTH
 
   debug -v SMOOTH ITER
-  while [ ${ITER} -gt 0 ] ; do
+  while [ ${ITER} -ne 0 ] ; do
     : $((ITER-=1))
 
     while [ ${SMOOTH} -gt 0 ] ; do
@@ -48,20 +48,22 @@ speed_dl(){
     debug -v REPLY
     [ "${REPLY}" = q ] && break
     time wget "$url" -T3 -o /dev/null -O /dev/null 2>&1 | grep real
-  done | awk '{gsub(/s/,"",$NF); print $NF}'
+  done | awk '{gsub(/s/,"",$NF); print $NF*100}' | bar 25
 }
 
 bar(){
   debug bar "$@"
   local count
   local floor="${1:-0}"
-  local col=$((COLUMNS+floor-5))
+  local col=$(((COLUMNS+floor)-5))
+  debug -v COLUMNS col floor
   while read count ; do
     printf "%4s " "$count"
     [ $count -gt $col ] && count=$col
     while [ $count -gt $floor ] ; do
       echo -n "#"
-      : $((count=count * 95 / 100))
+      : $((count=(count * 97) / 100))
+      #: $((count--))
     done
     echo
   done
