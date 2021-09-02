@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 multi_thread(){
   seq -s $'\n'192.168.0. 0 254 \

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 debug(){
   ${DEBUG:-false} || return 0

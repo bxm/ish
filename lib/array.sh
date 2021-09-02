@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 if ! type adlib 1>/dev/null 2>&1 ; then
   adlib(){

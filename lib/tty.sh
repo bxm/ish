@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 get_tty() {
   local tty=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
