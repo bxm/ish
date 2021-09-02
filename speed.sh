@@ -16,7 +16,7 @@ sleepy(){
   local sleep_time="${1:-1}"
   local reply
   debug -v sleep_time
-  read -s -n1 -t$sleep_time reply
+  read -s -n1 -t${sleep_time} reply
   debug -v REPLY
   ! [ "${reply}" = q ]
 }
@@ -29,23 +29,23 @@ bar(){
   local col=$(((COLUMNS+floor)-5))
   debug -v COLUMNS col floor
   while read count ; do
-    printf "%4s " "$count"
-    #[ $count -gt $col ] && count=$col
-    while [ $count -gt $floor ] ; do
+    printf "%4s " "${count}"
+    #[ ${count} -gt ${col} ] && count=${col}
+    while [ ${count} -gt ${floor} ] ; do
       echo -n "#"
       : $((count=(count * reduction) / 100))
       debug -v count
       #: $((count--))
     done
     echo
-  done | cut -c 1-$COLUMNS
+  done | cut -c 1-${COLUMNS}
 }
 
 speed_ping(){
   debug speed_ping "$@"
   SMOOTH=${1:-3}
   ITER=${2:-5}
-  smooth=$SMOOTH
+  smooth=${SMOOTH}
 
   debug -v SMOOTH ITER
   while [ ${ITER} -ne 0 ] ; do
@@ -57,7 +57,7 @@ speed_ping(){
       ping 8.8.8.8 -c 1
     done \
       | grep -oE time=[^\ ]+ \
-      | awk -v "max=$smooth" -F= '{n+=$NF ; i+=1 ; if (i==max) {print int(n/i)}}' | bar 15
+      | awk -v "max=${smooth}" -F= '{n+=$NF ; i+=1 ; if (i==max) {print int(n/i)}}' | bar 15
       #| awk -F= '{n+=$NF ; i+=1 ; print $NF,n,i,n/i}'
 
   done
@@ -76,16 +76,16 @@ speed_dl(){
   debug -v url
   : "${url:?}"
   while sleepy 0.5 ; do
-    time wget "$url" -T3 -o /dev/null -O /dev/null 2>&1 | grep real
-  done | awk '{gsub(/s/,"",$NF); print $NF*100}' | bar $min $red
+    time wget "${url}" -T3 -o /dev/null -O /dev/null 2>&1 | grep real
+  done | awk '{gsub(/s/,"",$NF); print $NF*100}' | bar ${min} ${red}
 }
 
 main(){
   debug main "$@"
   get_tty
   case "${1}" in
-    (p|ping) shift ; speed_ping "$@" ;;
-    (d|dl  ) shift ; speed_dl   "$@" ;;
+    (p*) shift ; speed_ping "$@" ;;
+    (d*) shift ; speed_dl   "$@" ;;
   esac
 }
 
