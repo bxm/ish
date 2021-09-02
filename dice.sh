@@ -23,8 +23,7 @@ elaborate() {
     for I in ${P//,/ } ; do
       eval printf "\|.%s.\|/" "\$${I}"
     done
-    printf "%s/" "$h_line"
-    echo
+    printf "%s/\n" "$h_line"
   done
 }
 
@@ -379,7 +378,7 @@ animate_loop(){
 main_loop(){
   while true ; do
     do_clear
-    echo -e "Working..."
+    printf "Working...\n"
     animate_loop
     ${TEST} || roll
     prompt || break
@@ -393,7 +392,7 @@ do_clear(){
 }
 
 get_tty() {
-  local TTY=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
+  local TTY=$(tput -V 1>/dev/null 2>&1 && printf "cols\nlines" | tput -S | paste - - || ttysize)
   COLUMNS="${TTY// *}"
   LINES="${TTY//* }"
 }
@@ -420,7 +419,7 @@ main(){
   SIZE=1
   DICE=1
   TEST=false
-  DEBUG=false
+  DEBUG=${DEBUG:-false}
   QUICK=false
 
   debug main "$@"
