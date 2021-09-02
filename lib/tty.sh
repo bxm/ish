@@ -1,7 +1,7 @@
 #!/bin/sh
 
 get_tty() {
-  local tty=$(tput -V 1>/dev/null 2>&1 && echo -e "cols\nlines" | tput -S | paste - - || ttysize)
+  local tty=$(tput -V 1>/dev/null 2>&1 && printf "cols\nlines" | tput -S | paste - - || ttysize)
   local tab=$'\t'
   COLUMNS="${tty//[ ${tab}]*}"
   LINES="${tty//*[ ${tab}]}"

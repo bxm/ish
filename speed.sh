@@ -3,12 +3,12 @@
 adlib(){
   local realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
-	while [ $# -gt 0 ] ; do
-		local libname="${1%.sh}.sh"
-		source "${libdir}/${libname}" || continue
+  while [ $# -gt 0 ] ; do
+    local libname="${1%.sh}.sh"
+    source "${libdir}/${libname}" || continue
     debug added "${libdir}/${libname}"
-		shift
-	done
+    shift
+  done
 }
 
 sleepy(){
@@ -27,17 +27,17 @@ bar(){
   local floor="${1:-0}"
   local reduction="${2:-97}"
   local col=$(((COLUMNS+floor)-5))
-  debug -v COLUMNS col floor
+  debug -v COLUMNS col floor reduction
   while read count ; do
     printf "%4s " "${count}"
     #[ ${count} -gt ${col} ] && count=${col}
     while [ ${count} -gt ${floor} ] ; do
-      echo -n "#"
+      printf "#"
       : $((count=(count * reduction) / 100))
       debug -v count
       #: $((count--))
     done
-    echo
+    printf "\n"
   done | cut -c 1-${COLUMNS}
 }
 
@@ -75,7 +75,7 @@ speed_dl(){
   esac
   debug -v url
   : "${url:?}"
-  while sleepy 0.5 ; do
+  while sleepy 1 ; do
     time wget "${url}" -T3 -o /dev/null -O /dev/null 2>&1 | grep real
   done | awk '{gsub(/s/,"",$NF); print $NF*100}' | bar ${min} ${red}
 }
