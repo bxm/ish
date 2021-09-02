@@ -12,8 +12,9 @@ adlib(){
 }
 
 DEBUG=true
-adlib debug
+adlib debug decor
 foo=bar
 DEBUG=true debug foo
 debug -v DEBUG foo
+printf "${RED}Hello$NC World\n"
 
