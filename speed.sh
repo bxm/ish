@@ -25,18 +25,20 @@ bar(){
   debug bar "$@"
   local count
   local floor="${1:-0}"
+  local reduction="${2:-97}"
   local col=$(((COLUMNS+floor)-5))
   debug -v COLUMNS col floor
   while read count ; do
     printf "%4s " "$count"
-    [ $count -gt $col ] && count=$col
+    #[ $count -gt $col ] && count=$col
     while [ $count -gt $floor ] ; do
       echo -n "#"
-      : $((count=(count * 97) / 100))
+      : $((count=(count * reduction) / 100))
+      debug -v count
       #: $((count--))
     done
     echo
-  done
+  done | cut -c 1-$COLUMNS
 }
 
 speed_ping(){
@@ -65,16 +67,17 @@ speed_dl(){
   debug speed_dl "$@"
   local url=''
   local min=0
+  local red=''
   case "${1:-small}" in
     (s*) url='http://example.com/' ;;
     (m*) url='http://speedtest.tele2.net/1MB.zip' min=25 ;;
-    (l*) url='http://212.183.159.230/5MB.zip' min=35 ;;
+    (l*) url='http://212.183.159.230/5MB.zip' min=35 red=90 ;;
   esac
   debug -v url
   : "${url:?}"
   while sleepy 0.5 ; do
     time wget "$url" -T3 -o /dev/null -O /dev/null 2>&1 | grep real
-  done | awk '{gsub(/s/,"",$NF); print $NF*100}' | bar $min
+  done | awk '{gsub(/s/,"",$NF); print $NF*100}' | bar $min $red
 }
 
 main(){
