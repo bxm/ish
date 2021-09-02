@@ -15,8 +15,9 @@ adlib(){
 
 prompt(){
   while true ; do
-    read -s -n1 -p% <&1
-    echo -e "\r \b\c"
+    printf "${WHITE}%s${NC}" %
+    read -s -n1 <&1
+    echo -e "\r           \r\c"
     case "${REPLY}" in
       ([qQ]   ) exit ;;
       ($'\r'  ) : $((drawn-=inc)) ; break ;;
@@ -105,6 +106,6 @@ main(){
 }
 
 # TODO truncate really long (screenful)?
-adlib debug tty array
+adlib debug tty array decor
 
 main "$@"
