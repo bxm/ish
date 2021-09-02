@@ -70,7 +70,7 @@ speed_dl(){
   local red=''
   case "${1:-small}" in
     (s*) url='http://example.com/' ;;
-    (m*) url='http://speedtest.tele2.net/1MB.zip' min=25 ;;
+    (m*) url='http://speedtest.tele2.net/1MB.zip' min=25 red=95 ;;
     (l*) url='http://212.183.159.230/5MB.zip' min=35 red=90 ;;
   esac
   debug -v url
