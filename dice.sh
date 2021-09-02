@@ -3,12 +3,12 @@
 adlib(){
   local realname="$(readlink -f "$0")"
   local libdir="${realname%/*}/lib"
-	while [ $# -gt 0 ] ; do
-		local libname="${1%.sh}.sh"
-		source "$libdir/$libname" || continue
+  while [ $# -gt 0 ] ; do
+    local libname="${1%.sh}.sh"
+    source "$libdir/$libname" || continue
     debug added "$libdir/$libname"
-		shift
-	done
+    shift
+  done
 }
 
 elaborate() {
@@ -249,7 +249,7 @@ build_face_list(){
     else
       while true ; do
         ROLL=$((RANDOM % DIE_S + 1))
-	      [ $DICE -ne 1 ] && break
+        [ $DICE -ne 1 ] && break
         [ "${NOT}" -eq 0 ] && break
         [ "${NOT}" -ne "${ROLL}" ] && break
         debug re-roll
