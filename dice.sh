@@ -224,7 +224,7 @@ how_many(){
   debug PER_LINE $PER_LINe
 }
 
-make_face(){
+make_face(){ # $1 is the die face number
   debug make_face "$@"
   local LINE
   local FACE
@@ -232,7 +232,7 @@ make_face(){
   debug FACE: "${FACE}"
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
-
+  # only build array if not already done
   is_array XDIE_${SIZE}_$1 || array_new XDIE_${SIZE}_$1 $FACE
   eval DIE_LINES=\$XDIE_${SIZE}_${1}_S
 }
