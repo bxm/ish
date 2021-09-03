@@ -283,11 +283,7 @@ show_face_list(){
   local fl
   local die_face
   local die_line
-  # iterate face lists array element list
-  # think we go through die lists here
-  # like for bb in die list e
-  # array get to var 
-  # then do lines, faces from that var
+
   for dl in $DIE_LIST_E ; do
     debug dl: $dl
     array_get $dl dla
@@ -391,12 +387,6 @@ do_clear(){
   clear
 }
 
-get_tty() {
-  local TTY=$(tput -V 1>/dev/null 2>&1 && printf "cols\nlines" | tput -S | paste - - || ttysize)
-  COLUMNS="${TTY// *}"
-  LINES="${TTY//* }"
-}
-
 process_params(){
   debug process_params "$@"
   while [ $# -gt 0 ] ; do
@@ -428,6 +418,6 @@ main(){
   main_loop
 }
 
-adlib debug array
+adlib debug array decor tty
 
 main "${@}"

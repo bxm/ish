@@ -16,5 +16,5 @@ adlib debug decor
 foo=bar
 DEBUG=true debug foo
 debug -v DEBUG foo
-printf "${RED}Hello$NC World\n"
+printf "${RED}Hello$_NC_ World\n"
 

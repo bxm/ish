@@ -15,7 +15,7 @@ adlib(){
 
 prompt(){
   while true ; do
-    printf "${WHITE}${INV_ON}%%${NC}"
+    printf "${WHITE}${INV_ON}%%${_NC_}"
     read -s -n1 <&1
     echo -e "\r           \r\c"
     case "${REPLY}" in

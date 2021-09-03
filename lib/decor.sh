@@ -47,5 +47,5 @@ export BG_LGREEN='\033[1;42m'
 export BG_LPURPLE='\033[1;45m'
 export BG_LRED='\033[1;41m'
 
-export NC='\033[0m'
+export _NC_='\033[0m'
 
