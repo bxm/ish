@@ -57,7 +57,7 @@ speed_ping(){
       ping 8.8.8.8 -c 1
     done \
       | grep -oE time=[^\ ]+ \
-      | awk -v "max=${smooth}" -F= '{n+=$NF ; i+=1 ; if (i==max) {print int(n/i)}}' | bar 15
+      | awk -v "max=${smooth}" -F= '{n+=$NF ; i+=1 ; if (i==max) {print int(n/i)}}' | bar 25 90
       #| awk -F= '{n+=$NF ; i+=1 ; print $NF,n,i,n/i}'
 
   done
