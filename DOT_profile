@@ -1,13 +1,19 @@
 # vi: set ft=bash
 export GIT_PAGER=pgr
-alias ll='ls -l'
+alias lll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
 alias v=vim
 alias vi=vim
 alias ff=fg
 alias f=fg
-
+ll(){
+  # remove non-user bits of mode
+  # drop links, owner & tz, r-justify size
+  ls -l -F --full-time --color=always "$@" \
+    | awk '{sub(/.{6}$/,"",$1);print}' \
+    | column -t -H2,3,4,8 -R5 -o' '
+}
 vim() { nvim -p "$@" ; }
 log() { git log "$@" ; }
 stat() { git status "$@" ; }
