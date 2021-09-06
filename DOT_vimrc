@@ -53,6 +53,7 @@ vnoremap <silent> <C-P> <C-C>:set paste<CR>
 inoremap <silent> <C-P> <C-O>:set paste<CR>
 
 noremap <silent> <C-S> :update<CR>
+noremap <silent> s :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 
