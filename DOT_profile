@@ -50,16 +50,17 @@ comm() {
 
 c() {
   case "$1" in
-    (cd) 
-      cd "${HOME}/code/ish"
-      ;;  
+    (cd)
+      shift
+      cd "${HOME}/code/ish/${*// /\/}"
+      ;;
     (*)
       (
         cd "${HOME}/code/ish"
         "$@"
       )
       ;;
-     (*) echo "$1 not supported" ;; 
+     (*) echo "$1 not supported" ;;
   esac
 }
 
