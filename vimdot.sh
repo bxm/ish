@@ -14,13 +14,13 @@ adlib(){
 main(){
   debug main "$@"
   cd ${HOME}/code/ish
-  local f=$(
+  local f="$(
     find . -type f -name "DOT_${1:?}*" | head -1
-  )
-  [ "$f" ] || return
-  home_f=${HOME}/.${f#./DOT_}
+  )"
+  [ "${f}" ] || return
+  home_f="${HOME}/.${f#./DOT_}"
   debug -v f home_f
-  nvim ${home_f}
+  nvim "${home_f}"
 }
 
 adlib debug
