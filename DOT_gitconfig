@@ -22,3 +22,5 @@
 	plain = white
 [color "status"]
 	header = white
+[advice]
+	detachedHead = false
