@@ -1,1 +1,1 @@
-f(){ clear;echo -e $1;sleep 1;f $2 $1;};f "_o_\n 0\n/ \\" "\o/\n_0_\n"
+f(){ clear;echo -e $1;sleep 1;f "$2" "$1";};f "_o_\n 0\n/ \\" "\o/\n_0_"
