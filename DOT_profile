@@ -1,4 +1,5 @@
 # vi: set ft=bash
+export EDITOR=nvim
 export GIT_PAGER=pgr
 alias lll='ls -l'
 alias lla='ll -a'
