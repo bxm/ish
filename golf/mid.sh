@@ -7,8 +7,7 @@ sed -r 's/^[^ ]+//;s/ [^ ]+$//;s/^ //'
   ;;
   (*)
 while read i;do
-i=" ${i#* }"
-echo ${i% *}
+i=\ ${i#* };echo ${i% *}
 done
 esac
 
