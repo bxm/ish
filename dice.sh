@@ -1,12 +1,12 @@
 #!/bin/sh
 
 adlib(){
-  local realname="$(readlink -f "$0")"
+  local realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
   while [ $# -gt 0 ] ; do
     local libname="${1%.sh}.sh"
-    source "$libdir/$libname" || continue
-    debug added "$libdir/$libname"
+    source "${libdir}/${libname}" || continue
+    debug added "${libdir}/${libname}"
     shift
   done
 }
@@ -19,11 +19,11 @@ elaborate() {
   debug "PATTERN:\n${PATTERN}"
   local h_line=".-${1//?/-}-."
   for P in ${PATTERN} ; do
-    printf "%s/" "$h_line"
+    printf "%s/" "${h_line}"
     for I in ${P//,/ } ; do
       eval printf "\|.%s.\|/" "\$${I}"
     done
-    printf "%s/\n" "$h_line"
+    printf "%s/\n" "${h_line}"
   done
 }
 
@@ -33,7 +33,7 @@ x_sed() { # perform sed action multiple times
   local sed_cmd=''
   while [ "${i}" -gt 0 ] ; do
     : $((i-=1))
-    sed_cmd="${sed_cmd};$1"
+    sed_cmd="${sed_cmd};${1}"
   done
   sed -r "${sed_cmd}"
 }
@@ -218,10 +218,10 @@ how_many(){
   get_tty
   debug how_many "$@"
 
-  debug COLUMNS $COLUMNS
+  debug -v COLUMNS
 
-  PER_LINE=$((COLUMNS / $1))
-  debug PER_LINE $PER_LINe
+  PER_LINE=$((COLUMNS / ${1}))
+  debug -v PER_LINE
 }
 
 make_face(){ # $1 is the die face number
@@ -233,7 +233,7 @@ make_face(){ # $1 is the die face number
   FACE="${FACE//\// }"
   debug FACE: "${FACE}"
   # only build array if not already done
-  is_array XDIE_${SIZE}_$1 || array_new XDIE_${SIZE}_$1 $FACE
+  is_array XDIE_${SIZE}_${1} || array_new XDIE_${SIZE}_${1} ${FACE}
   eval DIE_LINES=\$XDIE_${SIZE}_${1}_S
 }
 
@@ -241,15 +241,15 @@ build_face_list(){
   local die_no=0
   local die_list=''
   array_new DIE_LIST
-  while [ $die_no -lt $DICE ] ; do
-    debug die_no: $die_no
+  while [ ${die_no} -lt ${DICE} ] ; do
+    debug die_no: ${die_no}
     : $((die_no++))
     if [ "${FORCE}" -gt 0 ] ; then
       ROLL="${FORCE}"
     else
       while true ; do
         ROLL=$((RANDOM % DIE_S + 1))
-        [ $DICE -ne 1 ] && break
+        [ ${DICE} -ne 1 ] && break
         [ "${NOT}" -eq 0 ] && break
         [ "${NOT}" -ne "${ROLL}" ] && break
         debug re-roll
@@ -258,13 +258,13 @@ build_face_list(){
 
     debug "ROLL: ${ROLL}"
 
-    make_face "${ROLL}" $die_no
-    die_list="${die_list} XDIE_${SIZE}_$ROLL"
+    make_face "${ROLL}" ${die_no}
+    die_list="${die_list} XDIE_${SIZE}_${ROLL}"
     local mod
-    debug die_no $die_no PER_LINE $PER_LINE
+    debug die_no ${die_no} PER_LINE ${PER_LINE}
     : $((mod = die_no % PER_LINE ))
-    debug mod $mod
-    if [ $mod -eq 0 ] ; then
+    debug mod ${mod}
+    if [ ${mod} -eq 0 ] ; then
       array_push DIE_LIST "${die_list}"
       die_list=''
     fi
@@ -272,24 +272,24 @@ build_face_list(){
   if [ -n "${die_list}" ] ; then
     array_push DIE_LIST "${die_list}"
   fi
-  debug DIE_LIST: $DIE_LIST
+  debug DIE_LIST: ${DIE_LIST}
 }
 
 show_face_list(){
   local width=0
   do_clear
   echo
-  local die_lines="$(seq 1 $DIE_LINES)"
+  local die_lines="$(seq 1 ${DIE_LINES})"
   local fl
   local die_face
   local die_line
 
-  for dl in $DIE_LIST_E ; do
-    debug dl: $dl
-    array_get $dl dla
-    debug dla: $dla
-    for die_line in $die_lines ; do
-      for die_face in $dla ; do
+  for dl in ${DIE_LIST_E} ; do
+    debug dl: ${dl}
+    array_get ${dl} dla
+    debug dla: ${dla}
+    for die_line in ${die_lines} ; do
+      for die_face in ${dla} ; do
         array_get ${die_face}_${die_line} fl
         # replace filler chars with space
         echo -n "${fl//[.:]/ }"
@@ -316,7 +316,7 @@ roll(){
   debug "NOT: ${NOT}"
   debug "FORCE: ${FORCE}"
   get_tty
-  debug COLUMNS: $COLUMNS
+  debug -v COLUMNS
   build_face_list
   show_face_list
 
@@ -326,17 +326,17 @@ roll(){
 prompt(){
   unset REPLY
   while true ; do
-    printf "\rRoll again (${SIZE} x$DICE)? "
+    printf "\rRoll again (${SIZE} x${DICE})? "
     IFS= read -n1 -s REPLY
-    debug "REPLY: ${REPLY}"
+    debug -v REPLY
     case "${REPLY}" in
       ('['   ) : ;; # cursor key suppression
       ([qQnN]) echo ; return 1 ;;
-      ([0-9] ) SIZE=$REPLY ; set_die "${SIZE}" ;;
+      ([0-9] ) SIZE=${REPLY} ; set_die "${SIZE}" ;;
       (M     ) SIZE=mvp ; set_die "${SIZE}" ;;
       (S     ) SIZE=seg ; set_die "${SIZE}" ;;
       (D     ) : $((DICE++)) ;;
-      (X     ) [ $DICE -gt 1 ] && : $((DICE--)) ;;
+      (X     ) [ ${DICE} -gt 1 ] && : $((DICE--)) ;;
       ([\ -~]) echo ; return 0 ;; # all alpha and symbol
     esac
   done
@@ -348,12 +348,12 @@ set_die(){
   debug "DIE:\n${DIE}"
   array_new DIE ${DIE}
   local first_line="${DIE_1//\/*}"
-  debug first_line: "$first_line"
+  debug first_line: "${first_line}"
   face_width="${#first_line}"
   debug DIE_S: "${DIE_S}"
   debug DIE_E: "${DIE_E}"
-  debug face_width: $face_width
-  how_many $face_width
+  debug face_width: ${face_width}
+  how_many ${face_width}
 }
 
 animate_loop(){
