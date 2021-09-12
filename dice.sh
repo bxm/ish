@@ -224,7 +224,7 @@ how_many(){
   debug -v PER_LINE
 }
 
-make_face(){ # $1 is the die face number
+make_face(){ # ${1} is the die face number
   debug make_face "$@"
   local LINE
   local FACE
@@ -318,7 +318,7 @@ roll(){
   get_tty
   debug -v COLUMNS
   build_face_list
-  show_face_list
+  show_face_list | colour spot LRED border WHITE
 
   return ${ROLL}
 }
@@ -403,6 +403,26 @@ process_params(){
   done
   debug DICE: "${DICE}" SIZE: "${SIZE}"
   debug TEST: "${TEST}" QUICK: "${QUICK}"
+}
+
+colour(){
+  local border
+  local spot
+  # TODO colour validation via prefix?
+  # spin the meat out as a lib func
+  while [ $# -gt 0 ] ; do
+    case "${1}" in
+      (border)
+        eval border="\"s/[-|]+/\${${2}}&${_NC_}/g"\" ;;
+      (spot  )
+        eval spot="\"s/[^-| ]+/\$${2}&${_NC_}/g"\" ;;
+    esac
+    shift
+  done
+ debug -v spot border
+ # NOTE spot is greedy, will wreck other escape
+ #      codes if present, so *must* go first
+ sed -r "${spot};${border}"
 }
 
 main(){
