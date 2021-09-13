@@ -14,21 +14,33 @@ adlib(){
 process_args(){
   debug process_args "$@"
   ICASE=false
+  LIST=false
+  HEAD=true
+  local param
   while [ $# -gt 0] ; do
+    param="$1"
+# while though -xxx snipping off the flags
+# maybe just use getopt?
+# eat file/rx params
+# handling for -- ?
+    #while [ ${#param}
     case "$1" in
       (-i) ICASE=true ;;
+      (-l) LIST=true ;;
+      (-H) HEAD=false ;;
     esac
     shift
   done
 }
 
+# TODO support -g, -l, -i, -hH
+# implicit ignore case for -g?
+# authentic piped -g w/ -x or "lazy" non piped?
+# fancy output? -b option for bare?
+# colour inline matches?
+
 main(){
   debug main "$@"
-  # TODO support -g, -l, -i, -hH
-  # implicit ignore case for -g?
-  # authentic piped -g w/ -x or "lazy" non piped?
-  # fancy output? -b option for bare?
-  # colour inline matches?
   find . -mindepth 1 -type f ! -path */.git/* ! -path */.git | sort
 }
 
