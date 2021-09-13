@@ -16,20 +16,21 @@ process_args(){
   ICASE=false
   LIST=false
   HEAD=true
-  local param
-  while [ $# -gt 0] ; do
-    param="$1"
+  local opt
+  #while [ $# -gt 0] ; do
+    #param="$1"
 # while though -xxx snipping off the flags
 # maybe just use getopt?
 # eat file/rx params
 # handling for -- ?
     #while [ ${#param}
-    case "$1" in
+
+  for opt in $(getopt -ghil -- "$@")
+    case "$o" in
       (-i) ICASE=true ;;
       (-l) LIST=true ;;
       (-H) HEAD=false ;;
     esac
-    shift
   done
 }
 
