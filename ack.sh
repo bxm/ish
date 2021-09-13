@@ -41,7 +41,7 @@ process_args(){
         # TODO do something with non opt args?
         # The norm actually seem to be to break on -- and I guess
         # have another routine for files etc but going it with
-        # context seems better, so we can 
+        # context seems better, so we can handle danglers
     esac
   done
 }
