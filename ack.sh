@@ -15,33 +15,44 @@ usage(){
   echo "$*"
 }
 
+non_opt_args(){
+  debug non_opt_args "$@"
+  # fill rx (if empty), and files with everything else
+  [ -z "$CONTENT_RX" ] && CONTENT_RX="$1" && shift
+  array_push FILES "$@"
+  debug -v CONTENT_RX FILES_S FILES_E
+}
+
 process_args(){
   debug process_args "$@"
   ICASE=false
   LIST=false
   HEAD=true
   FILEGREP=false
-  local context='GEN'
-  local opt
+  CONTENT_RX=''
+  array_new FILES
+  local context='DEF'
+  local arg
   #while [ $# -gt 0] ; do
-    #param="$1"
+    #param="${1}"
 # while though -xxx snipping off the flags
 # maybe just use getopt?
 # eat file/rx params
 # handling for -- ?
     #while [ ${#param}
-  local args="$(getopt -o gHil -- "$@")"
-  set -- ${args}
+  local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
+  eval set -- "${args}"
   while [ $# -gt 0 ] ; do
-    case "${context}/${1}" in
-      (GEN/-H ) HEAD=false ;;
-      (GEN/-g ) FILEGREP=true ;;
-      (GEN/-i ) ICASE=true ;;
-      (GEN/-l ) LIST=true ;;
-      (GEN/-- ) context=PARAM ;;
-      (GEN/-* ) usage "$1 not supported" ;; # unhandled opt
-      (GEN/*  )  ;; # grab danglers as rx, files
-      (PARAM/*)  ;; # in PARAM context fill rx (if empty), and files with everything else
+    arg="${1}"
+    debug -v context arg
+    case "${context}/${arg}" in
+      (PARAM/*) non_opt_args "$@" ; break;;
+      (DEF/-- ) context=PARAM ;;
+      (DEF/-H ) HEAD=false ;;
+      (DEF/-g ) FILEGREP=true ;;
+      (DEF/-i ) ICASE=true ;;
+      (DEF/-l ) LIST=true ;;
+      (DEF/-* ) usage "${arg} not supported" ;; # unhandled opt
         # TODO do something with non opt args?
         # The norm actually seem to be to break on -- and I guess
         # have another routine for files etc but going it with
@@ -66,7 +77,7 @@ main(){
   process_args "$@"
 }
 
-adlib debug decor
+adlib debug decor array
 
 main "$@"
 
