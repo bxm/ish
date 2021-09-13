@@ -11,6 +11,10 @@ adlib(){
 	done
 }
 
+usage(){
+  echo "$*"
+}
+
 process_args(){
   debug process_args "$@"
   ICASE=false
@@ -26,16 +30,16 @@ process_args(){
 # eat file/rx params
 # handling for -- ?
     #while [ ${#param}
-  local args="$(getopt -ghil -- "$@")"
+  local args="$(getopt -gHil -- "$@")"
   set -- ${args}
   while [ $# -gt 0 ] ; do
     case "${context}/${opt}" in
-      (GEN/-h ) HEAD=false ;;
+      (GEN/-H ) HEAD=false ;;
       (GEN/-g ) FILEGREP=true ;;
       (GEN/-i ) ICASE=true ;;
       (GEN/-l ) LIST=true ;;
       (GEN/-- ) context=PARAM ;;
-      (GEN/-* )  ;; # unhandled opt
+      (GEN/-* ) usage "$opt not supported" ;; # unhandled opt
       (GEN/*  )  ;; # grab danglers as rx, files
       (PARAM/*)  ;; # in PARAM context fill rx (if empty), and files with everything else
         # TODO do something with non opt args?
