@@ -44,22 +44,17 @@ process_args(){
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
     arg="${1}"
-    debug -v context arg
-    case "${context}/${arg}" in
-      (PARAM/*) non_opt_args "$@" ; break;;
-      (DEF/-- ) context=PARAM ;;
-      (DEF/-H ) HEAD=false ;;
-      (DEF/-g ) FILEGREP=true ;;
-      (DEF/-i ) ICASE=true ;;
-      (DEF/-l ) LIST=true ;;
-      (DEF/-* ) usage "${arg} not supported" ;; # unhandled opt
-        # TODO do something with non opt args?
-        # The norm actually seem to be to break on -- and I guess
-        # have another routine for files etc but going it with
-        # context seems better, so we can handle danglers
+    case "${arg}" in
+      (--) shift ; break ;;
+      (-H) HEAD=false ;;
+      (-g) FILEGREP=true ;;
+      (-i) ICASE=true ;;
+      (-l) LIST=true ;;
+      (-*) usage "${arg} not supported" ;; # unhandled opt
     esac
     shift
   done
+  non_opt_args "$@"
   debug -v ICASE LIST FILEGREP HEAD
 }
 
