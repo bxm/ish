@@ -30,16 +30,16 @@ process_args(){
 # eat file/rx params
 # handling for -- ?
     #while [ ${#param}
-  local args="$(getopt -gHil -- "$@")"
+  local args="$(getopt -o gHil -- "$@")"
   set -- ${args}
   while [ $# -gt 0 ] ; do
-    case "${context}/${opt}" in
+    case "${context}/${1}" in
       (GEN/-H ) HEAD=false ;;
       (GEN/-g ) FILEGREP=true ;;
       (GEN/-i ) ICASE=true ;;
       (GEN/-l ) LIST=true ;;
       (GEN/-- ) context=PARAM ;;
-      (GEN/-* ) usage "$opt not supported" ;; # unhandled opt
+      (GEN/-* ) usage "$1 not supported" ;; # unhandled opt
       (GEN/*  )  ;; # grab danglers as rx, files
       (PARAM/*)  ;; # in PARAM context fill rx (if empty), and files with everything else
         # TODO do something with non opt args?
@@ -47,7 +47,9 @@ process_args(){
         # have another routine for files etc but going it with
         # context seems better, so we can handle danglers
     esac
+    shift
   done
+  debug -v ICASE LIST FILEGREP HEAD
 }
 
 # TODO support -g, -l, -i, -hH
@@ -61,6 +63,7 @@ list_files(){
 
 main(){
   debug main "$@"
+  process_args "$@"
 }
 
 adlib debug decor
