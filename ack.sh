@@ -20,8 +20,8 @@ non_opt_args(){
   # fill rx (if empty), and files with everything else
   [ -z "${EXPRESSION}" ] && EXPRESSION="${1}" && shift
   while [ $# -gt 0 ] ; do
-    [ -d "$1" ] && array_push DIRS "$1" && shift && continue
-    array_push FILES "$1"
+    [ -f "$1" ] && array_push FILES "$1"
+    [ -d "$1" ] && array_push DIRS "$1"
     shift
   done
   debug -v EXPRESSION FILES_S FILES_E
@@ -35,8 +35,6 @@ process_args(){
   HEAD=true
   FILEGREP=false
   EXPRESSION=''
-  array_new FILES
-  array_new DIRS
 
   local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
   eval set -- "${args}"
@@ -62,7 +60,11 @@ process_args(){
 # colour inline matches?
 list_files(){
   local files=$(array_dump FILES | sort -u)
-  find $files -mindepth 1 -type f ! -path */.git/* ! -path */.git | sort
+  local dirs=$(array_dump DIRS | sort -u)
+  find $files $dirs \
+    -type f \
+    ! -path */.git/* \
+    ! -path */.git
   # files and dirs need to be handled differently
   # dirs need to dump out their files, files just
   # are themselves
