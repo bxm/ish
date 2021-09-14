@@ -20,8 +20,8 @@ non_opt_args(){
   # fill rx (if empty), and files with everything else
   [ -z "${EXPRESSION}" ] && EXPRESSION="${1}" && shift
   while [ $# -gt 0 ] ; do
-    [ -f "$1" ] && array_push FILES "$1"
-    [ -d "$1" ] && array_push DIRS "$1"
+    [ -f "${1}" ] && array_push FILES "${1}"
+    [ -d "${1}" ] && array_push DIRS "${1}"
     shift
   done
   debug -v EXPRESSION FILES_S FILES_E
@@ -59,22 +59,33 @@ process_args(){
 # fancy output? -b option for bare?
 # colour inline matches?
 list_files(){
-  local files=$(array_dump FILES | sort -u)
-  local dirs=$(array_dump DIRS | sort -u)
-  find $files $dirs \
+  debug list_files "$@"
+  local files=$(array_dump FILES)
+  local dirs=$(array_dump DIRS)
+  find ${files} ${dirs} \
     -type f \
     ! -path */.git/* \
-    ! -path */.git
+    ! -path */.git | sort -u
   # files and dirs need to be handled differently
   # dirs need to dump out their files, files just
   # are themselves
   # two arrays need to be made during opt handling
 }
 
+grep_in_list(){
+  debug grep_in_list "$@"
+  local flags=E
+  ${LIST} && flags="${flags}l"
+  ${HEAD} && flags="${flags}H"
+  ${HEAD} || flags="${flags}h"
+  debug -v flags
+  grep -${flags} -- "${EXPRESSION}" $(list_files)
+}
+
 main(){
   debug main "$@"
   process_args "$@"
-  $LIST && list_files
+  grep_in_list
 }
 
 adlib debug decor array
