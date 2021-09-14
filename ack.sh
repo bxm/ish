@@ -76,12 +76,12 @@ list_files(){
 
 colour_header(){
   debug colour_header "$@"
-  if $HEAD && $FANCY ; then
+  if ${HEAD} && ${FANCY} ; then
     awk \
-      -v HEAD="$YELLOW" \
-      -v LINE="$LRED" \
-      -v NC="$_NC_" \
-      -v OFS="$BLUE:$_NC_" \
+      -v HEAD="${YELLOW}" \
+      -v LINE="${LRED}" \
+      -v NC="${_NC_}" \
+      -v OFS=":" \
       -F: \
       '{
           sub(/.*/,HEAD"&"NC,$1);
