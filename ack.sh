@@ -32,7 +32,6 @@ process_args(){
   CONTENT_RX=''
   array_new FILES
   local context='DEF'
-  local arg
   #while [ $# -gt 0] ; do
     #param="${1}"
 # while though -xxx snipping off the flags
@@ -43,14 +42,13 @@ process_args(){
   local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
-    arg="${1}"
-    case "${arg}" in
+    case "${1}" in
       (--) shift ; break ;;
       (-H) HEAD=false ;;
       (-g) FILEGREP=true ;;
       (-i) ICASE=true ;;
       (-l) LIST=true ;;
-      (-*) usage "${arg} not supported" ;; # unhandled opt
+      (-*) usage "${1} not supported" ;;
     esac
     shift
   done
