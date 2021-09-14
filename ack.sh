@@ -55,12 +55,18 @@ process_args(){
 # fancy output? -b option for bare?
 # colour inline matches?
 list_files(){
-  find . -mindepth 1 -type f ! -path */.git/* ! -path */.git | sort
+  local files=$(array_dump FILES | sort -u)
+  find $files -mindepth 1 -type f ! -path */.git/* ! -path */.git | sort
+  # files and dirs need to be handled differently
+  # dirs need to dump out their files, files just
+  # are themselves
+  # two arrays need to be made during opt handling
 }
 
 main(){
   debug main "$@"
   process_args "$@"
+  $LIST && list_files
 }
 
 adlib debug decor array
