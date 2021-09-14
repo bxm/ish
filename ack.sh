@@ -31,13 +31,7 @@ process_args(){
   FILEGREP=false
   EXPRESSION=''
   array_new FILES
-  local context='DEF'
-  #while [ $# -gt 0] ; do
-    #param="${1}"
-# while though -xxx snipping off the flags
-# maybe just use getopt?
-# eat file/rx params
-# handling for -- ?
+
   local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
