@@ -19,8 +19,13 @@ non_opt_args(){
   debug non_opt_args "$@"
   # fill rx (if empty), and files with everything else
   [ -z "${EXPRESSION}" ] && EXPRESSION="${1}" && shift
-  array_push FILES "$@"
+  while [ $# -gt 0 ] ; do
+    [ -d "$1" ] && array_push DIRS "$1" && shift && continue
+    array_push FILES "$1"
+    shift
+  done
   debug -v EXPRESSION FILES_S FILES_E
+  debug -v DIRS_S DIRS_E
 }
 
 process_args(){
@@ -31,6 +36,7 @@ process_args(){
   FILEGREP=false
   EXPRESSION=''
   array_new FILES
+  array_new DIRS
 
   local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
   eval set -- "${args}"
