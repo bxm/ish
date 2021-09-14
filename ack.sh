@@ -30,10 +30,11 @@ non_opt_args(){
 
 process_args(){
   debug process_args "$@"
-  ICASE=false
+  CASE=true
   LIST=false
   HEAD=true
   FILEGREP=false
+  FANCY=true
   EXPRESSION=''
 
   local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
@@ -43,14 +44,15 @@ process_args(){
       (--) shift ; break ;;
       (-H) HEAD=false ;;
       (-g) FILEGREP=true ;;
-      (-i) ICASE=true ;;
+      (-i) CASE=false ;;
       (-l) LIST=true ;;
+      (-F) FANCY=false ;;
       (-*) usage "${1} not supported" ;;
     esac
     shift
   done
   non_opt_args "$@"
-  debug -v ICASE LIST FILEGREP HEAD
+  debug -v CASE LIST FILEGREP HEAD FANCY
 }
 
 # TODO support -g, -l, -i, -hH
@@ -72,11 +74,31 @@ list_files(){
   # two arrays need to be made during opt handling
 }
 
+colour_header(){
+  debug colour_header "$@"
+  if $HEAD && $FANCY ; then
+    awk \
+      -v HEAD="$YELLOW" \
+      -v LINE="$LRED" \
+      -v NC="$_NC_" \
+      -v OFS="$BLUE:$_NC_" \
+      -F: \
+      '{
+          sub(/.*/,HEAD"&"NC,$1);
+          sub(/.*/,LINE"&"NC,$2);
+          print $0
+        }'
+  else
+    cat
+  fi
+}
+
 grep_in_list(){
   debug grep_in_list "$@"
   local flags=E
   ${LIST} && flags="${flags}l"
-  ${HEAD} && flags="${flags}H"
+  ${CASE} || flags="${flags}i"
+  ${HEAD} && flags="${flags}Hn"
   ${HEAD} || flags="${flags}h"
   debug -v flags
   grep -${flags} -- "${EXPRESSION}" $(list_files)
@@ -85,7 +107,7 @@ grep_in_list(){
 main(){
   debug main "$@"
   process_args "$@"
-  grep_in_list
+  grep_in_list | colour_header
 }
 
 adlib debug decor array
