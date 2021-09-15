@@ -18,13 +18,13 @@ usage(){
 non_opt_args(){
   debug non_opt_args "$@"
   # fill rx (if empty), and files with everything else
-  [ -z "${EXPRESSION}" ] && EXPRESSION="${1}" && shift
+  [ -z "${EXPR}" ] && EXPR="${1}" && shift
   while [ $# -gt 0 ] ; do
     [ -f "${1}" ] && array_push FILES "${1}"
     [ -d "${1}" ] && array_push DIRS "${1}"
     shift
   done
-  debug -v EXPRESSION FILES_S FILES_E
+  debug -v EXPR FILES_S FILES_E
   debug -v DIRS_S DIRS_E
 }
 
@@ -35,7 +35,7 @@ process_args(){
   HEAD=true
   FILEGREP=false
   FANCY=true
-  EXPRESSION=''
+  EXPR=''
 
   local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
   eval set -- "${args}"
@@ -74,36 +74,27 @@ list_files(){
   # two arrays need to be made during opt handling
 }
 
-colour_header(){
-  debug colour_header "$@"
-  # how yo jnline colour match word?
-  # while read name line conent perhaps but a
-  # regex per line expensive
-  # or don't make awk process columns at all, do
-  # a partial split?
-  # possible solution:
-#echo "a:b:c:d::e" | \
-#   awk '{
-#     split($0,f,":");           # split $0 into array of fields `f`
-#     sub(/^([^:]+:){2}/,"",$0); # remove first two "fields" from `$0`
-#     print f[1],f[2],$0         # print first two elements of `f` and edited `$0`
-#   }'
-# we can then do whatever colour/sub fun we like with f[1..2] and $0
+make_fancy(){
+  debug make_fancy "$@"
 # do something like check $1 against a var
 # if not matched, print $1 then content beneath
-# plaxe $1 in the var and proceed to next line
+# plaxe ${1} in the var and proceed to next line
   if ${HEAD} && ${FANCY} ; then
     awk \
-      -v FILE="${YELLOW}" \
-      -v LINE="${LRED}" \
-      -v NC="${_NC_}" \
-      -v OFS=":" \
-      -F: \
+      -v _FILE="${YELLOW}" \
+      -v _LINE="${LRED}" \
+      -v _MATCH="${LCYAN}${INV_ON}" \
+      -v _EXPR="${EXPR}" \
+      -v _NC="${_NC_}" \
+      -v OFS=: \
       '{
-          sub(/.*/,FILE"&"NC,$1);
-          sub(/.*/,LINE"&"NC,$2);
-          print $0
-        }'
+         split($0,f,":");
+         sub(/.*/,_FILE"&"_NC,f[1]);
+         sub(/.*/,_LINE"&"_NC,f[2]);
+         sub(/^([^:]+:){2}/,"",$0);
+         gsub(_EXPR,_MATCH"&"_NC,$0);
+         print f[1],f[2],$0
+       }'
   else
     cat
   fi
@@ -117,13 +108,13 @@ grep_in_list(){
   ${HEAD} && flags="${flags}Hn"
   ${HEAD} || flags="${flags}h"
   debug -v flags
-  grep -${flags} -- "${EXPRESSION}" $(list_files)
+  grep -${flags} -- "${EXPR}" $(list_files)
 }
 
 main(){
   debug main "$@"
   process_args "$@"
-  grep_in_list | colour_header
+  grep_in_list | make_fancy
 }
 
 adlib debug decor array
