@@ -79,6 +79,16 @@ colour_header(){
   # how yo jnline colour match word?
   # while read name line conent perhaps but a
   # regex per line expensive
+  # or don't make awk process columns at all, do
+  # a partial split?
+  # possible solution:
+#echo "a:b:c:d::e" | \
+#   awk '{
+#     split($0,f,":");           # split $0 into array of fields `f`
+#     sub(/^([^:]+:){2}/,"",$0); # remove first two "fields" from `$0`
+#     print f[1],f[2],$0         # print first two elements of `f` and edited `$0`
+#   }'
+# we can then do whatever colour/sub fun we like with f[1..2] and $0
   if ${HEAD} && ${FANCY} ; then
     awk \
       -v HEAD="${YELLOW}" \
