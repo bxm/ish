@@ -74,7 +74,6 @@ process_args(){
 # implicit ignore case for -g?
 # authentic piped -g w/ -x or "lazy" non piped?
 # fancy output? -b option for bare?
-# colour inline matches?
 list_files(){
   debug list_files "$@"
   local files=$(array_dump FILES)
@@ -85,10 +84,6 @@ list_files(){
     ! -path */.git \
     | sort -u \
     | sed 's|^[.]/||'
-  # files and dirs need to be handled differently
-  # dirs need to dump out their files, files just
-  # are themselves
-  # two arrays need to be made during opt handling
 }
 
 make_fancy(){
