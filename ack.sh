@@ -17,12 +17,13 @@ usage(){
 cat << EOF
 Usage: ${0//*\/} [options] expression [files]
 
--F  suppress fancy stuff
+-F  suppress fancy output
 -H  suppress header
 -g  not implemented
 -h  this help text
 -i  ignore pattern case
 -l  list files only
+-s  single line fancy output
 
 EOF
   exit ${1//*/0}
@@ -48,9 +49,10 @@ process_args(){
   HEAD=true
   FILEGREP=false
   FANCY=true
+  SINGLE=false
   EXPR=''
 
-  local args="$(getopt -n "${RED}warning${_NC_}" -o FHghil -- "$@")"
+  local args="$(getopt -n "${RED}warning${_NC_}" -o FHghils -- "$@")"
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
     case "${1}" in
@@ -61,6 +63,7 @@ process_args(){
       (-h) usage ;;
       (-i) CASE=false ;;
       (-l) LIST=true ;;
+      (-s) SINGLE=true ;;
       (-*) usage "${1} not supported" ;;
     esac
     shift
@@ -73,7 +76,6 @@ process_args(){
 # TODO support -g, -l, -i, -hH
 # implicit ignore case for -g?
 # authentic piped -g w/ -x or "lazy" non piped?
-# fancy output? -b option for bare?
 list_files(){
   debug list_files "$@"
   local files=$(array_dump FILES)
@@ -88,12 +90,36 @@ list_files(){
 
 make_fancy(){
   debug make_fancy "$@"
-# do something like check $1 against a var
-# if not matched, print $1 then content beneath
-# plaxe ${1} in the var and proceed to next line
   ${LIST} && cat && return
   ! ${HEAD} && cat && return
   ! ${FANCY} && cat && return
+  ${SINGLE} && fancy_single_line && return
+  fancy_multi_line
+}
+
+fancy_multi_line() {
+  awk \
+    -v _FILE="${YELLOW}" \
+    -v _LINE="${LRED}" \
+    -v _MATCH="${LCYAN}${INV_ON}" \
+    -v _EXPR="${EXPR}" \
+    -v _NC="${_NC_}" \
+    -v OFS=: \
+    '{
+      split($0,f,":");
+      gsub(_EXPR,_MATCH"&"_NC,$0);
+      sub(/^([^:]+:){2}/,"",$0);
+      sub(/.*/,_FILE"&"_NC,f[1]);
+      if (fn != f[1]) {
+        print "\n"f[1];
+      }
+      sub(/.*/,_LINE"&"_NC,f[2]);
+      print f[2],$0;
+      fn=f[1];
+    }'
+}
+
+fancy_single_line() {
   awk \
     -v _FILE="${YELLOW}" \
     -v _LINE="${LRED}" \
