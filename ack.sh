@@ -89,6 +89,9 @@ colour_header(){
 #     print f[1],f[2],$0         # print first two elements of `f` and edited `$0`
 #   }'
 # we can then do whatever colour/sub fun we like with f[1..2] and $0
+# do something like check $1 against a var
+# if not matched, print $1 then content beneath
+# plaxe $1 in the var and proceed to next line
   if ${HEAD} && ${FANCY} ; then
     awk \
       -v HEAD="${YELLOW}" \
