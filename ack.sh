@@ -100,6 +100,7 @@ make_fancy(){
 fancy_multi_line() {
   awk \
     -v _FILE="${YELLOW}" \
+    -v _PATH="${BROWN}" \
     -v _LINE="${LRED}" \
     -v _MATCH="${LCYAN}${INV_ON}" \
     -v _EXPR="${EXPR}" \
@@ -109,7 +110,8 @@ fancy_multi_line() {
       split($0,f,":");
       gsub(_EXPR,_MATCH"&"_NC,$0);
       sub(/^([^:]+:){2}/,"",$0);
-      sub(/.*/,_FILE"&"_NC,f[1]);
+      sub(/[^\/]+$/,_FILE"&"_NC,f[1]);
+      gsub(/^.+\/+/,_PATH"&"_NC,f[1]);
       if (fn != f[1]) {
         print "\n"f[1];
       }
