@@ -82,7 +82,9 @@ list_files(){
   find ${files} ${dirs} \
     -type f \
     ! -path */.git/* \
-    ! -path */.git | sort -u
+    ! -path */.git \
+    | sort -u \
+    | sed 's|^[.]/||'
   # files and dirs need to be handled differently
   # dirs need to dump out their files, files just
   # are themselves
