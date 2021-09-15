@@ -129,7 +129,7 @@ fancy_single_line() {
     -v OFS=: \
     '{
       split($0,f,":");
-      sub(/.*/,_FILE"&"_NC,f[1]);
+      gsub(/[^\/]+/,_FILE"&"_NC,f[1]);
       sub(/.*/,_LINE"&"_NC,f[2]);
       sub(/^([^:]+:){2}/,"",$0);
       gsub(_EXPR,_MATCH"&"_NC,$0);
