@@ -94,13 +94,13 @@ colour_header(){
 # plaxe $1 in the var and proceed to next line
   if ${HEAD} && ${FANCY} ; then
     awk \
-      -v HEAD="${YELLOW}" \
+      -v FILE="${YELLOW}" \
       -v LINE="${LRED}" \
       -v NC="${_NC_}" \
       -v OFS=":" \
       -F: \
       '{
-          sub(/.*/,HEAD"&"NC,$1);
+          sub(/.*/,FILE"&"NC,$1);
           sub(/.*/,LINE"&"NC,$2);
           print $0
         }'
