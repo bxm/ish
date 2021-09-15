@@ -76,6 +76,9 @@ list_files(){
 
 colour_header(){
   debug colour_header "$@"
+  # how yo jnline colour match word?
+  # while read name line conent perhaps but a
+  # regex per line expensive
   if ${HEAD} && ${FANCY} ; then
     awk \
       -v HEAD="${YELLOW}" \
