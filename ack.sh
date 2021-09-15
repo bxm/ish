@@ -122,6 +122,7 @@ fancy_multi_line() {
 fancy_single_line() {
   awk \
     -v _FILE="${YELLOW}" \
+    -v _SLASH="${BROWN}" \
     -v _LINE="${LRED}" \
     -v _MATCH="${LCYAN}${INV_ON}" \
     -v _EXPR="${EXPR}" \
@@ -130,6 +131,7 @@ fancy_single_line() {
     '{
       split($0,f,":");
       gsub(/[^\/]+/,_FILE"&"_NC,f[1]);
+      gsub(/\/+/,_SLASH"&"_NC,f[1]);
       sub(/.*/,_LINE"&"_NC,f[2]);
       sub(/^([^:]+:){2}/,"",$0);
       gsub(_EXPR,_MATCH"&"_NC,$0);
