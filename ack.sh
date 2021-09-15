@@ -100,13 +100,18 @@ make_fancy(){
   fi
 }
 
+add_flag(){
+  flags="${flags}${1}"
+}
+
 grep_in_list(){
   debug grep_in_list "$@"
-  local flags=E
-  ${LIST} && flags="${flags}l"
-  ${CASE} || flags="${flags}i"
-  ${HEAD} && flags="${flags}Hn"
-  ${HEAD} || flags="${flags}h"
+  local flags=''
+  add_flag "E"
+  ${LIST} && add_flag "l"
+  ${CASE} || add_flag "i"
+  ${HEAD} && add_flag "Hn"
+  ${HEAD} || add_flag "h"
   debug -v flags
   grep -${flags} -- "${EXPR}" $(list_files)
 }
