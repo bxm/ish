@@ -12,7 +12,20 @@ adlib(){
 }
 
 usage(){
-  echo "$*"
+  exec >&2
+  printf "${*:+ERROR${*}\n}"
+cat << EOF
+Usage: ${0//*\/} [options] expression [files]
+
+-F  suppress fancy stuff
+-H  suppress header
+-g  notimplemented
+-h  this help text
+-i  ignore pattern case
+-l  list files only
+
+EOF
+  exit ${1//*/0}
 }
 
 non_opt_args(){
@@ -37,16 +50,17 @@ process_args(){
   FANCY=true
   EXPR=''
 
-  local args="$(getopt -n "${RED}warning${_NC_}" -o gHil -- "$@")"
+  local args="$(getopt -n "${RED}warning${_NC_}" -o FHghil -- "$@")"
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (--) shift ; break ;;
+      (-F) FANCY=false ;;
       (-H) HEAD=false ;;
       (-g) FILEGREP=true ;;
+      (-h) usage ;;
       (-i) CASE=false ;;
       (-l) LIST=true ;;
-      (-F) FANCY=false ;;
       (-*) usage "${1} not supported" ;;
     esac
     shift
@@ -79,25 +93,24 @@ make_fancy(){
 # do something like check $1 against a var
 # if not matched, print $1 then content beneath
 # plaxe ${1} in the var and proceed to next line
-  if ${HEAD} && ${FANCY} ; then
-    awk \
-      -v _FILE="${YELLOW}" \
-      -v _LINE="${LRED}" \
-      -v _MATCH="${LCYAN}${INV_ON}" \
-      -v _EXPR="${EXPR}" \
-      -v _NC="${_NC_}" \
-      -v OFS=: \
-      '{
-         split($0,f,":");
-         sub(/.*/,_FILE"&"_NC,f[1]);
-         sub(/.*/,_LINE"&"_NC,f[2]);
-         sub(/^([^:]+:){2}/,"",$0);
-         gsub(_EXPR,_MATCH"&"_NC,$0);
-         print f[1],f[2],$0
-       }'
-  else
-    cat
-  fi
+  ${LIST} && cat && return
+  ! ${HEAD} && cat && return
+  ! ${FANCY} && cat && return
+  awk \
+    -v _FILE="${YELLOW}" \
+    -v _LINE="${LRED}" \
+    -v _MATCH="${LCYAN}${INV_ON}" \
+    -v _EXPR="${EXPR}" \
+    -v _NC="${_NC_}" \
+    -v OFS=: \
+    '{
+      split($0,f,":");
+      sub(/.*/,_FILE"&"_NC,f[1]);
+      sub(/.*/,_LINE"&"_NC,f[2]);
+      sub(/^([^:]+:){2}/,"",$0);
+      gsub(_EXPR,_MATCH"&"_NC,$0);
+      print f[1],f[2],$0
+    }'
 }
 
 add_flag(){
