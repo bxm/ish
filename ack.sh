@@ -13,13 +13,13 @@ adlib(){
 
 usage(){
   exec >&2
-  printf "${*:+ERROR${*}\n}"
+  printf "${*:+${LRED}ERROR: ${*}${_NC_}\n\n}"
 cat << EOF
 Usage: ${0//*\/} [options] expression [files]
 
 -F  suppress fancy stuff
 -H  suppress header
--g  notimplemented
+-g  not implemented
 -h  this help text
 -i  ignore pattern case
 -l  list files only
@@ -66,6 +66,7 @@ process_args(){
     shift
   done
   non_opt_args "$@"
+  [ "${EXPR}" ] || usage "no expression given"
   debug -v CASE LIST FILEGREP HEAD FANCY
 }
 
