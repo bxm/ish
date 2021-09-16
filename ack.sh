@@ -146,8 +146,8 @@ add_flag(){
   flags="${flags}${1}"
 }
 
-grep_in_list(){
-  debug grep_in_list "$@"
+grep_content(){
+  debug grep_content "$@"
   local flags=''
   add_flag "E"
   ${LIST} && add_flag "l"
@@ -155,13 +155,20 @@ grep_in_list(){
   ${HEAD} && add_flag "Hn"
   ${HEAD} || add_flag "h"
   debug -v flags
-  grep -${flags} -- "${EXPR}" $(list_files)
+  case "$EXPR" in
+    (.|'.*') list_files ;;
+    (*) grep -${flags} -- "${EXPR}" $(list_files)
+  esac
 }
 
 main(){
   debug main "$@"
   process_args "$@"
-  grep_in_list | make_fancy
+  if ${FILEGREP} ; then
+    true
+  else
+    grep_content | make_fancy
+  fi
 }
 
 adlib debug decor array
