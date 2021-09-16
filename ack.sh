@@ -34,12 +34,14 @@ non_opt_args(){
   # fill rx (if empty), and files with everything else
   [ -z "${EXPR}" ] && EXPR="${1}" && shift
   while [ $# -gt 0 ] ; do
-    [ -f "${1}" ] && array_push FILES "${1}"
-    [ -d "${1}" ] && array_push DIRS "${1}"
+    [ -f "${1}" ] && array_push FILES "${1}" && shift && continue
+    [ -d "${1}" ] && array_push DIRS "${1}" && shift && continue
+    array_push OTHER "${1}"
     shift
   done
   debug -v EXPR FILES_S FILES_E
   debug -v DIRS_S DIRS_E
+  debug -v OTHER_S OTHER_E
 }
 
 process_args(){
@@ -80,6 +82,7 @@ list_files(){
   debug list_files "$@"
   local files=$(array_dump FILES)
   local dirs=$(array_dump DIRS)
+  [ ${FILES_S:-0} -eq 0 -a ${DIRS_S:-0} -eq 0 -a ${OTHER_S:-0} -gt 0 ] && usage "no valid files/dirs given"
   find ${files} ${dirs} \
     -type f \
     ! -path */.git/* \
@@ -141,7 +144,10 @@ grep_content(){
   debug -v flags
   case "$EXPR" in
     (.|'.*') list_files ;;
-    (*) grep -${flags} -- "${EXPR}" $(list_files)
+    (*) list_files \
+        | xargs -r \
+          grep -${flags} -- "${EXPR}"
+        ;;
   esac
 }
 
