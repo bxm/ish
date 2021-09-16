@@ -108,21 +108,21 @@ fancy_awk() {
     -v _SINGLE="${SINGLE}" \
     -v OFS="${WHITE}:${_NC_}" \
     '{
-      split($0,f,":");                  # split $0
-      sub(/^([^:]+:){2}/,"",$0);        # remove $1, $2 from $0
-      sub(/[^\/]+$/,_FILE"&"_NC,f[1]);  # colour file part
-      gsub(/^.+\/+/,_PATH"&"_NC,f[1]);  # colour path part
-      sub(/.*/,_LINE"&"_NC,f[2]);       # colour line number
-      gsub(_EXPR,_MATCH"&"_NC,$0);      # colour expression matches
-      if (_SINGLE == "true") {          # if single line style
-        print f[1],f[2],$0;             #   print filename, line, $0
-        next;                           #   move to next record
+      split($0,f,":");                 # split $0
+      sub(/^([^:]+:){2}/,"",$0);       # kill $1, $2
+      sub(/[^\/]+$/,_FILE"&"_NC,f[1]); # colour file
+      gsub(/^.+\/+/,_PATH"&"_NC,f[1]); # colour path
+      sub(/.*/,_LINE"&"_NC,f[2]);      # colour line
+      gsub(_EXPR,_MATCH"&"_NC,$0);     # colour match
+      if (_SINGLE == "true") {         # single style
+        print f[1],f[2],$0;            # file line $0
+        next;                          #   next record
       }
-      if (fn != f[1]) {                 #   if first sight of filename
-        print "\n"f[1];                 #     print filename
+      if (fn != f[1]) {                # first sight of filename
+        print "\n"f[1];                #   prnt file
       }
-      print f[2],$0;                    # print line number, $0
-      fn=f[1];                          # record filename for next loop
+      print f[2],$0;                   # line $0
+      fn=f[1];                         # record file
     }'
 }
 
