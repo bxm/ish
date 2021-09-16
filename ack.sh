@@ -90,9 +90,10 @@ list_files(){
 
 make_fancy(){
   debug make_fancy "$@"
-  ${LIST} && cat && return
-  ! ${HEAD} && cat && return
-  ! ${FANCY} && cat && return
+  if ${LIST} || ! ${HEAD} || ! ${FANCY} ; then
+    cat
+    return
+  fi
   ${SINGLE} && fancy_single_line && return
   fancy_multi_line
 }
