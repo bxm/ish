@@ -106,7 +106,7 @@ fancy_multi_line() {
     -v _MATCH="${LCYAN}${INV_ON}" \
     -v _EXPR="${EXPR}" \
     -v _NC="${_NC_}" \
-    -v OFS=: \
+    -v OFS="${WHITE}:${_NC_}" \
     '{
       split($0,f,":");
       gsub(_EXPR,_MATCH"&"_NC,$0);
