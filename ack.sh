@@ -19,7 +19,7 @@ Usage: ${0//*\/} [options] expression [files]
 
 -F  suppress fancy output
 -H  suppress header
--g  not implemented
+-g  pattern match in file list
 -h  this help text
 -i  ignore pattern case
 -l  list files only
@@ -146,15 +146,23 @@ grep_content(){
   ${HEAD} || add_flag "h"
   debug -v flags
   list_files \
-    | xargs -r \
-    grep -${flags} -- "${EXPR}"
+    | xargs -r grep -${flags} -- "${EXPR}"
+}
+
+grep_list(){
+  debug grep_list "$@"
+  local flags=''
+  add_flag "E"
+  ${CASE} || add_flag "i"
+  list_files \
+    | grep -${flags} -- "${EXPR}"
 }
 
 main(){
   debug main "$@"
   process_args "$@"
   if ${FILEGREP} ; then
-    true
+    grep_list
   else
     grep_content | make_fancy
   fi
