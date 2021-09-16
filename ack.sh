@@ -82,7 +82,8 @@ list_files(){
   debug list_files "$@"
   local files=$(array_dump FILES)
   local dirs=$(array_dump DIRS)
-  [ ${FILES_S:-0} -eq 0 -a ${DIRS_S:-0} -eq 0 -a ${OTHER_S:-0} -gt 0 ] && usage "no valid files/dirs given"
+  [ $((FILES_S + DIRS_S)) -eq 0 -a $((OTHER_S)) -gt 0 ] && usage "no valid files/dirs given"
+
   find ${files} ${dirs} \
     -type f \
     ! -path */.git/* \
@@ -101,6 +102,7 @@ make_fancy(){
 }
 
 fancy_awk() {
+  debug fancy_awk "$@"
   awk \
     -v _FILE="${YELLOW}" \
     -v _PATH="${BROWN}" \
@@ -130,6 +132,7 @@ fancy_awk() {
 }
 
 add_flag(){
+  debug add_flag "$@"
   flags="${flags}${1}"
 }
 
@@ -142,13 +145,9 @@ grep_content(){
   ${HEAD} && add_flag "Hn"
   ${HEAD} || add_flag "h"
   debug -v flags
-  case "$EXPR" in
-    (.|'.*') list_files ;;
-    (*) list_files \
-        | xargs -r \
-          grep -${flags} -- "${EXPR}"
-        ;;
-  esac
+  list_files \
+    | xargs -r \
+    grep -${flags} -- "${EXPR}"
 }
 
 main(){
