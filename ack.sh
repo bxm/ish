@@ -24,6 +24,7 @@ Usage: ${0//*\/} [options] expression [files]
 -i  ignore pattern case
 -l  list files only
 -s  single line fancy output
+-x  files from pipeline
 
 EOF
   exit ${1//*/0}
@@ -46,26 +47,30 @@ non_opt_args(){
 
 process_args(){
   debug process_args "$@"
+  : "${DEBUG:=false}"
   CASE=true
   LIST=false
   HEAD=true
   FILEGREP=false
   FANCY=true
   SINGLE=false
+  PIPELIST=false
   EXPR=''
 
-  local args="$(getopt -n "${RED}warning${_NC_}" -o FHghils -- "$@")"
+  local args="$(getopt -n "${RED}warning${_NC_}" -o FHdghilsx -- "$@")"
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (--) shift ; break ;;
       (-F) FANCY=false ;;
       (-H) HEAD=false ;;
+      (-d) DEBUG=true ;;
       (-g) FILEGREP=true ;;
       (-h) usage ;;
       (-i) CASE=false ;;
       (-l) LIST=true ;;
       (-s) SINGLE=true ;;
+      (-x) PIPELIST=true ;;
       (-*) usage "${1} not supported" ;;
     esac
     shift
@@ -75,9 +80,6 @@ process_args(){
   debug -v CASE LIST FILEGREP HEAD FANCY
 }
 
-# TODO support -g, -l, -i, -hH
-# implicit ignore case for -g?
-# authentic piped -g w/ -x or "lazy" non piped?
 list_files(){
   debug list_files "$@"
   local files=$(array_dump FILES)
@@ -90,6 +92,11 @@ list_files(){
     ! -path */.git \
     | sort -u \
     | sed 's|^[.]/||'
+}
+
+piped_files(){
+  debug piped_files "$@"
+  cat
 }
 
 make_fancy(){
@@ -145,7 +152,7 @@ grep_content(){
   ${HEAD} && add_flag "Hn"
   ${HEAD} || add_flag "h"
   debug -v flags
-  list_files \
+  ${PIPELIST} && piped_files || list_files \
     | xargs -r grep -${flags} -- "${EXPR}"
 }
 
