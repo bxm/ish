@@ -94,11 +94,10 @@ make_fancy(){
     cat
     return
   fi
-  ${SINGLE} && fancy_single_line && return
-  fancy_multi_line
+  fancy_awk
 }
 
-fancy_multi_line() {
+fancy_awk() {
   awk \
     -v _FILE="${YELLOW}" \
     -v _PATH="${BROWN}" \
@@ -106,39 +105,24 @@ fancy_multi_line() {
     -v _MATCH="${LCYAN}${INV_ON}" \
     -v _EXPR="${EXPR}" \
     -v _NC="${_NC_}" \
+    -v _SINGLE="${SINGLE}" \
     -v OFS="${WHITE}:${_NC_}" \
     '{
-      split($0,f,":");
-      gsub(_EXPR,_MATCH"&"_NC,$0);
-      sub(/^([^:]+:){2}/,"",$0);
-      sub(/[^\/]+$/,_FILE"&"_NC,f[1]);
-      gsub(/^.+\/+/,_PATH"&"_NC,f[1]);
-      if (fn != f[1]) {
-        print "\n"f[1];
+      split($0,f,":");                  # split $0
+      sub(/^([^:]+:){2}/,"",$0);        # remove $1, $2 from $0
+      sub(/[^\/]+$/,_FILE"&"_NC,f[1]);  # colour file part
+      gsub(/^.+\/+/,_PATH"&"_NC,f[1]);  # colour path part
+      sub(/.*/,_LINE"&"_NC,f[2]);       # colour line number
+      gsub(_EXPR,_MATCH"&"_NC,$0);      # colour expression matches
+      if (_SINGLE == "true") {          # if single line style
+        print f[1],f[2],$0;             #   print filename, line, $0
+        next;                           #   move to next record
       }
-      sub(/.*/,_LINE"&"_NC,f[2]);
-      print f[2],$0;
-      fn=f[1];
-    }'
-}
-
-fancy_single_line() {
-  awk \
-    -v _FILE="${YELLOW}" \
-    -v _PATH="${BROWN}" \
-    -v _LINE="${LRED}" \
-    -v _MATCH="${LCYAN}${INV_ON}" \
-    -v _EXPR="${EXPR}" \
-    -v _NC="${_NC_}" \
-    -v OFS="${WHITE}:${_NC_}" \
-    '{
-      split($0,f,":");
-      sub(/[^\/]+$/,_FILE"&"_NC,f[1]);
-      gsub(/^.+\/+/,_PATH"&"_NC,f[1]);
-      sub(/.*/,_LINE"&"_NC,f[2]);
-      sub(/^([^:]+:){2}/,"",$0);
-      gsub(_EXPR,_MATCH"&"_NC,$0);
-      print f[1],f[2],$0
+      if (fn != f[1]) {                 #   if first sight of filename
+        print "\n"f[1];                 #     print filename
+      }
+      print f[2],$0;                    # print line number, $0
+      fn=f[1];                          # record filename for next loop
     }'
 }
 
