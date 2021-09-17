@@ -17,14 +17,16 @@ usage(){
 cat << EOF
 Usage: ${0//*\/} [options] expression [files]
 
--F  suppress fancy output
--H  suppress header
--g  pattern match in file list
--h  this help text
--i  ignore pattern case
--l  list files only
--s  single line fancy output
--x  read files from pipeline
+  -F  suppress fancy output
+  -H  suppress header
+  -d  enable debug
+  -e  expression
+  -g  pattern match in file list
+  -h  this help text
+  -i  ignore pattern case
+  -l  list files only
+  -s  single line fancy output
+  -x  read files from pipeline
 
 EOF
   exit ${1//*/1}
@@ -61,13 +63,14 @@ process_args(){
   PIPELIST=false
   EXPR=''
 
-  local args="$(getopt -n "${RED}warning${_NC_}" -o FHdghilsx -- "$@")"
+  local args="$(getopt -n "${RED}warning${_NC_}" -o FHde:ghilsx -- "$@")"
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (--) shift ; break ;;
       (-F) FANCY=false ;;
       (-H) HEAD=false ;;
+      (-e) EXPR="${EXPR:+${EXPR}|}${2}" ; shift ;;
       (-d) DEBUG=true ;;
       (-g) FILEGREP=true ;;
       (-h) usage ;;
