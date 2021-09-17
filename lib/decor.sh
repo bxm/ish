@@ -51,3 +51,5 @@ export BG_LRED="${_ESC_}[1;41m"
 
 export _NC_="${_ESC_}[0m"
 
+# TODO pid_colour.. choose random colour based on pid
+#      any use outside debug?
