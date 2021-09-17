@@ -35,9 +35,13 @@ non_opt_args(){
   # fill rx (if empty), and files with everything else
   [ -z "${EXPR}" ] && EXPR="${1}" && shift
   while [ $# -gt 0 ] ; do
-    [ -f "${1}" ] && array_push FILES "${1}" && shift && continue
-    [ -d "${1}" ] && array_push DIRS "${1}" && shift && continue
-    array_push OTHER "${1}"
+    if [ -f "${1}" ] ; then
+      array_push FILES "${1}"
+    elif [ -d "${1}" ] ; then
+      array_push DIRS "${1}"
+    else
+      array_push OTHER "${1}"
+    fi
     shift
   done
   debug -v EXPR FILES_S FILES_E
