@@ -31,7 +31,7 @@ EOF
 }
 
 non_opt_args(){
-  debug non_opt_args "$@"
+  debug -f non_opt_args "$@"
   # fill rx (if empty), and files with everything else
   [ -z "${EXPR}" ] && EXPR="${1}" && shift
   while [ $# -gt 0 ] ; do
@@ -46,7 +46,7 @@ non_opt_args(){
 }
 
 process_args(){
-  debug process_args "$@"
+  debug -f process_args "$@"
   : "${DEBUG:=false}"
   CASE=true
   LIST=false
@@ -81,7 +81,7 @@ process_args(){
 }
 
 list_files(){
-  debug list_files "$@"
+  debug -f list_files "$@"
   local files=$(array_dump FILES)
   local dirs=$(array_dump DIRS)
   [ $((FILES_S + DIRS_S)) -eq 0 -a $((OTHER_S)) -gt 0 ] && usage "no valid files/dirs given"
@@ -95,12 +95,12 @@ list_files(){
 }
 
 piped_files(){
-  debug piped_files "$@"
+  debug -f piped_files "$@"
   cat
 }
 
 make_fancy(){
-  debug make_fancy "$@"
+  debug -f make_fancy "$@"
   if ${LIST} || ! ${HEAD} || ! ${FANCY} ; then
     cat
     return
@@ -109,7 +109,7 @@ make_fancy(){
 }
 
 fancy_awk() {
-  debug fancy_awk "$@"
+  debug -f fancy_awk "$@"
   awk \
     -v _FILE="${YELLOW}" \
     -v _PATH="${BROWN}" \
@@ -139,12 +139,12 @@ fancy_awk() {
 }
 
 add_flag(){
-  debug add_flag "$@"
+  debug -f add_flag "$@"
   flags="${flags}${1}"
 }
 
 grep_content(){
-  debug grep_content "$@"
+  debug -f grep_content "$@"
   local flags=''
   add_flag "E"
   ${LIST} && add_flag "l"
@@ -157,7 +157,7 @@ grep_content(){
 }
 
 grep_list(){
-  debug "${RED}grep_list${_NC_}" "$@"
+  debug -f "grep_list" "$@"
   local flags=''
   add_flag "E"
   ${CASE} || add_flag "i"
@@ -166,15 +166,15 @@ grep_list(){
 }
 
 main(){
-  debug main "$@"
+  debug -f main "$@"
   process_args "$@"
-  debug main $$ "$@"
+  debug -f main "$@"
   if ${FILEGREP} ; then
     grep_list
   else
     grep_content | make_fancy
   fi
-  debug END main $$ "$@"
+  debug -f main.END "$@"
 }
 
 adlib debug decor array
