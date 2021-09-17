@@ -24,10 +24,10 @@ Usage: ${0//*\/} [options] expression [files]
 -i  ignore pattern case
 -l  list files only
 -s  single line fancy output
--x  files from pipeline
+-x  read files from pipeline
 
 EOF
-  exit ${1//*/0}
+  exit ${1//*/1}
 }
 
 non_opt_args(){
