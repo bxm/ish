@@ -157,7 +157,7 @@ grep_content(){
 }
 
 grep_list(){
-  debug grep_list "$@"
+  debug "${RED}grep_list${_NC_}" "$@"
   local flags=''
   add_flag "E"
   ${CASE} || add_flag "i"
@@ -168,11 +168,13 @@ grep_list(){
 main(){
   debug main "$@"
   process_args "$@"
+  debug main $$ "$@"
   if ${FILEGREP} ; then
     grep_list
   else
     grep_content | make_fancy
   fi
+  debug END main $$ "$@"
 }
 
 adlib debug decor array
