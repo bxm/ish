@@ -152,7 +152,11 @@ grep_content(){
   ${HEAD} && add_flag "Hn"
   ${HEAD} || add_flag "h"
   debug -v flags
-  ${PIPELIST} && piped_files || list_files \
+  if ${PIPELIST} ; then
+    piped_files
+  else
+    list_files
+  fi \
     | xargs -r grep -${flags} -- "${EXPR}"
 }
 
