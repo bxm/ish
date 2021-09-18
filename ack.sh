@@ -13,20 +13,21 @@ adlib(){
 
 usage(){
   exec >&2
-  printf "${*:+${LRED}ERROR: ${*}${_NC_}\n\n}"
+  printf "\n${*:+${LRED}ERROR${_NC_}: ${*}\n\n}"
 cat << EOF
-Usage: ${0//*\/} [options] expression [files]
+Usage: ${YELLOW}${0//*\/}${_NC_} [options] -e EXPR | EXPR [files]
+
+  -e EXPR  expression (replaces positional)
 
   -F  suppress fancy output
   -H  suppress header
   -d  enable debug
-  -e  expression
   -g  pattern match in file list
   -h  this help text
   -i  ignore pattern case
   -l  list files only
   -s  single line fancy output
-  -x  read files from pipeline
+  -x  read file list from pipeline
 
 EOF
   exit ${1//*/1}
@@ -42,6 +43,7 @@ non_opt_args(){
     elif [ -d "${1}" ] ; then
       array_push DIRS "${1}"
     else
+      printf "${RED}warning${_NC_}: non-existent file: %s\n" "$1"
       array_push OTHER "${1}"
     fi
     shift
@@ -64,6 +66,7 @@ process_args(){
   EXPR=''
 
   local args="$(getopt -n "${RED}warning${_NC_}" -o FHde:ghilsx -- "$@")"
+  debug -v args
   eval set -- "${args}"
   while [ $# -gt 0 ] ; do
     case "${1}" in
