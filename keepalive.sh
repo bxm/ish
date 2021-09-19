@@ -16,7 +16,12 @@ is_running(){
 }
 
 status(){
-  is_running && echo up || { echo down ; false ; } >&2
+  if is_running ; then
+    echo up
+  else
+    echo down >&2
+    false
+  fi
 }
 
 
