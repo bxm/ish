@@ -12,7 +12,7 @@ adlib(){
 }
 
 is_running(){
-  pgrep -f "$PROC" | grep -q .
+  pgrep -f "$PROC" >/dev/null
 }
 
 status(){
@@ -24,7 +24,6 @@ status(){
   fi
 }
 
-
 kill_it(){
   status 1>/dev/null || return 0
   pkill -f "$PROC"
@@ -32,8 +31,8 @@ kill_it(){
 }
 
 run_it(){
-  is_running && return 0
   status 2>/dev/null && return 0
+  printf "Starting..."
   cat /dev/location >/dev/null &
   status
 }
