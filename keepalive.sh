@@ -23,19 +23,22 @@ status(){
 kill_it(){
   status 1>/dev/null || return 0
   pkill -f "$PROC"
+  status
 }
 
 run_it(){
+  is_running && return 0
   status 2>/dev/null && return 0
   cat /dev/location >/dev/null &
+  status
 }
 
 main(){
   debug main "$@"
   PROC="cat /dev/location"
   case "$1" in
-    (k*) kill_it ;;
-    (r*) run_it ;;
+    (d*|k*) kill_it ;;
+    (u*|r*) run_it ;;
     (* ) status ;;
   esac
 }
