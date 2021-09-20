@@ -102,7 +102,26 @@ main(){
   get_tty
   set_page_size
   nice_clear 1
-  read_pipeline
+  # TODO eat params, open files if existing
+  #      maybe just a shonky self call to pipe?
+  if [ $# -eq 0 ] ; then
+    read_pipeline
+    return
+  fi
+
+  while [ $# -gt 0 ] ; do
+    [ -f "$1" ] || continue
+    cat "$1" | "$0"
+    printf "${LRED}${INV_ON}%%${_NC_}"
+    read -s -n1
+    echo -e "\r           \r\c"
+    #read -s -n1 -p %
+    #printf " \b"
+    case "$REPLY" in
+      ([qQ]) exit ;;
+    esac
+    shift
+  done
 }
 
 # TODO truncate really long (screenful)?
