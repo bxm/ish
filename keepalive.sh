@@ -12,7 +12,7 @@ adlib(){
 }
 
 is_running(){
-  pgrep -f "$PROC" >/dev/null
+  pgrep -f "${PROC}" >/dev/null
 }
 
 status(){
@@ -26,8 +26,8 @@ status(){
 
 kill_it(){
   status 1>/dev/null || return 0
-  pkill -f "$PROC"
-  status
+  pkill -f "${PROC}"
+  ! status
 }
 
 run_it(){
@@ -40,7 +40,7 @@ run_it(){
 main(){
   debug main "$@"
   PROC="cat /dev/location"
-  case "$1" in
+  case "${1}" in
     (d*|k*) kill_it ;;
     (u*|r*) run_it ;;
     (* ) status ;;
