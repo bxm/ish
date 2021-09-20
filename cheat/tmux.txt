@@ -9,3 +9,7 @@ P previous session
 S choose session
 
 $ rename session
+, rename window
+
+D detach session
+  tmux attach  to reconnect
