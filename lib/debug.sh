@@ -4,14 +4,14 @@ debug(){
   ${DEBUG:-false} || return 0
   case "${1}" in
     (-f)
-      local func="$2"
+      local func="${2}"
       shift 2
-      debug "${RED}${func}${BLUE} $*${_NC_}"
+      debug "${BG_RED}${func}${BLUE} $*${_NC_}"
       ;;
     (-v)
       shift
       while [ $# -gt 0 ] ; do
-        eval debug "${1}: \>\>\$${1}\<\<"
+        eval debug "\"${BG_PURPLE}${1}${_NC_}: \>\>\$${1}\<\<\""
         shift
       done
       ;;

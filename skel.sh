@@ -12,9 +12,9 @@ adlib(){
 }
 
 main(){
-  debug main "$@"
+  debug -f main "$@"
 }
 
-adlib debug
+adlib debug install
 
 main "$@"

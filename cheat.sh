@@ -26,7 +26,8 @@ main(){
   fi
 }
 
-adlib debug
+adlib debug install
+install cht cheat
 
 main "$@"
 
