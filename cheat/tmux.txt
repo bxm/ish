@@ -1,0 +1,11 @@
+Ctrl B - prefix
+
+C create new session
+X close current pane
+
+L last session
+N next session
+P previous session
+S choose session
+
+$ rename session
