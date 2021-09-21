@@ -14,14 +14,14 @@ install(){
   local l
   # create symlink to name
   # only override existing symlinks, no other
-  for l in $linknames ; do
-    l="$installdir/$l"
+  for l in ${linknames} ; do
+    l="${installdir}/${l}"
     debug -v l
-    [ -e "${l}" -a ! -L "$l" ] && continue
-    ln -sf "$realname" "$l"
+    [ -e "${l}" -a ! -L "${l}" ] && continue
+    ln -sf "${realname}" "${l}"
   done
   # also make sure executable for good measure
-  [ ! -x "$realname" ] && chmod +x "$realname"
+  [ ! -x "${realname}" ] && chmod +x "${realname}"
 }
 
 adlib debug
