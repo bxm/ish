@@ -11,7 +11,7 @@ debug(){
     (-v)
       shift
       while [ $# -gt 0 ] ; do
-        eval debug "\"${BG_PURPLE}${1}${_NC_}: \>\>\$${1}\<\<\""
+        eval debug "\"${BG_PURPLE}${1}${_NC_}: >>${YELLOW}\$${1}${_NC_}<<\""
         shift
       done
       ;;

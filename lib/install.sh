@@ -1,24 +1,13 @@
 #!/bin/sh
 
-adlib(){
-  local realname="$(readlink -f "${0}")"
-  local libdir="${realname%/*}/lib"
-  while [ $# -gt 0 ] ; do
-    local libname="${1%.sh}.sh"
-    source "${libdir}/${libname}" || continue
-    debug added "${libdir}/${libname}"
-    shift
-  done
-}
-
 install(){
   debug -f install "$@"
   # get real name of dollar zero
   local realname="$(readlink -f "${0}")"
-  local filename="${realname#*/}"
+  local filename="${realname##*/}"
   debug -v realname filename
   # if no param passed, snip name only
-  # otherwiss use param or params
+  # otherwise use params
   local linknames="${*:-${filename%.sh}}"
   local installdir="/usr/local/bin"
   debug -v linknames installdir
