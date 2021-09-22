@@ -12,6 +12,9 @@ alias vi=vim
 alias ff=fg
 alias f=fg
 alias st=stat
+alias tma='tmux attach'
+alias tmd='tmux detach'
+
 ll(){
   # remove non-user bits of mode
   # drop links, owner & tz, r-justify size
