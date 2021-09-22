@@ -52,7 +52,7 @@ get_increment(){
 prepend_length(){
   # strip colour chars to get visible length
   # prepending value to original text
-  awk '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
+  awk -v OFS='|' '{n = $0 ; gsub(/\x1B\[[0-9;]*[A-Za-z]/,"",n) ; print length(n),$0}'
 }
 
 fix_bslash(){
@@ -63,7 +63,7 @@ read_pipeline(){
   local drawn=0 # how far down a page we have drawn
   local inc
   local line
-  fix_bslash | prepend_length | while read len line ; do
+  fix_bslash | prepend_length | while IFS='|' read len line ; do
     echo "${line}"
     debug len: ${len}
     get_increment "${len}"
@@ -77,9 +77,19 @@ read_pipeline(){
   done
 }
 
-check_parama(){
+check_params(){
+  [ $# -eq 0 ] && return 1
+
   while [ $# -gt 0 ] ; do
-    true
+    [ -f "$1" ] || continue
+    cat "$1" | "$0"
+    [ $# -le 1 ] && exit
+    printf "${LRED}${INV_ON}%%${_NC_}"
+    read -s -n1
+    echo -e "\r           \r\c"
+    case "$REPLY" in
+      ([qQ]) exit ;;
+    esac
     shift
   done
 }
@@ -102,26 +112,7 @@ main(){
   get_tty
   set_page_size
   nice_clear 1
-  # TODO eat params, open files if existing
-  #      maybe just a shonky self call to pipe?
-  if [ $# -eq 0 ] ; then
-    read_pipeline
-    return
-  fi
-
-  while [ $# -gt 0 ] ; do
-    [ -f "$1" ] || continue
-    cat "$1" | "$0"
-    printf "${LRED}${INV_ON}%%${_NC_}"
-    read -s -n1
-    echo -e "\r           \r\c"
-    #read -s -n1 -p %
-    #printf " \b"
-    case "$REPLY" in
-      ([qQ]) exit ;;
-    esac
-    shift
-  done
+  check_params "$@" || read_pipeline
 }
 
 # TODO truncate really long (screenful)?
