@@ -4,6 +4,8 @@ source /root/code/ish/lib/decor.sh
 export PS1="${WHITE}[${LBLUE}\t${WHITE}][${YELLOW}\w${WHITE}]${_NC_}\n\$ "
 export EDITOR=nvim
 export GIT_PAGER=pgr
+alias ..='cd ..'
+alias -='cd -'
 alias lll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
