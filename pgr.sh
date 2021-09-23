@@ -79,12 +79,13 @@ read_pipeline(){
 
 check_params(){
   [ $# -eq 0 ] && return 1
-
+  local prompt
   while [ $# -gt 0 ] ; do
     [ -f "$1" ] || continue
-    cat "$1" | "$0"
+    read_pipeline < "$1"
     [ $# -le 1 ] && exit
-    printf "${LRED}${INV_ON}%%${_NC_}"
+
+    printf "${LRED}${INV_ON}Next: $2 %%${_NC_}"
     read -s -n1
     echo -e "\r           \r\c"
     case "$REPLY" in
