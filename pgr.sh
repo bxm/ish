@@ -17,10 +17,12 @@ prompt(){
   while true ; do
     printf "${WHITE}${INV_ON}%%${_NC_}"
     read -s -n1 <&1
-    echo -e "\r           \r\c"
+    erase_line
     case "${REPLY}" in
       ([qQ]   ) exit ;;
+      # enter
       ($'\r'  ) : $((drawn-=inc)) ; break ;;
+      # probably an arrow key
       ([A-D]  ) : $((drawn-=inc)) ; break ;;
       ([1-9]  ) : $((drawn-=REPLY)) ; break ;;
       ([hH]   ) PAGE=${HALF} drawn=0 ; break ;;
@@ -36,6 +38,11 @@ set_page_size(){
   FULL=$(( LINES - 1)) # allow for prompt
   HALF=$(( FULL / 2 ))
   PAGE=${FULL}
+}
+
+erase_line(){
+  # overprint current line with spaces
+  printf "\r%${COLUMNS}s\r"
 }
 
 get_increment(){
@@ -81,13 +88,16 @@ check_params(){
   [ $# -eq 0 ] && return 1
   local prompt
   while [ $# -gt 0 ] ; do
+    # only consider existing files, obv
     [ -f "$1" ] || continue
     read_pipeline < "$1"
-    [ $# -le 1 ] && exit
 
+    [ $# -le 1 ] && exit
     printf "${LRED}${INV_ON}Next: $2 %%${_NC_}"
     read -s -n1
-    echo -e "\r           \r\c"
+
+    erase_line
+
     case "$REPLY" in
       ([qQ]) exit ;;
     esac
