@@ -4,8 +4,8 @@ source /root/code/ish/lib/decor.sh
 export PS1="${WHITE}[${LBLUE}\t${WHITE}][${YELLOW}\w${WHITE}]${_NC_}\n\$ "
 export EDITOR=nvim
 export GIT_PAGER=pgr
-alias ..='cd ..'
-alias -='cd -'
+alias ..='_cd ..'
+alias -='_cd -'
 alias lll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
@@ -16,6 +16,13 @@ alias f=fg
 alias st=stat
 alias tma='tmux attach'
 alias tmd='tmux detach'
+
+_cd(){
+  case "$1" in
+    (..) shift ; cd ../$* ;;
+    (- ) cd - ;;
+  esac
+}
 
 ll(){
   # remove non-user bits of mode
