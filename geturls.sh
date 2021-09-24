@@ -18,6 +18,16 @@ get_urls(){
 edit(){
   true call editor on tmp file
 }
+
+copy_to_clip(){
+  local uname=$(uname -s -r)
+  case "${uname}" in
+    (Linux*-ish) tee /dev/clipboard ;;
+    (Darwin*)    pbcopy ; pbpaste ;;
+    (*)          cat ;;
+  esac
+}
+
 main(){
   debug -f main "$@"
   # TODO
@@ -28,7 +38,7 @@ main(){
   # cat temp file into clipboard
   # trap exit to clean up temp file
   # make edit optional
-  get_urls "$@" | tee /dev/clipboard
+  get_urls "$@" | copy_to_clip
 }
 
 adlib debug install
