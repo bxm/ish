@@ -12,6 +12,7 @@ adlib(){
 }
 
 get_urls(){
+  # TODO params handling needs to be here?
   cat "$@" | grep -Eo "\<https?://[^[:space:]]+"
 }
 
