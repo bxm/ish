@@ -1,17 +1,23 @@
 let g:currentmode={
-       \ 'n'  : 'NORMAL ',
-       \ 'v'  : 'VISUAL ',
-       \ 'V'  : 'V·Line ',
-       \ "\<C-V>" : 'V·Block ',
-       \ 'i'  : 'INSERT ',
-       \ 'R'  : 'R ',
-       \ 'Rv' : 'V·Replace ',
-       \ 'c'  : 'Command ',
+       \ 'n'  : 'NORM',
+       \ 'v'  : 'VIS',
+       \ 'V'  : 'V·Line',
+       \ "\<C-V>" : 'V·Blk',
+       \ 'i'  : 'INS',
+       \ 'R'  : 'Rep',
+       \ 'r'  : 'Rep',
+       \ 'Rv' : 'V·Rep',
+       \ 'c'  : 'Cmd',
        \}
+let space=' '
+set statusline=%t   " shortname
+set statusline+=:%l " line
+set statusline+=%{space}
 
-set statusline=%F=
-"set statusline+=:%l
-set statusline+=\ %{&modified?'[+]':'[\=]'}
+set statusline+=%{&modified?'[+]':'[\=]'}
+set statusline+=%{space}
 
-set statusline+=\ %{toupper(g:currentmode[mode()])}
+set statusline+=%{tolower(g:currentmode[mode()])}
+
+set statusline+=%{&paste?'-pst':''}
 
