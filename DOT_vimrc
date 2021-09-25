@@ -42,9 +42,9 @@ endfunction
 let @w=":call RemoveTrailingWhitespace()\<CR>"
 autocmd FileType sh let @p=":call ProtectBashVars()\<CR>"
 
-noremap <silent> <C-Y> :so $MYVIMRC<CR>
-vnoremap <silent> <C-Y> <C-C>:so $MYVIMRC<CR>
-inoremap <silent> <C-Y> <C-O>:so $MYVIMRC<CR>
+noremap <silent> <C-Y> :so $MYVIMRC<CR>:so %<CR>
+vnoremap <silent> <C-Y> <C-C>:so $MYVIMRC<CR>:so %<CR>
+inoremap <silent> <C-Y> <C-O>:so $MYVIMRC<CR>:so %<CR>
 
 noremap <silent> <Tab> gt
 

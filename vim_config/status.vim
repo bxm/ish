@@ -11,7 +11,8 @@ let g:currentmode={
        \ 'c'  : 'Cmd',
        \}
 let space=' '
-set statusline=%t   " shortname
+set statusline=
+set statusline+=%t   " shortname
 set statusline+=%{space}
 
 set statusline+=[%{&modified?'+':'='}]
