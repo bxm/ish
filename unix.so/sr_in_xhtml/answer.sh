@@ -1,1 +1,1 @@
-sed -ri.bak 's (src=").*/files/(.+") \1graphics/\2 ' *.xhtml
+sed -ri.bak 's (src=").*/files/(.+[.]jpg") \1graphics/\2 ' *.xhtml
