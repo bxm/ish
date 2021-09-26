@@ -47,7 +47,9 @@ main(){
   esac
 }
 
-adlib debug
+adlib debug install
+
+install
 
 main "$@"
 

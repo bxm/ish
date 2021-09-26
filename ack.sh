@@ -191,7 +191,9 @@ main(){
   debug -f main.END "$@"
 }
 
-adlib debug decor array
+adlib debug decor array install
+
+install
 
 main "$@"
 

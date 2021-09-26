@@ -23,7 +23,9 @@ main(){
   nvim "${home_f}"
 }
 
-adlib debug
+adlib debug install
+
+install vd
 
 main "$@"
 

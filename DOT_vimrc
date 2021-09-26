@@ -1,4 +1,4 @@
-source ~/.vim/config/status.vim
+source ~/.config/nvim/status.vim
 
 set confirm
 set list
