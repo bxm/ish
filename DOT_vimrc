@@ -9,7 +9,7 @@ augroup vimrc-remember-cursor-position
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
-au BufNewFile *.sh 0r ~/.vim/skel/skel.sh
+au BufNewFile *.sh 0r ~/.config/nvim/skel/skel.sh
 
 highlight ExtraWhitespace ctermbg=88 guibg=red
 highlight AllTabs ctermbg=22 guibg=green
