@@ -20,6 +20,10 @@ main(){
     | while read target ; do
       link="$HOME/.${target#./DOT_}"
       target="$PWD/${target#./}"
+      if [ -e "$link" -a ! -L "$link" ] ; then
+        echo "Skipped $link, exists and not a link"
+        continue
+      fi
       echo ln -s $target $link
     done
  #   | awk -v home="$HOME" \
