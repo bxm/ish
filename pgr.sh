@@ -127,6 +127,8 @@ main(){
 }
 
 # TODO truncate really long (screenful)?
-adlib debug tty array decor
+adlib debug tty array decor install
+
+install
 
 main "$@"

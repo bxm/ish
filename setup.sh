@@ -11,8 +11,7 @@ adlib(){
   done
 }
 
-main(){
-  debug -f main "$@"
+dot_links(){
   local realname="$(readlink -f "${0}")"
   local realdir="${realname%/*}"
   local target link
@@ -26,12 +25,18 @@ main(){
       fi
       echo ln -s $target $link
     done
- #   | awk -v home="$HOME" \
- #   '{targ = $0;link = $0;sub(/.\/DOT_/,home"/.",link);print targ,link}' # FIXME just use sed!
-
 }
 
-adlib debug
+find_installs(){
+  true
+}
+
+main(){
+  debug -f main "$@"
+  dot_links "$@"
+}
+
+adlib debug install
 
 main "$@"
 

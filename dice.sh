@@ -438,6 +438,8 @@ main(){
   main_loop
 }
 
-adlib debug array decor tty
+adlib debug array decor tty install
+
+install
 
 main "${@}"
