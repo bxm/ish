@@ -12,13 +12,12 @@ adlib(){
 }
 
 dot_links(){
-  local realname="$(readlink -f "${0}")"
-  local realdir="${realname%/*}"
+
   local target link
-  find . -mindepth 1 -maxdepth 1 -name 'DOT_*' \
+  find "$1" -mindepth 1 -maxdepth 1 -name 'DOT_*' \
     | while read target ; do
-      link="$HOME/.${target#./DOT_}"
-      target="$PWD/${target#./}"
+      link="$HOME/.${target#*/DOT_}"
+      target="${target}"
       if [ -e "$link" -a ! -L "$link" ] ; then
         echo "Skipped $link, exists and not a link"
         continue
@@ -28,12 +27,15 @@ dot_links(){
 }
 
 find_installs(){
-  true
+  grep -E "^install( |$)" "$1"/*.sh
 }
 
 main(){
   debug -f main "$@"
-  dot_links "$@"
+  local realname="$(readlink -f "${0}")"
+  local realdir="${realname%/*}"
+  dot_links "$realdir"
+  find_installs "$realdir"
 }
 
 adlib debug install
