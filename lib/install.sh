@@ -2,13 +2,13 @@
 
 install(){
   debug -f install "$@"
-  # allow target override
+  # allow target override, default to $0
   local TARG="${TARG:-${0}}"
   debug -v TARG
   # get real name of TARG
   local realname="$(readlink -f "${TARG}")"
-  if ! test -f "$realname" ; then
-    >&2 echo "WARN: could not install $TARG"
+  if ! test -f "${realname}" ; then
+    >&2 echo "WARN: could not install ${TARG}"
     return 1
   fi
   local filename="${realname##*/}"

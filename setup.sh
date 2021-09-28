@@ -12,6 +12,7 @@ adlib(){
 }
 
 dot_links(){
+  debug -f dot_links "$@"
   local target link
   find "${1}" -mindepth 1 -maxdepth 1 -name 'DOT_*' \
     | while read target ; do
@@ -21,22 +22,55 @@ dot_links(){
         echo "Skipped ${link}, exists and not a link"
         continue
       fi
-      echo ln -s "${target}" "${link}"
+      ${OP} ln -s "${target}" "${link}"
     done
 }
 
-reinstalls(){
+bulk_install(){
+  debug -f bulk_install "$@"
   grep -E "^install( |$)" "${1}"/*.sh \
-    | sed -r 's/^([^:]+):(.*)$/TARG="\1" \2/'
+    | while IFS=: read targ cmd ; do
+        ${OP} TARG="${targ}" ${cmd}
+      done
 
+}
+
+apk_add() {
+  debug -f apk_adapk_add "$@"
+  ${OP} apk add openssh-client
+  ${OP} apk add util-linux
+  ${OP} apk add neovim
+  ${OP} apk add tmux
+}
+
+process_params(){
+  debug -f process_params "$@"
+  DOT=false
+  INS=false
+  APK=false
+  OP=echo
+  while [ $# -gt 0 ] ; do
+    case "${1}" in
+      (dot ) DOT=true ;;
+      (ins ) INS=true ;;
+      (apk ) APK=true ;;
+      (--op) OP="" ;;
+      (*) >&2 echo "Usage: ${0##*/} --op apk|dot|ins|all" ;;
+    esac
+    shift
+  done
+  debug -v OP APK DOT INS
+  ${APK} || ${DOT} || ${INS}
 }
 
 main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
   local realdir="${realname%/*}"
-  dot_links "${realdir}"
-  reinstalls "${realdir}"
+  process_params "$@" || return
+  ${APK} && apk_add
+  ${DOT} && dot_links "${realdir}"
+  ${INS} && bulk_install "${realdir}"
 }
 
 adlib debug install
