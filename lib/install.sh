@@ -2,25 +2,32 @@
 
 install(){
   debug -f install "$@"
-  # get real name of dollar zero
-  local realname="$(readlink -f "${0}")"
+  # allow target override
+  local TARG="${TARG:-${0}}"
+  debug -v TARG
+  # get real name of TARG
+  local realname="$(readlink -f "${TARG}")"
+  if ! test -f "$realname" ; then
+    >&2 echo "WARN: could not install $TARG"
+    return 1
+  fi
   local filename="${realname##*/}"
   debug -v realname filename
-  # if no param passed, snip name only
-  # otherwise use params
+  # use params if passed, otherwise snip name
   local linknames="${*:-${filename%.sh}}"
   local installdir="/usr/local/bin"
   debug -v linknames installdir
-  local l
+  local link
   # create symlink to name
   # only override existing symlinks, no other
-  for l in ${linknames} ; do
-    l="${installdir}/${l}"
-    debug -v l
-    [ -e "${l}" -a ! -L "${l}" ] && continue
-    ln -sf "${realname}" "${l}"
+  for link in ${linknames} ; do
+    link="${installdir}/${link}"
+    debug -v link
+    # only overwrite links
+    [ -e "${link}" -a ! -L "${link}" ] && continue
+    ln -sf "${realname}" "${link}"
   done
-  # also make sure executable for good measure
+  # also make target executable for good measure
   [ ! -x "${realname}" ] && chmod +x "${realname}"
 }
 
