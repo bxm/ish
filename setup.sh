@@ -27,7 +27,9 @@ dot_links(){
 }
 
 find_installs(){
-  grep -E "^install( |$)" "$1"/*.sh
+  grep -E "^install( |$)" "$1"/*.sh \
+    | sed -r 's/^([^:]+):(.*)$/TARG="\1" \2/'
+
 }
 
 main(){
