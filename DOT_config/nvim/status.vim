@@ -1,9 +1,13 @@
 " https://jdhao.github.io/2019/11/03/vim_custom_statusline/
-let g:currentmode={
+hi User1 ctermfg=0 ctermbg=133 " dull light purple
+hi User2 ctermfg=White ctermbg=DarkBlue
+hi User3 ctermfg=White ctermbg=Red
+hi User4 ctermfg=White ctermbg=DarkGreen
+let g:modes={
        \ 'n'  : 'NORM',
        \ 'v'  : 'VIS',
-       \ 'V'  : 'V·Line',
-       \ "\<C-V>" : 'V·Blk',
+       \ 'V'  : 'VLine',
+       \ "\<C-V>" : 'VBlk',
        \ 'i'  : 'INS',
        \ 'R'  : 'Rep',
        \ 'r'  : 'Rep',
@@ -12,16 +16,17 @@ let g:currentmode={
        \}
 let space=' '
 set statusline=
-set statusline+=%t   " shortname
-set statusline+=%{space}
+set statusline+=%1*[%t]%*   " short filename
+set statusline+=%3*%{&modified?'[+]':''}%* " mod'd
+set statusline+=%4*%{&modified?'':'[=]'}%* " unmod'd
 
-set statusline+=[%{&modified?'+':'='}]
-set statusline+=%{space}
-
-set statusline+=%{tolower(g:currentmode[mode()])}
+set statusline+=[
+set statusline+=%{tolower(g:modes[mode()])} " mode
 
 set statusline+=%{&paste?'-pst':''} " set paste
+set statusline+=]
 
-set statusline+=%{space}
-set statusline+=(%l/%L) " line
+set statusline+=%2*[%{&ft}]%* " filetype
+set statusline+=[%l/%L] " line
+
 
