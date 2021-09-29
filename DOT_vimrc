@@ -39,6 +39,14 @@ function! ProtectBashVars()
   endif
 endfunction
 
+function! SetPaste()
+  if &paste
+    set paste!
+  else
+    set paste
+  endif
+endfunction
+
 let @w=":call RemoveTrailingWhitespace()\<CR>"
 autocmd FileType sh let @p=":call ProtectBashVars()\<CR>"
 
@@ -56,9 +64,9 @@ noremap <silent> <C-X> :q<CR>
 vnoremap <silent> <C-X> <C-C>:q<CR>
 inoremap <silent> <C-X> <C-O>:q<CR>
 
-noremap <silent> <C-P> :set paste<CR>
-vnoremap <silent> <C-P> <C-C>:set paste<CR>
-inoremap <silent> <C-P> <C-O>:set paste<CR>
+noremap <silent> <C-P> :call SetPaste()<CR>
+vnoremap <silent> <C-P> <C-C>:call SetPaste()<CR>
+inoremap <silent> <C-P> <C-O>:call SetPaste()<CR>
 
 noremap <silent> <C-S> :update<CR>
 noremap <silent> s :update<CR>
