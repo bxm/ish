@@ -16,6 +16,7 @@ install(){
   # use params if passed, otherwise snip name
   local linknames="${*:-${filename%.sh}}"
   local installdir="/usr/local/bin"
+  mkdir -p "${installdir}"
   debug -v linknames installdir
   local link
   # create symlink to name
