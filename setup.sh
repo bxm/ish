@@ -22,7 +22,7 @@ dot_links(){
         echo "Skipped ${link}, exists and not a link"
         continue
       fi
-      ${OP} ln -s "${target}" "${link}"
+      ${OP} ln -fs "${target}" "${link}"
     done
 }
 
@@ -30,7 +30,7 @@ bulk_install(){
   debug -f bulk_install "$@"
   grep -E "^install( |$)" "${1}"/*.sh \
     | while IFS=: read targ cmd ; do
-        ${OP} TARG="${targ}" ${cmd}
+        eval ${OP} TARG="${targ}" ${cmd}
       done
 
 }
@@ -43,19 +43,25 @@ apk_add() {
   ${OP} apk add tmux
 }
 
+usage(){
+  >&2 echo "Usage: ${0##*/} --op apk|dot|ins|all"
+  exit
+}
+
 process_params(){
   debug -f process_params "$@"
   DOT=false
   INS=false
   APK=false
   OP=echo
+  [ $# -eq 0 ] && usage
   while [ $# -gt 0 ] ; do
     case "${1}" in
       (dot ) DOT=true ;;
       (ins ) INS=true ;;
       (apk ) APK=true ;;
       (--op) OP="" ;;
-      (*) >&2 echo "Usage: ${0##*/} --op apk|dot|ins|all" ;;
+      (*) usage ;;
     esac
     shift
   done
