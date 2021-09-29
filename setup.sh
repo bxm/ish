@@ -60,6 +60,7 @@ process_params(){
       (dot ) DOT=true ;;
       (ins ) INS=true ;;
       (apk ) APK=true ;;
+      (all ) DOT=true INS=true APK=true ;;
       (--op) OP="" ;;
       (*) usage ;;
     esac
