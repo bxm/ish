@@ -16,14 +16,24 @@ convoluted(){
   m=-rwxr-x--x
   echo ${m:1}
   seq 1 9 | while read i ; do
+    # q is inverted modulus
+    # bitshift q left to get x, which
+    # corresponds to 2/3 of the mode octal values
     : $((q=((9-i)%3),x=q<<1))
+    # fix remaining octal value to 1
     x=${x/0/1}
+    # j gets char number i of mode
     j=${m:$i:1}
+    # k is j with non hyphen replaced with x
     k=${j/[^-]/$x}
+    # fix those hyphens
     k=${k/-/0}
+    # when r-bitshifted q is 1 its first of a triple
+    # so f is set to k, otherwise incremented by k
     [ $((q>>1)) = 1 ] && f=$k || : $((f+=k))
     #printf "$x $q $j $k"
     #[ $q = 0 ] && echo " $f" || echo
+    # when q is 0 at end of triple so print total f
     [ $q = 0 ] && printf "$f"
   done
   echo
