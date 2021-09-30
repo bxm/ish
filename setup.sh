@@ -13,7 +13,7 @@ adlib(){
 
 dot_links(){
   debug -f dot_links "$@"
-  local target link
+  local target link slash
   find "${1}" -mindepth 1 -maxdepth 1 -name 'DOT_*' \
     | while read target ; do
       link="${HOME}/.${target#*/DOT_}"
@@ -22,7 +22,14 @@ dot_links(){
         echo "Skipped ${link}, exists and not a link"
         continue
       fi
-      ${OP} ln -fs "${target}" "${link}"
+      if [ -d "${target}" ] ; then
+        # ln -f behaviour with directories is ungood
+        rm -f "${link}"
+        slash=/
+      else
+        slash=''
+      fi
+      ${OP} ln -vfs "${target}${slash}" "${link}"
     done
 }
 
@@ -30,7 +37,7 @@ bulk_install(){
   debug -f bulk_install "$@"
   grep -E "^install( |$)" "${1}"/*.sh \
     | while IFS=: read targ cmd ; do
-        eval ${OP} TARG="${targ}" ${cmd}
+        eval ${OP} VERBOSE=true TARG="${targ}" ${cmd}
       done
 
 }
