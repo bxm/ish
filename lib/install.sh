@@ -4,9 +4,12 @@ install(){
   debug -f install "$@"
   # allow target override, default to $0
   local TARG="${TARG:-${0}}"
+  local VERBOSE="${VERBOSE:-1}" # any non empty value for verbose enables it
+  local flag="${VERBOSE:+v}"
   debug -v TARG
   # get real name of TARG
   local realname="$(readlink -f "${TARG}")"
+  # we only link to files
   if ! test -f "${realname}" ; then
     >&2 echo "WARN: could not install ${TARG}"
     return 1
@@ -26,7 +29,7 @@ install(){
     debug -v link
     # only overwrite links
     [ -e "${link}" -a ! -L "${link}" ] && continue
-    ln -sf "${realname}" "${link}"
+    ln -sf${flag} "${realname}" "${link}"
   done
   # also make target executable for good measure
   [ ! -x "${realname}" ] && chmod +x "${realname}"
