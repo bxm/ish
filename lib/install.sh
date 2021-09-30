@@ -4,7 +4,7 @@ install(){
   debug -f install "$@"
   # allow target override, default to $0
   local TARG="${TARG:-${0}}"
-  local VERBOSE="${VERBOSE:-1}" # any non empty value for verbose enables it
+  local VERBOSE="${VERBOSE}" # any non empty value for verbose enables it
   local flag="${VERBOSE:+v}"
   debug -v TARG
   # get real name of TARG
