@@ -19,7 +19,7 @@ inoremap <silent> <C-P> <C-O>:call SetPaste()<CR>
 noremap <silent> s :update<CR>
 noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
-inoremap <silent> <C-S> <C-O>:update<CR>
+inoremap <silent> <C-S> <Esc>:update<CR>
 noremap <silent> <C-A> :update<CR>
 vnoremap <silent> <C-A> <C-C>:update<CR>
 inoremap <silent> <C-A> <C-O>:update<CR>

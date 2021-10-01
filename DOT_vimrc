@@ -1,5 +1,10 @@
-source ~/.config/nvim/status.vim
-source ~/.config/nvim/keymap.vim
+let config_dir='~/.config/nvim'
+exec 'source ' . config_dir . '/status.vim'
+exec 'source ' . config_dir . '/keymap.vim'
+exec 'source ' . config_dir . '/funcs.vim'
+"source ~/.config/nvim/status.vim
+"source ~/.config/nvim/keymap.vim
+"source ~/.config/nvim/funcs.vim
 
 set confirm
 set list
@@ -11,47 +16,25 @@ augroup vimrc-remember-cursor-position
 augroup END
 
 au BufNewFile *.sh 0r ~/.config/nvim/skel/skel.sh
-
+" https://jonasjacek.github.io/colors/
 highlight ExtraWhitespace ctermbg=88 guibg=red
 highlight AllTabs ctermbg=22 guibg=green
 highlight LineNr ctermfg=darkgrey ctermbg=236
-
+hi Folded ctermbg=237
+hi NonText ctermfg=242
 " highlight trailing whitespace and literal tabs
 "match ExtraWhitespace /\s\+$/
 "match AllTabs /\t/
 match errorMsg /\s\+$/
 "match errorMsg /\t/
 
-function! RemoveTrailingWhitespace()
-  let save_cursor = getcurpos() " save current cursor position
-  if search('\v\s+$',"n") " check for offenders, to prevent error from %s
-    execute '%s/\v\s+$//g'
-  endif
-  call setpos('.', save_cursor) " put the cursor back where it started
-endfunction
-
-function! ProtectBashVars()
-  let regex='\v(([^\\]|^)[$])([A-Za-z0-9_]+)'
-  if search(regex,"n") " check for offenders, to prevent error from %s
-    let save_cursor = getcurpos() " save current cursor position
-    let subst='%s/' . regex . '/\1{\3}/gc'
-    execute subst
-    call setpos('.', save_cursor) " put the cursor back where it started
-  endif
-endfunction
-
-function! SetPaste()
-  if &paste
-    set paste!
-  else
-    set paste
-  endif
-endfunction
-
 let @w=":call RemoveTrailingWhitespace()\<CR>"
 autocmd FileType sh let @p=":call ProtectBashVars()\<CR>"
 
 filetype plugin indent on
+set breakindent
+set breakindentopt=shift:2,min:40,sbr
+set showbreak=>>
 set wrap lbr
 " On pressing tab, insert 2 spaces
 set expandtab
@@ -61,4 +44,3 @@ set softtabstop=2
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
 set foldmethod=indent
-hi Folded ctermbg=237
