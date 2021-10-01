@@ -1,11 +1,12 @@
 let config_dir='~/.config/nvim'
-exec 'source ' . config_dir . '/status.vim'
-exec 'source ' . config_dir . '/keymap.vim'
-exec 'source ' . config_dir . '/funcs.vim'
-"source ~/.config/nvim/status.vim
-"source ~/.config/nvim/keymap.vim
-"source ~/.config/nvim/funcs.vim
-
+let config_files=[
+      \ "status",
+      \ "keymap",
+      \ "funcs",
+      \]
+for c in config_files
+  exec 'source ' . config_dir . '/' .   . '.vim'
+endfor
 set confirm
 set list
 set scrolloff=5
