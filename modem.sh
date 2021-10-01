@@ -16,10 +16,11 @@ convoluted(){
   m=-rwxr-x--x
   echo ${m:1}
   seq 1 9 | while read i ; do
-    # q is inverted modulus
-    # bitshift q left to get x, which
+    # q is inverted modulus of i
+    : $((q=(9-i)%3))
+    # double q to get x, which
     # corresponds to 2/3 of the mode octal values
-    : $((q=((9-i)%3),x=q<<1))
+    : $((x=q*2))
     # fix remaining octal value to 1
     x=${x/0/1}
     # j gets char number i of mode
