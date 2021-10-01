@@ -50,9 +50,12 @@ endfunction
 let @w=":call RemoveTrailingWhitespace()\<CR>"
 autocmd FileType sh let @p=":call ProtectBashVars()\<CR>"
 
-noremap <silent> <C-Y> :so $MYVIMRC<CR>:so %<CR>
-vnoremap <silent> <C-Y> <C-C>:so $MYVIMRC<CR>:so %<CR>
-inoremap <silent> <C-Y> <C-O>:so $MYVIMRC<CR>:so %<CR>
+noremap <silent> <C-Y> :so $MYVIMRC<CR>
+vnoremap <silent> <C-Y> <C-C>:so $MYVIMRC<CR>
+inoremap <silent> <C-Y> <C-O>:so $MYVIMRC<CR>
+autocmd FileType vim noremap <silent> <C-Y> :so $MYVIMRC<CR>:so %<CR>
+autocmd FileType vim vnoremap <silent> <C-Y> <C-C>:so $MYVIMRC<CR>:so %<CR>
+autocmd FileType vim inoremap <silent> <C-Y> <C-O>:so $MYVIMRC<CR>:so %<CR>
 
 noremap <silent> <Tab> gt
 
@@ -68,10 +71,13 @@ noremap <silent> <C-P> :call SetPaste()<CR>
 vnoremap <silent> <C-P> <C-C>:call SetPaste()<CR>
 inoremap <silent> <C-P> <C-O>:call SetPaste()<CR>
 
-noremap <silent> <C-S> :update<CR>
 noremap <silent> s :update<CR>
+noremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
+noremap <silent> <C-A> :update<CR>
+vnoremap <silent> <C-A> <C-C>:update<CR>
+inoremap <silent> <C-A> <C-O>:update<CR>
 
 nnoremap <silent> <Space> :silent :nohl<CR>
 
