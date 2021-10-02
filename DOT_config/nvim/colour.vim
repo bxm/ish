@@ -5,6 +5,11 @@ highlight NonText ctermfg=242
 highlight LineNr ctermfg=darkgrey ctermbg=236
 highlight Folded ctermbg=237
 
+"highlight TabLine
+highlight TabLine ctermbg=236 ctermfg=darkgrey cterm=none
+highlight TabLineFill ctermbg=236 ctermfg=darkgrey cterm=none
+highlight TabLineSel ctermbg=grey ctermfg=black
+
 " user
 highlight User1 ctermfg=0 ctermbg=133 " dull light purple
 highlight User2 ctermfg=White ctermbg=DarkBlue
