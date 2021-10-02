@@ -3,10 +3,11 @@ let config_files=[
       \ "status",
       \ "keymap",
       \ "funcs",
-      \ "colour",
       \ "cursor",
       \ "macros",
       \ "lineform",
+      \ "colour",
+      \ "commands",
       \ ]
 for c in config_files
   exec 'source ' . config_dir . '/' . c . '.vim'
