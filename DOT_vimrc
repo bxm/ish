@@ -13,12 +13,6 @@ for c in config_files
 endfor
 
 au BufNewFile *.sh 0r ~/.config/nvim/skel/skel.sh
-" highlight trailing whitespace and literal tabs
-"match ExtraWhitespace /\s\+$/
-"match AllTabs /\t/
-match errorMsg /\s\+$/
-"match errorMsg /\t/
-"
 
 set confirm
 set list
