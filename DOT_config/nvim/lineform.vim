@@ -14,10 +14,14 @@ set softtabstop=2
 set shiftwidth=2
 
 set foldmethod=indent
-
+" trailing space  
+" trailing tab	
+	" other	tab
+" naked space
+  
 set listchars=
-set listchars+=tab:->,
-set listchars+=trail:-,
+set listchars+=tab:--,
+set listchars+=trail:.,
 set listchars+=extends:>,
 set listchars+=precedes:<,
 set listchars+=nbsp:~,
