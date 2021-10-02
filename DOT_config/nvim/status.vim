@@ -7,7 +7,7 @@ let g:modes={
        \ 'i'  : 'INS',
        \ 'R'  : 'Rep',
        \ 'r'  : 'Rep',
-       \ 'Rv' : 'V·Rep',
+       \ 'Rv' : 'VRep',
        \ 'c'  : 'Cmd',
        \}
 let space=' '
@@ -20,7 +20,8 @@ set statusline+=%4*%{&modified?'':'[=]'}%* " unmod'd
 
 set statusline+=%= " expanding space
 set statusline+=[%{tolower(g:modes[mode()])}] " mode
-set statusline+=%{&paste?'[pst]':''} " set paste
+"set statusline+=%{&paste?'[pst]':''} " set paste
+set statusline+=%{mode()=='i'?&paste?'[pst]':'':''} " paste if in insert
 
 set statusline+=%= " expanding space
 "set statusline+=%2*[%{&ft}]%* " filetype
