@@ -3,45 +3,23 @@ let config_files=[
       \ "status",
       \ "keymap",
       \ "funcs",
-      \]
+      \ "colour",
+      \ "cursor",
+      \ "macros",
+      \ "lineform",
+      \ ]
 for c in config_files
-  exec 'source ' . config_dir . '/' .   . '.vim'
+  exec 'source ' . config_dir . '/' . c . '.vim'
 endfor
-set confirm
-set list
-set scrolloff=5
-" Remember cursor position
-augroup vimrc-remember-cursor-position
-    autocmd!
-    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-augroup END
 
 au BufNewFile *.sh 0r ~/.config/nvim/skel/skel.sh
-" https://jonasjacek.github.io/colors/
-highlight ExtraWhitespace ctermbg=88 guibg=red
-highlight AllTabs ctermbg=22 guibg=green
-highlight LineNr ctermfg=darkgrey ctermbg=236
-hi Folded ctermbg=237
-hi NonText ctermfg=242
 " highlight trailing whitespace and literal tabs
 "match ExtraWhitespace /\s\+$/
 "match AllTabs /\t/
 match errorMsg /\s\+$/
 "match errorMsg /\t/
+"
 
-let @w=":call RemoveTrailingWhitespace()\<CR>"
-autocmd FileType sh let @p=":call ProtectBashVars()\<CR>"
-
-filetype plugin indent on
-set breakindent
-set breakindentopt=shift:2,min:40,sbr
-set showbreak=>>
-set wrap lbr
-" On pressing tab, insert 2 spaces
-set expandtab
-" show existing tab with 2 spaces width
-set tabstop=2
-set softtabstop=2
-" when indenting with '>', use 2 spaces width
-set shiftwidth=2
-set foldmethod=indent
+set confirm
+set list
+set scrolloff=5
