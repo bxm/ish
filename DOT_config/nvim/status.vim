@@ -21,14 +21,11 @@ set statusline+=%9*%{space}%* " dead space
 set statusline+=%= " expanding space
 set statusline+=[%{tolower(g:modes[mode()])} " mode
 set statusline+=%{&paste?':p':''}] " set paste
-"set statusline+=%{mode()=='i'?&paste?'+pst':'':''}] " paste if in insert
-
 set statusline+=%= " expanding space
 set statusline+=%9*%{space}%* " dead space
-"set statusline+=%2*[%{&ft}]%* " filetype
+
 set statusline+=%2*%y%* " filetype
 set statusline+=%3*%r%* " readonly
-"set statusline+=%5*[%c,%l/%L]%* " position
 set statusline+=%5*[%3l/%L]%* " position
 
 " Colorise line numbers in insert and visual modes
@@ -58,15 +55,10 @@ function! ResetStatusLineColor()
   highlight StatusLine ctermfg=15 ctermbg=0
 endfunction
 
-
 vnoremap <silent> <expr> <SID>SetStatusLineColorVisual SetStatusLineColorVisual()
 nnoremap <silent> <script> v v<SID>SetStatusLineColorVisual
-"<left><right>
 nnoremap <silent> <script> V V<SID>SetStatusLineColorVisual
-"<left><right>
 nnoremap <silent> <script> <C-v> <C-v><SID>SetStatusLineColorVisual
-"<left><right>
-
 
 augroup StatusLineColorSwap
   autocmd!
@@ -74,4 +66,3 @@ augroup StatusLineColorSwap
   autocmd InsertLeave * call ResetStatusLineColor()
   autocmd CursorHold * call ResetStatusLineColor()
 augroup END
-
