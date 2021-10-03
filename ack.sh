@@ -100,6 +100,7 @@ list_files(){
     -type f \
     ! -path */.git/* \
     ! -path */.git \
+    ! -path */.*.sw? \
     | sort -u \
     | sed 's|^[.]/||'
 }
