@@ -10,32 +10,12 @@ let g:modes={
   \ 'Rv' : 'VRep',
   \ 'c'  : 'Cmd',
 \} " g:modes
-function! DefaultColour()
-    highlight StatusLine ctermfg=white ctermbg=black cterm=bold
-endfunction
-function! InsertColour(mode)
-  if     a:mode == 'i'
-    highlight StatusLine ctermbg=56 ctermfg=white
-  elseif a:mode == 'r'
-    highlight StatusLine ctermbg=1 ctermfg=white
-  endif
-endfunction
-augroup StatusLineColour
-  autocmd!
-  autocmd InsertEnter  * call InsertColour(v:insertmode)
-  autocmd InsertChange * call InsertColour(v:insertmode)
-  autocmd InsertLeave  * call DefaultColour()
-augroup END
-" no good for visual, duh
-" https://stackoverflow.com/questions/15561132/run-command-when-vim-enters-visual-mode
 
 let space=' '
 set statusline= " clear
 set statusline+=%1*[%t]%* " short filename
 set statusline+=%3*%{&modified?'[+]':''}%* " mod'd
 set statusline+=%4*%{&modified?'':'[=]'}%* " unmod'd
-
-"set statusline+=%#Paste# " set paste
 
 set statusline+=%9*%{space}%* " dead space
 set statusline+=%= " expanding space
@@ -48,6 +28,50 @@ set statusline+=%9*%{space}%* " dead space
 "set statusline+=%2*[%{&ft}]%* " filetype
 set statusline+=%2*%y%* " filetype
 set statusline+=%3*%r%* " readonly
-set statusline+=%5*[%c,%l/%L]%* " position
+"set statusline+=%5*[%c,%l/%L]%* " position
+set statusline+=%5*[%3l/%L]%* " position
 
+" Colorise line numbers in insert and visual modes
+" ------------------------------------------------
+" https://stackoverflow.com/questions/15561132/run-command-when-vim-enters-visual-mode
+function! SetStatusLineColorInsert(mode)
+  if a:mode == "i"
+    highlight StatusLine ctermbg=56
+
+  elseif a:mode == "r"
+    highlight StatusLine ctermbg=1
+
+  endif
+endfunction
+
+
+function! SetStatusLineColorVisual()
+  set updatetime=0
+
+  highlight StatusLine ctermbg=202
+  return 'lh'
+endfunction
+
+
+function! ResetStatusLineColor()
+  set updatetime=4000
+  highlight StatusLine ctermfg=15 ctermbg=0
+endfunction
+
+
+vnoremap <silent> <expr> <SID>SetStatusLineColorVisual SetStatusLineColorVisual()
+nnoremap <silent> <script> v v<SID>SetStatusLineColorVisual
+"<left><right>
+nnoremap <silent> <script> V V<SID>SetStatusLineColorVisual
+"<left><right>
+nnoremap <silent> <script> <C-v> <C-v><SID>SetStatusLineColorVisual
+"<left><right>
+
+
+augroup StatusLineColorSwap
+  autocmd!
+  autocmd InsertEnter * call SetStatusLineColorInsert(v:insertmode)
+  autocmd InsertLeave * call ResetStatusLineColor()
+  autocmd CursorHold * call ResetStatusLineColor()
+augroup END
 

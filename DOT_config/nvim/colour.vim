@@ -12,8 +12,8 @@ highlight TabLineSel ctermbg=grey ctermfg=black
 " builtin user defined
 highlight User1 ctermfg=0 ctermbg=133 " dull light purple
 highlight User2 ctermfg=255 ctermbg=DarkBlue
-highlight User3 ctermfg=255 ctermbg=Red
-highlight User4 ctermfg=255 ctermbg=DarkGreen
+highlight User3 ctermfg=255 ctermbg=Red cterm=none
+highlight User4 ctermfg=255 ctermbg=DarkGreen cterm=none
 highlight User5 ctermfg=0 ctermbg=DarkCyan
 highlight User9 ctermfg=white ctermbg=black
 
@@ -23,7 +23,7 @@ highlight User9 ctermfg=white ctermbg=black
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red ctermfg=black
 autocmd ColorScheme * highlight AllTabs ctermbg=green ctermfg=black
 highlight StatusLine ctermfg=white ctermbg=black cterm=bold
-highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=bold
+highlight StatusLineNC ctermfg=darkgrey ctermbg=black cterm=none
 " highlight trailing whitespace and literal tabs
 autocmd BufRead * syntax match AllTabs /\t/
 autocmd BufRead * syntax match ExtraWhitespace / \+$/
