@@ -12,32 +12,33 @@ let g:modes={
 \} " g:modes
 
 function! ModeColour(mode)
-  if    mode == 'n'
+  if    a:mode == 'reset'
     highlight StatusLine ctermfg=white ctermbg=black cterm=bold
-  elseif mode ==? 'v'
-    highlight StatusLine ctermfg=magenta ctermbg=black cterm=bold
+  elseif a:mode ==? 'i'
+    highlight StatusLine ctermbg=5
+  endif
 endfunction
 
-"au InsertEnter * call ModeColour(v:insertmode)
-"au InsertChange * call ModeColour(v:insertmode)
-"au InsertLeave * call ModeColour(v:insertmode)
+au InsertEnter * call ModeColour(v:insertmode)
+au InsertChange * call ModeColour(v:insertmode)
+au InsertLeave * call ModeColour('reset')
 
 let space=' '
-set statusline=
+set statusline= " clear
 set statusline+=%1*[%t]%* " short filename
 set statusline+=%3*%{&modified?'[+]':''}%* " mod'd
 set statusline+=%4*%{&modified?'':'[=]'}%* " unmod'd
 
 "set statusline+=%#Paste# " set paste
 
+set statusline+=%{space}
 set statusline+=%= " expanding space
-set statusline+=
 set statusline+=[%{tolower(g:modes[mode()])} " mode
 set statusline+=%{&paste?':p':''}] " set paste
 "set statusline+=%{mode()=='i'?&paste?'+pst':'':''}] " paste if in insert
-set statusline+=
 
 set statusline+=%= " expanding space
+set statusline+=%{space}
 "set statusline+=%2*[%{&ft}]%* " filetype
 set statusline+=%2*%y%* " filetype
 set statusline+=%3*%r%* " readonly
