@@ -12,16 +12,18 @@ let g:modes={
 \} " g:modes
 
 function! ModeColour(mode)
+
   if    a:mode == 'reset'
     highlight StatusLine ctermfg=white ctermbg=black cterm=bold
-  elseif a:mode ==? 'i'
-    highlight StatusLine ctermbg=5
+  elseif a:mode =~? 'i'
+    highlight StatusLine ctermbg=5 ctermfg=white
   endif
 endfunction
-
 au InsertEnter * call ModeColour(v:insertmode)
 au InsertChange * call ModeColour(v:insertmode)
 au InsertLeave * call ModeColour('reset')
+" no good for visual, duh
+" https://stackoverflow.com/questions/15561132/run-command-when-vim-enters-visual-mode
 
 let space=' '
 set statusline= " clear
