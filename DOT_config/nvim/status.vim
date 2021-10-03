@@ -10,18 +10,22 @@ let g:modes={
   \ 'Rv' : 'VRep',
   \ 'c'  : 'Cmd',
 \} " g:modes
-
-function! ModeColour(mode)
-
-  if    a:mode == 'reset'
+function! DefaultColour()
     highlight StatusLine ctermfg=white ctermbg=black cterm=bold
-  elseif a:mode =~? 'i'
-    highlight StatusLine ctermbg=5 ctermfg=white
+endfunction
+function! InsertColour(mode)
+  if     a:mode == 'i'
+    highlight StatusLine ctermbg=56 ctermfg=white
+  elseif a:mode == 'r'
+    highlight StatusLine ctermbg=1 ctermfg=white
   endif
 endfunction
-au InsertEnter * call ModeColour(v:insertmode)
-au InsertChange * call ModeColour(v:insertmode)
-au InsertLeave * call ModeColour('reset')
+augroup StatusLineColour
+  autocmd!
+  autocmd InsertEnter  * call InsertColour(v:insertmode)
+  autocmd InsertChange * call InsertColour(v:insertmode)
+  autocmd InsertLeave  * call DefaultColour()
+augroup END
 " no good for visual, duh
 " https://stackoverflow.com/questions/15561132/run-command-when-vim-enters-visual-mode
 
