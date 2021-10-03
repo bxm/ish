@@ -15,7 +15,7 @@ main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
   local realdir="${realname%/*}"
-  tmux attach || ${realdir}/tmsession.sh
+  tmux attach || ${realdir}/tmsession.sh "$@"
 }
 
 adlib debug install
