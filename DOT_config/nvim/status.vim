@@ -31,14 +31,14 @@ set statusline+=%4*%{&modified?'':'[=]'}%* " unmod'd
 
 "set statusline+=%#Paste# " set paste
 
-set statusline+=%{space}
+set statusline+=%9*%{space}%* " dead space
 set statusline+=%= " expanding space
 set statusline+=[%{tolower(g:modes[mode()])} " mode
 set statusline+=%{&paste?':p':''}] " set paste
 "set statusline+=%{mode()=='i'?&paste?'+pst':'':''}] " paste if in insert
 
 set statusline+=%= " expanding space
-set statusline+=%{space}
+set statusline+=%9*%{space}%* " dead space
 "set statusline+=%2*[%{&ft}]%* " filetype
 set statusline+=%2*%y%* " filetype
 set statusline+=%3*%r%* " readonly
