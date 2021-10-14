@@ -1,7 +1,7 @@
 #!/bin/sh
 
 multi_thread(){
-  seq -s $'\n'192.168.0. 0 254 \
+  seq -s $'\n'192.168.1. 0 254 \
     | tail +2 \
     | xargs -n1 -P64 -I% \
        $0 do $* % \
