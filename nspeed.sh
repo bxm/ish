@@ -29,10 +29,11 @@ if (time>max) {
 max=time*1.0
 mflag="+"}else{mflag=""}
 timepc=time/max
-barcols=(timepc*cols)-5
+barcols=(timepc*(cols-5))
 #print timepc
 printf "%4s%1s",time,mflag
-for(c=0;c<barcols;c++) {printf "#"}
+#for(c=0;c<barcols;c++) {printf "#"}
+for(c=0;c<cols-5;c++) {if(c<=barcols){printf "#"}}
 printf "\n"}'
 }
 
