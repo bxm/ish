@@ -20,13 +20,15 @@ ping 8.8.8.8 | awk \
     '/time=/ {
       i++
 time=$7
-gsub(/[^[:digit:]]/,"",time)
+gsub(/[^[:digit:].]/,"",time)
+itime=int(time)
 total+=time
 avg=total/i
 if (time>max) {max=time*1.1
-print "max increased"}
+mflag="+"}else{mflag=""}
 timepc=time/max
 barcols=timepc*cols
+printf "%s%1s",itime,mflag
 for(c=0;c<barcols;c++) {printf "#"}
 printf "\n"}'
 }
