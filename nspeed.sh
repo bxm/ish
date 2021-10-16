@@ -35,6 +35,7 @@ printf "%4s%1s",time,mflag
 #for(c=0;c<barcols;c++) {printf "#"}
 for(c=0;c<cols-5;c++) {if(c<=barcols){printf "#"}}
 printf "\n"}'
+# count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
 }
 
 adlib debug install
