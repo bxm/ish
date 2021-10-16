@@ -21,3 +21,4 @@
   }
   printf "\n"
 }
+# count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
