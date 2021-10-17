@@ -17,10 +17,16 @@ main(){
   ping 8.8.8.8 | awk \
     -vcols=$(tput cols) -vtimepc=0 -vbarcols=0 \
     -vtotal=0 -vi=0 -vmax=0 \
+    -vred="${RED}" \
+    -vyel="${YELLOW}" \
+    -vgrn="${GREEN}" \
+    -vion="${INV_ON}" \
+    -vioff="${INV_OFF}" \
+    -vnc="${_NC_}" \
     -f nspeed.awk
   }
 
-adlib debug install
+adlib debug install decor
 
 main "$@"
 

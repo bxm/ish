@@ -14,6 +14,7 @@ set softtabstop=2
 set shiftwidth=2
 
 set foldmethod=indent
+set foldlevel=1
 " trailing space  
 " trailing tab	
 	" other	tab

@@ -17,7 +17,7 @@
   printf "%4s%1s",time,mflag
   #for(c=0;c<barcols;c++) {printf "#"}
   for(c=0;c<cols-5;c++) {
-    if(c<barcols){printf "#"}else{printf " "}
+    if(c<barcols){printf red""ion" "nc}else{printf " "}
   }
   printf "\n"
 }
