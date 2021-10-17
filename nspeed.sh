@@ -12,9 +12,19 @@ do
   done
 }
 
+ping() {
+  while true ; do
+    command ping -c1 -W5 "$@" \
+      | grep -Eo "time=[[:digit:].]+" \
+      || echo time=0.0
+    sleep 1
+  done
+}
+
 main(){
   debug -f main "$@"
-  ping 8.8.8.8 | awk \
+  ping 8.8.8.8 \
+    | awk \
     -vcols=$(tput cols) -vtimepc=0 -vbarcols=0 \
     -vtotal=0 -vi=0 -vmax=0 \
     -vred="${RED}" \
