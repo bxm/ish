@@ -24,10 +24,16 @@
   defcol=yel
   maxmark=""
   if (pingtime>max) {
-    if (pingtime>maxout) {maxmark=">";max=maxout} else {max=int(pingtime*1.15)}
+    if (pingtime>maxout) {
+      maxmark=">";max=maxout
+    } else {
+      max=int(pingtime*1.15)
+    }
     mflag="+"
     defcol=red
-  } else { mflag=nil }
+  } else {
+    mflag=nil
+  }
   pingtimepc=pingtime/max
   avgpc=avg/max
   posavg=int(avgpc*adjcols)
@@ -39,11 +45,12 @@
   #for(c=0;c<barcols;c++) {printf "#"}
   # TODO build up the line in a var including value, time?, without colour
   #      then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
-  for(c=0;c<adjcols;c++) {
+  for(c=1;c<=adjcols;c++) {
     if (c<=barcols) { printf defcol ion }
     if (c==posavg) { printf ":" nc ; continue }
     # FIXME bug displays > across whole line
-    if (maxmark=="") { printf spc } else { printf maxmark }
+    if (maxmark!="" && c==adjcols) { printf maxmark } else { printf spc }
+    #if (maxmark=="") { printf spc } else { printf maxmark }
     printf nc
   }
   printf "\n"

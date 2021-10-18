@@ -22,7 +22,7 @@ ping() {
   : "${wait:?"${uname} is not handled"}"
   while true ; do
     printf "%s " $(date +%F_%T)
-    command ping -c1 ${wait:+-W${wait}} "$@" \
+    command ping -c1 -W${wait} "$@" 2>/dev/null \
       | grep -Eo "time=[[:digit:].]+"
     if [ $? -eq 0 ] ; then
       sleep 3
@@ -51,6 +51,8 @@ main(){
   }
 
 adlib debug install decor
+
+install
 
 main "$@"
 
