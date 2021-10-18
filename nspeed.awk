@@ -37,6 +37,8 @@
   #print barcols,posavg
   printf "%4s%1s",pingtime,mflag
   #for(c=0;c<barcols;c++) {printf "#"}
+  # TODO build up the line in a var including value, time?, without colour
+  #      then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
   for(c=0;c<adjcols;c++) {
     if (c<=barcols) { printf defcol ion }
     if (c==posavg) { printf ":" nc ; continue }
