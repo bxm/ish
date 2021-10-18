@@ -23,7 +23,7 @@ ping() {
   while true ; do
     command ping -c1 ${wait:+-W${wait}} "$@" \
       | grep -Eo "time=[[:digit:].]+" \
-      || echo time=${wait%000}000.0
+      || echo dead
     sleep 1
   done
 }
