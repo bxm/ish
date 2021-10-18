@@ -4,7 +4,10 @@
   # TODO need to special case if pingtime=0.0
   i++
   time=$1
-  pingtime=$2
+  cmd=$2
+  pingtime=$3
+  if (cmd == "r") max=0
+  #print "cmd",cmd
   #print "pingtime",pingtime
   if (pingtime=="dead") {
     # TODO keep a count, update it
