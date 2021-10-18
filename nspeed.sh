@@ -46,6 +46,7 @@ main(){
     -vion="${INV_ON}" \
     -vioff="${INV_OFF}" \
     -vnc="${_NC_}" \
+    -vmaxout=500 \
     -f "${realname%.sh}.awk"
   }
 
