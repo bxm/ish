@@ -1,5 +1,6 @@
 
 /time=/ {
+  # TODO need to special case if time=0.0
   i++
   time=$1
   nil=""
@@ -14,6 +15,7 @@
     max=time*1.0
     mflag="+"
   } else { mflag=nil }
+  # FIXME if time=0.0 this is a div0 error
   timepc=time/max
   barcols=(timepc*(fcols))
   #print timepc

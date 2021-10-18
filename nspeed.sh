@@ -23,6 +23,8 @@ ping() {
 
 main(){
   debug -f main "$@"
+  local realname="$(readlink -f "${0}")"
+  echo "${realname}"
   ping 8.8.8.8 \
     | awk \
     -vcols=$(tput cols) -vtimepc=0 -vbarcols=0 \
@@ -33,7 +35,7 @@ main(){
     -vion="${INV_ON}" \
     -vioff="${INV_OFF}" \
     -vnc="${_NC_}" \
-    -f nspeed.awk
+    -f "${realname%.sh}.awk"
   }
 
 adlib debug install decor
