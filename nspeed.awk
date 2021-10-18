@@ -21,9 +21,11 @@
   total+=pingtime
   avg=total/i
   #print pingtime,max
+  defcol=yel
   if (pingtime>max) {
-    max=pingtime*1.0
+    max=int(pingtime*1.15)
     mflag="+"
+    defcol=red
   } else { mflag=nil }
   # FIXME if pingtime=0.0 this is a div0 error
   pingtimepc=pingtime/max
@@ -33,10 +35,10 @@
   #print pingtimepc
   #print avgpc
   #print barcols,posavg
-  printf "%4s%s%1s%s",pingtime,red,mflag,nc
+  printf "%4s%1s",pingtime,mflag
   #for(c=0;c<barcols;c++) {printf "#"}
   for(c=0;c<adjcols;c++) {
-    if (c<=barcols) { printf yel ion }
+    if (c<=barcols) { printf defcol ion }
     if (c==posavg) { printf ":" } else { printf spc}
     #if ()
     printf nc

@@ -23,8 +23,12 @@ ping() {
   while true ; do
     printf "%s " $(date +%F_%T)
     command ping -c1 ${wait:+-W${wait}} "$@" \
-      | grep -Eo "time=[[:digit:].]+" \
-      || echo dead
+      | grep -Eo "time=[[:digit:].]+"
+    if [ $? -eq 0 ] ; then
+      sleep 3
+      continue
+    fi
+    echo dead
     sleep 1
   done
 }
