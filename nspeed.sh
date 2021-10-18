@@ -3,8 +3,7 @@
 adlib(){
   local realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
-  while [ $# -gt 0 ]
-do
+  while [ $# -gt 0 ] ; do
     local libname="${1%.sh}.sh"
     source "${libdir}/${libname}" || continue
     debug added "${libdir}/${libname}"
@@ -13,10 +12,18 @@ do
 }
 
 ping() {
+  local wait=2
+  local uname=$(uname -s -r)
+  case "${uname}" in
+    (Linux*-ish) : ;;
+    (Darwin*)    wait="${wait}000" ;;
+    (*)          wait='' ;;
+  esac
+  : "${wait:?"${uname} is not handled"}"
   while true ; do
-    command ping -c1 -W5 "$@" \
+    command ping -c1 ${wait:+-W${wait}} "$@" \
       | grep -Eo "time=[[:digit:].]+" \
-      || echo time=0.0
+      || echo time=${wait%000}000.0
     sleep 1
   done
 }
@@ -24,7 +31,6 @@ ping() {
 main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
-  echo "${realname}"
   ping 8.8.8.8 \
     | awk \
     -vcols=$(tput cols) -vtimepc=0 -vbarcols=0 \
