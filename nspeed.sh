@@ -17,7 +17,8 @@ isleep(){
     : $((i--))
     REPLY=''
     read -n1 -s -t1
-    [ -n "$REPLY" ] && break
+    REPLY="${REPLY// }"
+    [ -n "${REPLY}" ] && break
   done
 }
 
