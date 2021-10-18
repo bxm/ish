@@ -12,7 +12,7 @@ adlib(){
 }
 
 isleep(){
-  local i="${1:-1}"
+  local i="${1:?}"
   while [ $i -gt 0 ] ; do
     : $((i--))
     REPLY=''
@@ -23,7 +23,7 @@ isleep(){
 
 ping() {
   local wait=2
-  local cmd=''
+  local REPLY=''
   local uname=$(uname -s -r)
   case "${uname}" in
     (Linux*-ish) : ;;
@@ -32,16 +32,16 @@ ping() {
   esac
   : "${wait:?"${uname} is not handled"}"
   while true ; do
-    printf "%s %-2s" $(date +%F_%T) ${cmd:-x}
-    cmd=''
+    printf "%s %-2s" $(date +%F_%T) ${REPLY:-x}
+    REPLY=''
     command ping -c1 -W${wait} "$@" 2>/dev/null \
       | grep -Eo "time=[[:digit:].]+"
     if [ $? -eq 0 ] ; then
-      read -n1 -s -t3 cmd
+      isleep 3
       continue
     fi
     echo dead
-    sleep 1
+    isleep 1
   done
 }
 
