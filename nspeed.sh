@@ -21,6 +21,7 @@ ping() {
   esac
   : "${wait:?"${uname} is not handled"}"
   while true ; do
+    printf "%s " $(date +%F_%T)
     command ping -c1 ${wait:+-W${wait}} "$@" \
       | grep -Eo "time=[[:digit:].]+" \
       || echo dead

@@ -1,38 +1,39 @@
 
-#/time=/ {
+#/pingtime=/ {
 {
-  # TODO need to special case if time=0.0
+  # TODO need to special case if pingtime=0.0
   i++
   time=$1
-  #print "time",time
-  if (time=="dead") {
+  pingtime=$2
+  #print "pingtime",pingtime
+  if (pingtime=="dead") {
     # TODO keep a count, update it
     if (last=="dead") next
-    last=time
-    print red "dead" nc
+    last=pingtime
+    print red "dead",time nc
     next
   }
-  gsub(/[^[:digit:].]/,nil,time)
+  gsub(/[^[:digit:].]/,nil,pingtime)
   nil=""
   spc=" "
   adjcols=cols-5
-  time=int(time)
-  total+=time
+  pingtime=int(pingtime)
+  total+=pingtime
   avg=total/i
-  #print time,max
-  if (time>max) {
-    max=time*1.0
+  #print pingtime,max
+  if (pingtime>max) {
+    max=pingtime*1.0
     mflag="+"
   } else { mflag=nil }
-  # FIXME if time=0.0 this is a div0 error
-  timepc=time/max
+  # FIXME if pingtime=0.0 this is a div0 error
+  pingtimepc=pingtime/max
   avgpc=avg/max
   posavg=int(avgpc*adjcols)
-  barcols=int(timepc*adjcols)
-  #print timepc
+  barcols=int(pingtimepc*adjcols)
+  #print pingtimepc
   #print avgpc
   #print barcols,posavg
-  printf "%4s%1s",time,mflag
+  printf "%4s%s%1s%s",pingtime,red,mflag,nc
   #for(c=0;c<barcols;c++) {printf "#"}
   for(c=0;c<adjcols;c++) {
     if (c<=barcols) { printf yel ion }
@@ -41,6 +42,6 @@
     printf nc
   }
   printf "\n"
-  last=time
+  last=pingtime
 }
 # count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
