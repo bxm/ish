@@ -49,6 +49,7 @@ ping() {
 main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
+  # TODO: run tput every loop and pass cols value to awk
   ping 8.8.8.8 \
     | awk \
     -vcols=$(tput cols) -vtimepc=0 -vbarcols=0 \
