@@ -5,7 +5,7 @@
   time=$1
   cmd=$2
   pingtime=$3
-  if (cmd == "r") max=0,total=0,i=0
+  if (cmd == "r") {max=0;total=0;i=0}
   i++
   #print "cmd",cmd
   #print "pingtime",pingtime
