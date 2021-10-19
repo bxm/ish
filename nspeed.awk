@@ -1,7 +1,6 @@
 
 #/pingtime=/ {
 {
-  # TODO need to special case if pingtime=0.0
   time=$1
   cmd=$2
   pingtime=$3
@@ -46,12 +45,9 @@
   #print barcols,posavg
   printf "%4s%1s",pingtime,mflag
   #for(c=0;c<barcols;c++) {printf "#"}
-  # TODO build up the line in a var including value, time?, without colour
-  #      then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
   for(c=1;c<=adjcols;c++) {
     if (c<=barcols) { printf defcol ion }
     if (c==posavg) { printf ":" nc ; continue }
-    # FIXME bug displays > across whole line
     if (maxmark!="" && c==adjcols) { printf maxmark } else { printf spc }
     #if (maxmark=="") { printf spc } else { printf maxmark }
     printf nc
@@ -59,4 +55,7 @@
   printf "\n"
   last=pingtime
 }
-# count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
+# TODO
+# [x] count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
+# [ ] build up the line in a var including value, time?, without colour then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
+# [ ] status bar, print with \r avg, monitored time, dropouts, max, min
