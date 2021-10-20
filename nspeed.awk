@@ -4,7 +4,11 @@
   time=$1
   cmd=$2
   pingtime=$3
-  if (cmd == "r") {amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0}
+  nil=""
+  spc=" "
+  flag=nil
+  defcol=nil
+  if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0}
   i++
   #print "cmd",cmd
   #print "pingtime",pingtime
@@ -22,14 +26,11 @@
     next
   }
   gsub(/[^[:digit:].]/,nil,pingtime)
-  nil=""
-  spc=" "
   adjcols=cols-5
   pingtime=int(pingtime)
   total+=pingtime
   avg=total/i
   #print pingtime,max
-  defcol=yel
   maxmark=""
   if (pingtime>max) max=pingtime
   if (pingtime>amax) {
@@ -39,11 +40,10 @@
     } else {
       amax=int(pingtime*1.15)
     }
-    mflag="+"
-    defcol=red
-  } else {
-    mflag=nil
+    if (flag==nil) flag="+"
+    if (defcol==nil) defcol=red
   }
+  if (defcol==nil) defcol=yel
   pingtimepc=pingtime/amax
   avgpc=avg/amax
   posavg=int(avgpc*adjcols)
@@ -52,7 +52,7 @@
   #print avgpc
   #print barcols,posavg
   printf "\r"
-  printf "%4s%1s",pingtime,mflag
+  printf "%4s%1s",pingtime,flag
   #for(c=0;c<barcols;c++) {printf "#"}
   for(c=1;c<=adjcols;c++) {
     if (c<=barcols) { printf defcol ion }
