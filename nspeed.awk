@@ -4,7 +4,7 @@
   time=$1
   cmd=$2
   pingtime=$3
-  if (cmd == "r") {max=0;total=0;i=0}
+  if (cmd == "r") {amax=0;max=0;total=0;i=0;avg=0}
   i++
   #print "cmd",cmd
   #print "pingtime",pingtime
@@ -25,24 +25,26 @@
   #print pingtime,max
   defcol=yel
   maxmark=""
-  if (pingtime>max) {
+  if (pingtime>max) max=pingtime
+  if (pingtime>amax) {
     if (pingtime>maxout) {
-      maxmark=">";max=maxout
+      maxmark=">";amax=maxout
     } else {
-      max=int(pingtime*1.15)
+      amax=int(pingtime*1.15)
     }
     mflag="+"
     defcol=red
   } else {
     mflag=nil
   }
-  pingtimepc=pingtime/max
-  avgpc=avg/max
+  pingtimepc=pingtime/amax
+  avgpc=avg/amax
   posavg=int(avgpc*adjcols)
   barcols=int(pingtimepc*adjcols)
   #print pingtimepc
   #print avgpc
   #print barcols,posavg
+  printf "\r"
   printf "%4s%1s",pingtime,mflag
   #for(c=0;c<barcols;c++) {printf "#"}
   for(c=1;c<=adjcols;c++) {
@@ -53,7 +55,12 @@
     printf nc
   }
   printf "\n"
-  printf "avg:%.1f\r",avg
+  #printf "[cols:%d]",cols
+  printf "[i:%d]",i
+  printf "[total:%d]",total
+  printf "[avg:%.1f]",avg
+  printf "[max:%d]",max
+
   last=pingtime
 }
 # TODO
