@@ -53,6 +53,7 @@
     printf nc
   }
   printf "\n"
+  printf "avg:%.1f\r",avg
   last=pingtime
 }
 # TODO
