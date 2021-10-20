@@ -64,10 +64,10 @@
   printf "\n"
   #printf "[cols:%d]",cols
   printf "[i:%d]",i
-  printf "[total:%d]",total
+  #printf "[total:%d]",total
   printf "[avg:%.1f]",avg
   printf "[max:%d]",max
-  printf "[maxout:%d]",maxout
+  #printf "[maxout:%d]",maxout
   printf "[maxout_i:%d]",maxout_i
   printf "[dead_i:%d]",dead_i
 
