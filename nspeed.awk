@@ -1,4 +1,5 @@
 BEGIN {
+  adjcols=cols-5
   nil=""
   spc=" "
   nl="\n"
@@ -29,7 +30,6 @@ BEGIN {
     next
   }
   gsub(/[^[:digit:].]/,nil,pingtime)
-  adjcols=cols-5
   pingtime=int(pingtime)
   total+=pingtime
   avg=total/i
@@ -52,7 +52,8 @@ BEGIN {
   posavg=int(avgpc*adjcols)
   barcols=int(pingtimepc*adjcols)
 
-  bar=cr
+  bar=nil
+  bar=bar cr
   bar=bar sprintf("%4s%1s",pingtime,flag)
   for(c=1;c<=adjcols;c++) {
     if (c<=barcols) { bar=bar defcol ion }
