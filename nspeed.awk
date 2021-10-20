@@ -4,7 +4,7 @@
   time=$1
   cmd=$2
   pingtime=$3
-  if (cmd == "r") {amax=0;max=0;total=0;i=0;avg=0}
+  if (cmd == "r") {amax=0;max=0;total=0;i=0;avg=0;maxout_i=0}
   i++
   #print "cmd",cmd
   #print "pingtime",pingtime
@@ -28,6 +28,7 @@
   if (pingtime>max) max=pingtime
   if (pingtime>amax) {
     if (pingtime>maxout) {
+      maxout_i++
       maxmark=">";amax=maxout
     } else {
       amax=int(pingtime*1.15)
@@ -60,6 +61,8 @@
   printf "[total:%d]",total
   printf "[avg:%.1f]",avg
   printf "[max:%d]",max
+  printf "[maxout:%d]",maxout
+  printf "[maxout_i:%d]",maxout_i
 
   last=pingtime
 }
