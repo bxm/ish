@@ -1,13 +1,14 @@
-
+BEGIN {
+  nil=""
+  spc=" "
+  nl="\n"
+  cr="\r"
+}
 #/pingtime=/ {
 {
   time=$1
   cmd=$2
   pingtime=$3
-  nil=""
-  spc=" "
-  nl="\n"
-  cr="\r"
   flag=nil
   defcol=nil
   if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0}
@@ -63,15 +64,16 @@
   bar=bar
   bar=bar nl
   printf bar
-  stat=nil
+  sbar=nil
   #printf "[cols:%d]",cols
-  printf "[i:%d]",i
+  sbar=sbar sprintf("[i:%d]",i)
   #printf "[total:%d]",total
-  printf "[avg:%.1f]",avg
-  printf "[max:%d]",max
+  sbar=sbar sprintf("[avg:%.1f]",avg)
+  sbar=sbar sprintf("[max:%d]",max)
   #printf "[maxout:%d]",maxout
-  printf "[maxout_i:%d]",maxout_i
-  printf "[dead_i:%d]",dead_i
+  sbar=sbar sprintf("[maxout_i:%d]",maxout_i)
+  sbar=sbar sprintf("[dead_i:%d]",dead_i)
+  printf sbar
 
   last=pingtime
 }
