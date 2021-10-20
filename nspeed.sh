@@ -20,6 +20,7 @@ isleep(){
     REPLY="${REPLY// }"
     [ -n "${REPLY}" ] && break
   done
+  # TODO look at system date, work out if we have slept long enough
 }
 
 ping() {

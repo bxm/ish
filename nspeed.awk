@@ -4,15 +4,21 @@
   time=$1
   cmd=$2
   pingtime=$3
-  if (cmd == "r") {amax=0;max=0;total=0;i=0;avg=0;maxout_i=0}
+  if (cmd == "r") {amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0}
   i++
   #print "cmd",cmd
   #print "pingtime",pingtime
   if (pingtime=="dead") {
     # TODO keep a count, update it
+    dead_i++
     if (last=="dead") next
     last=pingtime
+    printf "\r"
     print red "dead",time nc
+    #      vvv blankline\r function?
+    # TODO print line full of spaces to cover status
+    #      allow status to stay, update when dead
+    #      status as a function?  How to handle the \r though?
     next
   }
   gsub(/[^[:digit:].]/,nil,pingtime)
@@ -63,6 +69,7 @@
   printf "[max:%d]",max
   printf "[maxout:%d]",maxout
   printf "[maxout_i:%d]",maxout_i
+  printf "[dead_i:%d]",dead_i
 
   last=pingtime
 }
