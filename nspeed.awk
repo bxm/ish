@@ -6,6 +6,8 @@
   pingtime=$3
   nil=""
   spc=" "
+  nl="\n"
+  cr="\r"
   flag=nil
   defcol=nil
   if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0}
@@ -48,20 +50,20 @@
   avgpc=avg/amax
   posavg=int(avgpc*adjcols)
   barcols=int(pingtimepc*adjcols)
-  #print pingtimepc
-  #print avgpc
-  #print barcols,posavg
-  printf "\r"
-  printf "%4s%1s",pingtime,flag
-  #for(c=0;c<barcols;c++) {printf "#"}
+
+  bar=cr
+  bar=bar sprintf("%4s%1s",pingtime,flag)
   for(c=1;c<=adjcols;c++) {
-    if (c<=barcols) { printf defcol ion }
-    if (c==posavg) { printf ":" nc ; continue }
-    if (maxmark!="" && c==adjcols) { printf maxmark } else { printf spc }
-    #if (maxmark=="") { printf spc } else { printf maxmark }
-    printf nc
+    if (c<=barcols) { bar=bar defcol ion }
+    if (c==posavg) { bar=bar ":" nc ; continue }
+    if (maxmark!="" && c==adjcols) { bar=bar maxmark } else { bar=bar spc }
+    ##if (maxmark=="") { printf spc } else { printf maxmark }
+    bar=bar nc
   }
-  printf "\n"
+  bar=bar
+  bar=bar nl
+  printf bar
+  stat=nil
   #printf "[cols:%d]",cols
   printf "[i:%d]",i
   #printf "[total:%d]",total
