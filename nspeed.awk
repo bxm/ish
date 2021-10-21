@@ -66,14 +66,14 @@ BEGIN {
   bar=bar nl
   printf bar
   sbar=nil
-  #printf "[cols:%d]",cols
   sbar=sbar sprintf("[i:%d]",i)
-  #printf "[total:%d]",total
   sbar=sbar sprintf("[avg:%.1f]",avg)
   sbar=sbar sprintf("[max:%d]",max)
-  #printf "[maxout:%d]",maxout
   sbar=sbar sprintf("[maxout_i:%d]",maxout_i)
   sbar=sbar sprintf("[dead_i:%d]",dead_i)
+  #printf "[maxout:%d]",maxout
+  #printf "[total:%d]",total
+  #printf "[cols:%d]",cols
   printf sbar
 
   last=pingtime
