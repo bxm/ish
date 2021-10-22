@@ -1,5 +1,5 @@
+#!/usr/bin/awk -f
 BEGIN {
-  adjcols=cols-5
   nil=""
   spc=" "
   nl="\n"
@@ -7,12 +7,14 @@ BEGIN {
 }
 #/pingtime=/ {
 {
-  time=$1
-  cmd=$2
-  pingtime=$3
+  cols=$1
+  time=$2
+  cmd=$3
+  pingtime=$4
+  adjcols=cols-5
   flag=nil
   defcol=nil
-  if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0}
+  if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0;min=-1}
   i++
   #print "cmd",cmd
   #print "pingtime",pingtime
@@ -35,7 +37,9 @@ BEGIN {
   avg=total/i
   #print pingtime,max
   maxmark=""
+
   if (pingtime>max) max=pingtime
+  if (min<0||pingtime<min) min=pingtime
   if (pingtime>amax) {
     if (pingtime>maxout) {
       maxout_i++
@@ -62,19 +66,22 @@ BEGIN {
     ##if (maxmark=="") { printf spc } else { printf maxmark }
     bar=bar nc
   }
-  bar=bar
   bar=bar nl
   printf bar
   sbar=nil
-  sbar=sbar sprintf("[i:%d]",i)
-  sbar=sbar sprintf("[avg:%.1f]",avg)
-  sbar=sbar sprintf("[max:%d]",max)
-  sbar=sbar sprintf("[maxout_i:%d]",maxout_i)
-  sbar=sbar sprintf("[dead_i:%d]",dead_i)
-  #printf "[maxout:%d]",maxout
-  #printf "[total:%d]",total
-  #printf "[cols:%d]",cols
-  printf sbar
+  sbars=nil
+  s=0
+  sbar[s++]=sprintf("[i:%d]",i)
+  sbar[s++]=sprintf("[avg:%.1f]",avg)
+  sbar[s++]=sprintf("[min:%d]",min)
+  sbar[s++]=sprintf("[max:%d]",max)
+  sbar[s++]=sprintf("[maxi:%d]",maxout_i)
+  sbar[s++]=sprintf("[dead:%d]",dead_i)
+  sbar[s++]=sprintf("[tot:%d]",total)
+  sbar[s++]=sprintf("[col:%d]",cols)
+  sbar[s++]=sprintf("[maxv:%d]",maxout)
+  for (s in sbar) {if (length(sbars sbar[s])<cols) {sbars=sbars sbar[s]} else {break}}
+  printf sbars
 
   last=pingtime
 }

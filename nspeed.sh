@@ -34,7 +34,7 @@ ping() {
   esac
   : "${wait:?"${uname} is not handled"}"
   while true ; do
-    printf "%s %-2s" $(date +%F_%T) ${REPLY:-x}
+    printf "%s %s %-2s" $(tput cols) $(date +%F_%T) ${REPLY:-x}
     REPLY=''
     command ping -c1 -W${wait} "$@" 2>/dev/null \
       | grep -Eo "time=[[:digit:].]+"
@@ -53,7 +53,7 @@ main(){
   # TODO: run tput every loop and pass cols value to awk
   ping 8.8.8.8 \
     | awk \
-    -vcols=$(tput cols) -vtimepc=0 -vbarcols=0 \
+    -vtimepc=0 -vbarcols=0 \
     -vtotal=0 -vi=0 -vmax=0 \
     -vred="${RED}" \
     -vyel="${YELLOW}" \
