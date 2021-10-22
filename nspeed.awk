@@ -14,6 +14,8 @@ BEGIN {
   adjcols=cols-5
   flag=nil
   defcol=nil
+  a=sprintf("%%%ss",cols)
+  spline=sprintf("\r" a "\r",spc)
   if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0;min=-1}
   i++
   #print "cmd",cmd
@@ -23,8 +25,7 @@ BEGIN {
     dead_i++
     if (last=="dead") next
     last=pingtime
-    printf "\r"
-    print red "dead",time nc
+    print spline red "dead",time nc
     #      vvv blankline\r function?
     # TODO print line full of spaces to cover status
     #      allow status to stay, update when dead
