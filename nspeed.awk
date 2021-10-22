@@ -34,9 +34,9 @@ BEGIN {
   if (pingtime>max) max=pingtime
   if (min<0||pingtime<min) min=pingtime
   if (pingtime>amax) {
-    if (pingtime>maxout) {
+    if (pingtime>maxout_val) {
       maxout_i++
-      maxmark=">";amax=maxout
+      maxmark=">";amax=maxout_val
     } else {
       amax=int(pingtime*1.15)
     }
@@ -63,16 +63,16 @@ BEGIN {
   sbar=nil
   sbars=nil
   s=0
-  sbar[s++]=sprintf("[i:%d]",i)
-  sbar[s++]=sprintf("[avg:%.1f]",avg)
-  sbar[s++]=sprintf("[min:%d]",min)
-  sbar[s++]=sprintf("[max:%d]",max)
-  sbar[s++]=sprintf("[maxi:%d]",maxout_i)
-  sbar[s++]=sprintf("[dead:%d]",dead_i)
-  sbar[s++]=sprintf("[tot:%d]",total)
-  sbar[s++]=sprintf("[col:%d]",cols)
-  sbar[s++]=sprintf("[maxv:%d]",maxout)
-  for (s in sbar) {if (length(sbars sbar[s])<cols) {sbars=sbars sbar[s]} else {break}}
+  sbar[s++]=sprintf("i:%d",i)
+  sbar[s++]=sprintf("avg:%.1f",avg)
+  sbar[s++]=sprintf("min:%d",min)
+  sbar[s++]=sprintf("max:%d",max)
+  sbar[s++]=sprintf("maxi:%d",maxout_i)
+  sbar[s++]=sprintf("dead:%d",dead_i)
+  sbar[s++]=sprintf("tot:%d",total)
+  sbar[s++]=sprintf("col:%d",cols)
+  sbar[s++]=sprintf("maxv:%d",maxout_val)
+  for (s in sbar) {if (length(sbars sbar[s])+2<cols) {sbars=sbars "[" sbar[s] "]"} else {break}}
   printf sbars
 
   last=pingtime
