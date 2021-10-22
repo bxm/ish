@@ -4,8 +4,8 @@ BEGIN {
   spc=" "
   nl="\n"
   cr="\r"
+  ORS=nil
 }
-#/pingtime=/ {
 {
   cols=$1
   time=$2
@@ -15,28 +15,20 @@ BEGIN {
   flag=nil
   defcol=nil
   a=sprintf("%%%ss",cols)
-  spline=sprintf("\r" a "\r",spc)
+  spline=sprintf(cr a cr,spc)
   if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0;min=-1}
   i++
-  #print "cmd",cmd
-  #print "pingtime",pingtime
   if (pingtime=="dead") {
-    # TODO keep a count, update it
     dead_i++
-    if (last=="dead") next
     last=pingtime
-    print spline red "dead",time nc
-    #      vvv blankline\r function?
-    # TODO print line full of spaces to cover status
-    #      allow status to stay, update when dead
-    #      status as a function?  How to handle the \r though?
+    print spline red "dead",time,dead_i nc
     next
   }
+  if (last=="dead") { printf nl }
   gsub(/[^[:digit:].]/,nil,pingtime)
   pingtime=int(pingtime)
   total+=pingtime
   avg=total/i
-  #print pingtime,max
   maxmark=""
 
   if (pingtime>max) max=pingtime
@@ -64,7 +56,6 @@ BEGIN {
     if (c<=barcols) { bar=bar defcol ion }
     if (c==posavg) { bar=bar ":" nc ; continue }
     if (maxmark!="" && c==adjcols) { bar=bar maxmark } else { bar=bar spc }
-    ##if (maxmark=="") { printf spc } else { printf maxmark }
     bar=bar nc
   }
   bar=bar nl
@@ -89,4 +80,4 @@ BEGIN {
 # TODO
 # [x] count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
 # [ ] build up the line in a var including value, time?, without colour then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
-# [ ] status bar, print with \r avg, monitored time, dropouts, max, min
+# [x] status bar, print with \r avg, monitored time, dropouts, max, min
