@@ -22,19 +22,30 @@ function cline( _a){
   _a=sprintf("%%%ss",cols)
   printf(cr a cr,spc)
   }
-BEGIN {
+
+function reset(){
+  amax=0
+  avg=0
   barcols=0
-  cr="\r"
+  dead_i=0
+  defcol=grn
+  flag="-"
   i=0
   max=0
+  maxout_i=0i
   min=-1
+  timepc=0
+  total=0
+  }
+
+BEGIN {
+  cr="\r"
   nil=""
   nl="\n"
   spc=" "
-  timepc=0
-  total=0
   hw="hello world"
   ORS=nil
+  reset()
 }
 {
   cols=$1
@@ -44,8 +55,7 @@ BEGIN {
   adjcols=cols-5
   flag=nil
   defcol=nil
-  a=sprintf("%%%ss",cols)
-  if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0;min=-1}
+  if (cmd == "r") reset()
   i++
   if (pingtime=="dead") {
     dead_i++
