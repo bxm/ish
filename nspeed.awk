@@ -1,9 +1,26 @@
 #!/usr/bin/awk -f
+function draw_sbar() {
+  sbar=nil
+  sbars=nil
+  s=0
+  sbar[s++]=sprintf("i:%d",i)
+  sbar[s++]=sprintf("avg:%.1f",avg)
+  sbar[s++]=sprintf("min:%d",min)
+  sbar[s++]=sprintf("max:%d",max)
+  sbar[s++]=sprintf("maxi:%d",maxout_i)
+  sbar[s++]=sprintf("dead:%d",dead_i)
+  sbar[s++]=sprintf("tot:%d",total)
+  sbar[s++]=sprintf("col:%d",cols)
+  sbar[s++]=sprintf("maxv:%d",maxout_val)
+  for (s in sbar) {if (length(sbars sbar[s])+2<cols) {sbars=sbars "[" sbar[s] "]"} else {break}}
+  print sbars
+  }
 BEGIN {
   nil=""
   spc=" "
   nl="\n"
   cr="\r"
+  hw="hello world"
   ORS=nil
 }
 {
@@ -60,21 +77,7 @@ BEGIN {
   }
   bar=bar nl
   printf bar
-  sbar=nil
-  sbars=nil
-  s=0
-  sbar[s++]=sprintf("i:%d",i)
-  sbar[s++]=sprintf("avg:%.1f",avg)
-  sbar[s++]=sprintf("min:%d",min)
-  sbar[s++]=sprintf("max:%d",max)
-  sbar[s++]=sprintf("maxi:%d",maxout_i)
-  sbar[s++]=sprintf("dead:%d",dead_i)
-  sbar[s++]=sprintf("tot:%d",total)
-  sbar[s++]=sprintf("col:%d",cols)
-  sbar[s++]=sprintf("maxv:%d",maxout_val)
-  for (s in sbar) {if (length(sbars sbar[s])+2<cols) {sbars=sbars "[" sbar[s] "]"} else {break}}
-  printf sbars
-
+  draw_sbar()
   last=pingtime
 }
 # TODO
