@@ -1,18 +1,21 @@
 #!/usr/bin/awk -f
-function draw_sbar() {
+function sbar_add( str, var){
+  sbar[s++]="[" sprintf(str,var) "]"
+  }
+function draw_sbar( sbars) {
   sbar=nil
   sbars=nil
   s=0
-  sbar[s++]=sprintf("i:%d",i)
-  sbar[s++]=sprintf("avg:%.1f",avg)
-  sbar[s++]=sprintf("min:%d",min)
-  sbar[s++]=sprintf("max:%d",max)
-  sbar[s++]=sprintf("maxi:%d",maxout_i)
-  sbar[s++]=sprintf("dead:%d",dead_i)
-  sbar[s++]=sprintf("tot:%d",total)
-  sbar[s++]=sprintf("col:%d",cols)
-  sbar[s++]=sprintf("maxv:%d",maxout_val)
-  for (s in sbar) {if (length(sbars sbar[s])+2<cols) {sbars=sbars "[" sbar[s] "]"} else {break}}
+  sbar_add("i:%d",i)
+  sbar_add("avg:%.1f",avg)
+  sbar_add("min:%d",min)
+  sbar_add("max:%d",max)
+  sbar_add("maxi:%d",maxout_i)
+  sbar_add("dead:%d",dead_i)
+  sbar_add("tot:%d",total)
+  sbar_add("col:%d",cols)
+  sbar_add("maxv:%d",maxout_val)
+  for (s in sbar) {if (length(sbars sbar[s])<cols) {sbars=sbars sbar[s]} else {break}}
   print sbars
   }
 BEGIN {
@@ -20,6 +23,7 @@ BEGIN {
   spc=" "
   nl="\n"
   cr="\r"
+  min=-1
   hw="hello world"
   ORS=nil
 }
