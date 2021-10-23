@@ -18,6 +18,10 @@ function draw_sbar( sbars) {
   for (s in sbar) {if (length(sbars sbar[s])<cols) {sbars=sbars sbar[s]} else {break}}
   print sbars
   }
+function cline( _a){
+  _a=sprintf("%%%ss",cols)
+  printf(cr a cr,spc)
+  }
 BEGIN {
   barcols=0
   cr="\r"
@@ -41,13 +45,12 @@ BEGIN {
   flag=nil
   defcol=nil
   a=sprintf("%%%ss",cols)
-  spline=sprintf(cr a cr,spc)
   if (cmd == "r") {defcol=grn;flag="-";amax=0;max=0;total=0;i=0;avg=0;maxout_i=0i;dead_i=0;min=-1}
   i++
   if (pingtime=="dead") {
     dead_i++
     last=pingtime
-    print spline red "dead",time,dead_i nc
+    print cline() red "dead",time,dead_i nc
     next
   }
   if (last=="dead") { printf nl }
