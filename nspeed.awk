@@ -8,8 +8,8 @@ function draw_sbar( sbars) {
   s=0
   sbar_add("i:%d",i)
   sbar_add("avg:%.1f",avg)
-  sbar_add("min:%d",min)
-  sbar_add("max:%d",max)
+  sbar_add("min:%.1f",min)
+  sbar_add("max:%.1f",max)
   sbar_add("maxi:%d",maxout_i)
   sbar_add("dead:%d",dead_i)
   sbar_add("tot:%d",total)
@@ -65,19 +65,19 @@ BEGIN {
   }
   if (last=="dead") { printf nl }
   gsub(/[^[:digit:].]/,nil,pingtime)
-  pingtime=int(pingtime)
+  ipingtime=int(pingtime)
   total+=pingtime
   avg=total/i
   maxmark=""
 
-  if (pingtime>max) max=pingtime
-  if (min<0||pingtime<min) min=pingtime
-  if (pingtime>amax) {
-    if (pingtime>maxout_val) {
+  if (ipingtime>max) max=ipingtime
+  if (min<0||ipingtime<min) min=ipingtime
+  if (ipingtime>amax) {
+    if (ipingtime>maxout_val) {
       maxout_i++
       maxmark=">";amax=maxout_val
     } else {
-      amax=int(pingtime*1.15)
+      amax=int(pingtime*1.1)
     }
     if (flag==nil) flag="+"
     if (defcol==nil) defcol=red
@@ -90,7 +90,8 @@ BEGIN {
 
   bar=nil
   bar=bar cr
-  bar=bar sprintf("%4s%1s",pingtime,flag)
+  # TODO
+  bar=bar sprintf("%4s%1s",ipingtime,flag)
   for(c=1;c<=adjcols;c++) {
     if (c<=barcols) { bar=bar defcol ion }
     if (c==posavg) { bar=bar ":" nc ; continue }
@@ -102,6 +103,7 @@ BEGIN {
   draw_sbar()
   last=pingtime
 }
+
 # TODO
 # [x] count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
 # [x] status bar, print with \r avg, monitored time, dropouts, max, min

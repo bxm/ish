@@ -51,5 +51,8 @@ BG_LRED="${_ESC_}[1;41m"
 
 _NC_="${_ESC_}[0m"
 
+CUR_OFF="${_ESC_}[?25l"
+CUR_ON="${_ESC_}[?25h"
+
 # TODO pid_colour.. choose random colour based on pid
 #      any use outside debug?

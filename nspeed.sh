@@ -13,7 +13,7 @@ adlib(){
 
 isleep(){
   local i="${1:?}"
-  while [ $i -gt 0 ] ; do
+  while [ ${i} -gt 0 ] ; do
     : $((i--))
     REPLY=''
     read -n1 -s -t1
@@ -40,6 +40,7 @@ ping() {
       | grep -Eo "time=[[:digit:].]+"
     if [ $? -eq 0 ] ; then
       isleep 3
+      [ "$REPLY" = q ] && return
       continue
     fi
     echo dead
@@ -47,10 +48,17 @@ ping() {
   done
 }
 
+before_exit(){
+  printf "${CUR_ON}\n"
+}
+
+trap "exit" 2
+trap "before_exit" 0
+
 main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
-  # TODO: run tput every loop and pass cols value to awk
+  printf "${CUR_OFF}"
   ping 8.8.8.8 \
     | awk \
     -vred="${RED}" \
