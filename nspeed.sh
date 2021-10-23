@@ -17,14 +17,16 @@ isleep(){
     : $((i--))
     REPLY=''
     read -n1 -s -t1
-    REPLY="${REPLY// }"
-    [ -n "${REPLY}" ] && break
+    case "$REPLY" in
+      ([qQrR]) break ;;
+      (*     ) REPLY='' ;;
+    esac
   done
   # TODO look at system date, work out if we have slept long enough
 }
 
 ping() {
-  local wait=2
+  local wait=3
   local REPLY=''
   local uname=$(uname -s -r)
   case "${uname}" in

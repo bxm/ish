@@ -6,6 +6,7 @@ function draw_sbar( _sbar_str) {
   sbar=nil
   _sbar_str=nil
   s=0
+  sbar_add("%s",state)
   sbar_add("avg:%.1f",avg)
   sbar_add("min:%.1f",min)
   sbar_add("max:%.1f",max)
@@ -20,13 +21,13 @@ function draw_sbar( _sbar_str) {
   }
 function cline( _a){
   _a=sprintf("%%%ss",cols)
-  printf(cr a cr,spc)
+  printf(cr _a cr,spc)
   }
 
 function reset(){
   adj_max=0
   avg=0.0
-  barcols=0
+  ping_cols=0
   dead_i=0
   defcol=grn
   flag="-"
@@ -55,12 +56,15 @@ BEGIN {
   adj_cols=cols-5
   flag=nil
   defcol=nil
+  state="up"
   if (cmd == "r") reset()
   i++
   if (pingtime=="dead") {
+    state="dead"
     dead_i++
     last=pingtime
-    print cline() red "dead",time,dead_i nc
+    cline()
+    print red "dead",time,dead_i nc
     next
   }
   if (last=="dead") { printf nl }
@@ -86,13 +90,13 @@ BEGIN {
   pingtime_pc=pingtime/adj_max
   avg_pc=avg/adj_max
   posavg=int(avg_pc*adj_cols)
-  barcols=int(pingtime_pc*adj_cols)
+  ping_cols=int(pingtime_pc*adj_cols)
 
   bar=cr
   # TODO 
   bar=bar sprintf("%4s%1s",ipingtime,flag)
   for(c=1;c<=adj_cols;c++) {
-    if (c<=barcols) { bar=bar defcol ion }
+    if (c<=ping_cols) { bar=bar defcol ion }
     if (c==posavg) { bar=bar ":" nc ; continue }
     if (maxmark!="" && c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
     bar=bar nc
@@ -105,10 +109,13 @@ BEGIN {
 # TODO
 # [x] count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
 # [x] status bar, print with \r avg, monitored time, dropouts, max, min
-# [ ] build up the line in a var including value, time?, without colour then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
-# [ ] sort out floats and display values
+# [ ] build up the line in a var including value, time?, without colour then use the ping_cols value to sub(/^.{ping_cols}/,color"&"nc,line)
+# [x] sort out floats and display values
 # [ ] draw mark for min value
 # [ ] replace dead with status bar
 # [ ] colour bar, dead different colour
+# [ ] FIXME maxout draws wrong after dead
+# [ ] FIXME avg includes dead???
+# [ ] FIXME min getting set wrong
 
 
