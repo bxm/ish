@@ -6,7 +6,6 @@ function draw_sbar( _sbar_str) {
   sbar=nil
   _sbar_str=nil
   s=0
-  sbar_add("i:%d",i)
   sbar_add("avg:%.1f",avg)
   sbar_add("min:%.1f",min)
   sbar_add("max:%.1f",max)
@@ -15,6 +14,7 @@ function draw_sbar( _sbar_str) {
   sbar_add("tot:%d",total)
   sbar_add("col:%d",cols)
   sbar_add("maxv:%d",maxout_val)
+  sbar_add("i:%d",i)
   for (s in sbar) {if (length(_sbar_str sbar[s])<=cols) {_sbar_str=_sbar_str sbar[s]} else {break}}
   print _sbar_str cr
   }
@@ -24,18 +24,18 @@ function cline( _a){
   }
 
 function reset(){
-  amax=0
-  avg=0
+  adj_max=0
+  avg=0.0
   barcols=0
   dead_i=0
   defcol=grn
   flag="-"
   i=0
-  max=0
-  maxout_i=0i
-  min=-1
-  timepc=0
-  total=0
+  max=0.0
+  maxout_i=0
+  min=-1.0
+  time_pc=0
+  total=0.0
   }
 
 BEGIN {
@@ -52,7 +52,7 @@ BEGIN {
   time=$2
   cmd=$3
   pingtime=$4
-  adjcols=cols-5
+  adj_cols=cols-5
   flag=nil
   defcol=nil
   if (cmd == "r") reset()
@@ -70,32 +70,31 @@ BEGIN {
   avg=total/i
   maxmark=""
 
-  if (ipingtime>max) max=ipingtime
-  if (min<0||ipingtime<min) min=ipingtime
-  if (ipingtime>amax) {
-    if (ipingtime>maxout_val) {
+  if (pingtime>max) max=pingtime
+  if (min<0||pingtime<min) min=pingtime
+  if (pingtime>adj_max) {
+    if (pingtime>maxout_val) {
       maxout_i++
-      maxmark=">";amax=maxout_val
+      maxmark=">";adj_max=maxout_val
     } else {
-      amax=int(pingtime*1.1)
+      adj_max=int(pingtime*1.1)
     }
     if (flag==nil) flag="+"
     if (defcol==nil) defcol=red
   }
   if (defcol==nil) defcol=yel
-  pingtimepc=pingtime/amax
-  avgpc=avg/amax
-  posavg=int(avgpc*adjcols)
-  barcols=int(pingtimepc*adjcols)
+  pingtime_pc=pingtime/adj_max
+  avg_pc=avg/adj_max
+  posavg=int(avg_pc*adj_cols)
+  barcols=int(pingtime_pc*adj_cols)
 
-  bar=nil
-  bar=bar cr
-  # TODO
+  bar=cr
+  # TODO 
   bar=bar sprintf("%4s%1s",ipingtime,flag)
-  for(c=1;c<=adjcols;c++) {
+  for(c=1;c<=adj_cols;c++) {
     if (c<=barcols) { bar=bar defcol ion }
     if (c==posavg) { bar=bar ":" nc ; continue }
-    if (maxmark!="" && c==adjcols) { bar=bar maxmark } else { bar=bar spc }
+    if (maxmark!="" && c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
     bar=bar nc
   }
   printf bar nl
