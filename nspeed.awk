@@ -104,5 +104,11 @@ BEGIN {
 }
 # TODO
 # [x] count whole width, drop marker on avg (need cols value). Drop marker on current and spaces for rest?
-# [ ] build up the line in a var including value, time?, without colour then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
 # [x] status bar, print with \r avg, monitored time, dropouts, max, min
+# [ ] build up the line in a var including value, time?, without colour then use the barcols value to sub(/^.{barcols}/,color"&"nc,line)
+# [ ] sort out floats and display values
+# [ ] draw mark for min value
+# [ ] replace dead with status bar
+# [ ] colour bar, dead different colour
+
+
