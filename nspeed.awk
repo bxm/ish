@@ -19,11 +19,16 @@ function draw_sbar( sbars) {
   print sbars
   }
 BEGIN {
-  nil=""
-  spc=" "
-  nl="\n"
+  barcols=0
   cr="\r"
+  i=0
+  max=0
   min=-1
+  nil=""
+  nl="\n"
+  spc=" "
+  timepc=0
+  total=0
   hw="hello world"
   ORS=nil
 }

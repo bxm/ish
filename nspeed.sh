@@ -53,8 +53,6 @@ main(){
   # TODO: run tput every loop and pass cols value to awk
   ping 8.8.8.8 \
     | awk \
-    -vtimepc=0 -vbarcols=0 \
-    -vtotal=0 -vi=0 -vmax=0 \
     -vred="${RED}" \
     -vyel="${YELLOW}" \
     -vgrn="${GREEN}" \
