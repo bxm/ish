@@ -2,9 +2,9 @@
 function sbar_add( str, var){
   sbar[s++]="[" sprintf(str,var) "]"
   }
-function draw_sbar( sbars) {
+function draw_sbar( _sbar_str) {
   sbar=nil
-  sbars=nil
+  _sbar_str=nil
   s=0
   sbar_add("i:%d",i)
   sbar_add("avg:%.1f",avg)
@@ -15,8 +15,8 @@ function draw_sbar( sbars) {
   sbar_add("tot:%d",total)
   sbar_add("col:%d",cols)
   sbar_add("maxv:%d",maxout_val)
-  for (s in sbar) {if (length(sbars sbar[s])<cols) {sbars=sbars sbar[s]} else {break}}
-  print sbars
+  for (s in sbar) {if (length(_sbar_str sbar[s])<=cols) {_sbar_str=_sbar_str sbar[s]} else {break}}
+  print _sbar_str cr
   }
 function cline( _a){
   _a=sprintf("%%%ss",cols)
@@ -98,8 +98,7 @@ BEGIN {
     if (maxmark!="" && c==adjcols) { bar=bar maxmark } else { bar=bar spc }
     bar=bar nc
   }
-  bar=bar nl
-  printf bar
+  printf bar nl
   draw_sbar()
   last=pingtime
 }
