@@ -39,6 +39,18 @@ function reset(){
   total=0.0
   }
 
+function dead(){
+  state="dead"
+  dead_i++
+  last="dead"
+  cline()
+  print red "dead",time,dead_i nc
+  }
+
+function rint( _float){
+  return sprintf("%.f", _float)
+  }
+
 BEGIN {
   cr="\r"
   nil=""
@@ -60,18 +72,14 @@ BEGIN {
   if (cmd == "r") reset()
   i++
   if (pingtime=="dead") {
-    state="dead"
-    dead_i++
-    last=pingtime
-    cline()
-    print red "dead",time,dead_i nc
+    dead()
     next
   }
   if (last=="dead") { printf nl }
   gsub(/[^[:digit:].]/,nil,pingtime)
   ipingtime=int(pingtime)
   total+=pingtime
-  avg=total/i
+  avg=total/(i-dead_i)
   maxmark=""
 
   if (pingtime>max) max=pingtime
@@ -115,7 +123,7 @@ BEGIN {
 # [ ] replace dead with status bar
 # [ ] colour bar, dead different colour
 # [ ] FIXME maxout draws wrong after dead
-# [ ] FIXME avg includes dead???
+# [x] FIXME avg includes dead???
 # [ ] FIXME min getting set wrong
 
 
