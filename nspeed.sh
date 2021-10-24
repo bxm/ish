@@ -38,15 +38,15 @@ ping() {
   while true ; do
     printf "%s %s %-2s" $(tput cols) $(date +%F_%T) ${REPLY:-x}
     REPLY=''
+    # TODO start timer here
+    #      read time at end of loop and sleep for remainder of loop
     command ping -c1 -W${wait} "$@" 2>/dev/null \
       | grep -Eo "time=[[:digit:].]+"
-    if [ $? -eq 0 ] ; then
-      isleep 3
-      [ "$REPLY" = q ] && return
-      continue
-    fi
-    echo dead
-    isleep 1
+    [ $? -ne 0 ] && echo dead
+    # isleep should read the timer we started
+    # and return once enough time has elapsed
+    isleep 3
+    [ "$REPLY" = q ] && return
   done
 }
 
