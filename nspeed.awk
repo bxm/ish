@@ -1,7 +1,28 @@
 #!/usr/bin/awk -f
+
+function set_min(){
+  if (min<0||pingtime<min) min=pingtime
+}
+function set_max(){
+  maxmark=""
+  if (pingtime>max) max=pingtime
+  if (pingtime>adj_max) {
+    if (pingtime>maxout_val) {
+      maxout_i++
+      maxmark=">"
+      adj_max=maxout_val
+    } else {
+      adj_max=int(pingtime*1.1)
+    }
+    # set flag, colour unless max changed from a reset
+    if (flag==nil) flag="+"
+    if (defcol==nil) defcol=red
+  }
+}
+
 function sbar_add( str, var){
   sbar[s++]="[" sprintf(str,var) "]"
-  }
+}
 function draw_sbar( _sbar_str) {
   sbar=nil
   _sbar_str=nil
@@ -18,11 +39,11 @@ function draw_sbar( _sbar_str) {
   sbar_add("i:%d",i)
   for (s in sbar) {if (length(_sbar_str sbar[s])<=cols) {_sbar_str=_sbar_str sbar[s]} else {break}}
   print _sbar_str cr
-  }
+}
 function cline( _a){
   _a=sprintf("%%%ss",cols)
   printf(cr _a cr,spc)
-  }
+}
 
 function reset(){
   adj_max=0
@@ -80,20 +101,10 @@ BEGIN {
   ipingtime=int(pingtime)
   total+=pingtime
   avg=total/(i-dead_i)
-  maxmark=""
 
-  if (pingtime>max) max=pingtime
-  if (min<0||pingtime<min) min=pingtime
-  if (pingtime>adj_max) {
-    if (pingtime>maxout_val) {
-      maxout_i++
-      maxmark=">";adj_max=maxout_val
-    } else {
-      adj_max=int(pingtime*1.1)
-    }
-    if (flag==nil) flag="+"
-    if (defcol==nil) defcol=red
-  }
+  set_min()
+  set_max()
+
   if (defcol==nil) defcol=yel
   pingtime_pc=pingtime/adj_max
   avg_pc=avg/adj_max
