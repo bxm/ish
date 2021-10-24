@@ -4,7 +4,7 @@ function set_min(){
   if (min<0||pingtime<min) min=pingtime
 }
 function set_max(){
-  maxmark=""
+  maxmark=spc
   if (pingtime>max) max=pingtime
   if (pingtime>adj_max) {
     if (pingtime>maxout_val) {
@@ -92,7 +92,7 @@ BEGIN {
   state="up"
   if (cmd == "r") reset()
   i++
-  if (pingtime=="dead") {
+  if (pingtime=="dead" || pingtime<=0) {
     dead()
     next
   }
@@ -105,19 +105,19 @@ BEGIN {
   set_min()
   set_max()
 
-  if (defcol==nil) defcol=yel
   pingtime_pc=pingtime/adj_max
   avg_pc=avg/adj_max
   posavg=int(avg_pc*adj_cols)
   ping_cols=int(pingtime_pc*adj_cols)
 
+  if (defcol==nil) defcol=yel
   bar=cr
   # TODO 
   bar=bar sprintf("%4s%1s",ipingtime,flag)
   for(c=1;c<=adj_cols;c++) {
     if (c<=ping_cols) { bar=bar defcol ion }
     if (c==posavg) { bar=bar ":" nc ; continue }
-    if (maxmark!="" && c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
+    if (c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
     bar=bar nc
   }
   printf bar nl
