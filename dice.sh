@@ -249,7 +249,6 @@ build_face_list(){
     else
       while true ; do
         ROLL=$((RANDOM % DIE_S + 1))
-        [ ${DICE} -ne 1 ] && break
         [ "${NOT}" -eq 0 ] && break
         [ "${NOT}" -ne "${ROLL}" ] && break
         debug re-roll
