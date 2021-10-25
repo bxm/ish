@@ -24,9 +24,8 @@ function sbar_add( str, var){
   sbar[s++]="[" sprintf(str,var) "]"
 }
 function draw_sbar( _sbar_str) {
-  sbar=nil
+  s=0 # so we always overwrite the array
   _sbar_str=nil
-  s=0
   sbar_add("%s",state)
   sbar_add("avg:%.1f",avg)
   sbar_add("min:%.1f",min)
@@ -37,7 +36,12 @@ function draw_sbar( _sbar_str) {
   sbar_add("col:%d",cols)
   sbar_add("maxv:%d",maxout_val)
   sbar_add("i:%d",i)
-  for (s in sbar) {if (length(_sbar_str sbar[s])<=cols) {_sbar_str=_sbar_str sbar[s]} else {break}}
+  for (s in sbar) {
+    if (length(_sbar_str sbar[s])<=cols) {
+      _sbar_str=_sbar_str "" sbar[s]
+    } else {break}
+  }
+  # FIXME doesn't display outside of ish, think need to do the cursor positioning
   print _sbar_str cr
 }
 function cline( _a){
