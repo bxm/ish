@@ -30,7 +30,7 @@ ping() {
   local REPLY=''
   local uname=$(uname -s -r)
   case "${uname}" in
-    (Linux*-ish) : ;;
+    (Linux*-ish|Linux*-linuxkit) : ;;
     (Darwin*)    wait="${wait}000" ;;
     (*)          wait='' ;;
   esac
