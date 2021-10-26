@@ -1,7 +1,9 @@
 #!/usr/bin/awk -f
 
 function set_min(){
-  if (min<0||pingtime<min) min=pingtime
+  if (min<0||pingtime<min) {
+#    print "min",min,"ping",pingtime,nl
+    min=pingtime}
 }
 function set_max(){
   maxmark=spc
@@ -67,7 +69,7 @@ function reset(){
 function dead(){
   state="dead"
   dead_i++
-  last="dead"
+  last=-1
   cline()
   print red "dead",time,dead_i nc
   }
@@ -96,11 +98,11 @@ BEGIN {
   state="up"
   if (cmd == "r") reset()
   i++
-  if (pingtime=="dead" || pingtime<=0) {
+  if (pingtime<0) {
     dead()
     next
   }
-  if (last=="dead") { printf nl }
+  if (last<0) { printf nl }
   gsub(/[^[:digit:].]/,nil,pingtime)
   ipingtime=int(pingtime)
   total+=pingtime
@@ -125,6 +127,7 @@ BEGIN {
     bar=bar nc
   }
   printf bar nl
+#  printf pingtime "^^^" nl
   draw_sbar()
   last=pingtime
 }

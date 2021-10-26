@@ -42,7 +42,7 @@ ping() {
     #      read time at end of loop and sleep for remainder of loop
     command ping -c1 -W${wait} "$@" 2>/dev/null \
       | grep -Eo "time=[[:digit:].]+"
-    [ $? -ne 0 ] && echo dead
+    [ $? -ne 0 ] && echo -1
     # isleep should read the timer we started
     # and return once enough time has elapsed
     isleep 3
