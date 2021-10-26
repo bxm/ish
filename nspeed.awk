@@ -103,7 +103,8 @@ BEGIN {
     next
   }
   if (last<0) { printf nl }
-  gsub(/[^[:digit:].]/,nil,pingtime)
+  gsub(/[^-[:digit:].]/,nil,pingtime)
+  pingtime=pingtime+0.0
   ipingtime=int(pingtime)
   total+=pingtime
   avg=total/(i-dead_i)
