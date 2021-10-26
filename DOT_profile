@@ -63,7 +63,8 @@ col() {
 comms() {
   local flag="${flag}"
   git commit ${flag} -m "$*" || return
-  echo careful with git push
+  #echo careful with git push
+  git push
 }
 
 comm() {
