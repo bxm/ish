@@ -118,13 +118,13 @@ BEGIN {
   state="up"
   if (cmd == "r") reset()
   i++
-  if (pingtime<0) {
+  gsub(/[^-[:digit:].]/,nil,pingtime)
+  pingtime=pingtime+0.0
+  if (pingtime<0||pingtime>5000) {
     dead()
     next
   }
   if (last<0) { printf nl }
-  gsub(/[^-[:digit:].]/,nil,pingtime)
-  pingtime=pingtime+0.0
   ipingtime=int(pingtime)
   total+=pingtime
   avg=total/(i-dead_i)
