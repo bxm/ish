@@ -119,7 +119,7 @@ BEGIN {
 
   if (defcol==nil) defcol=yel
   bar=cr
-  # TODO 
+  # TODO spin out func, colour once via rx
   bar=bar sprintf("%4s%1s",ipingtime,flag)
   for(c=1;c<=adj_cols;c++) {
     if (c<=ping_cols) { bar=bar defcol ion }
@@ -141,8 +141,8 @@ BEGIN {
 # [ ] draw mark for min value
 # [ ] replace dead with status bar
 # [ ] colour bar, dead different colour
-# [ ] FIXME maxout draws wrong after dead
+# [x] FIXME maxout draws wrong after dead
 # [x] FIXME avg includes dead???
-# [ ] FIXME min getting set wrong
+# [x] FIXME min getting set wrong
 
 
