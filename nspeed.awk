@@ -25,6 +25,26 @@ function set_max(){
 function sbar_add( str, var){
   sbar[s++]="[" sprintf(str,var) "]"
 }
+
+function draw_pbar( _pbar_str) {
+  pingtime_pc=pingtime/adj_max
+  avg_pc=avg/adj_max
+  posavg=int(avg_pc*adj_cols)
+  ping_cols=int(pingtime_pc*adj_cols)
+
+  if (defcol==nil) defcol=yel
+  bar=cr
+  # TODO build up str, colour once via rx
+  bar=bar sprintf("%4s%1s",ipingtime,flag)
+  for(c=1;c<=adj_cols;c++) {
+    if (c<=ping_cols) { bar=bar defcol ion }
+    if (c==posavg) { bar=bar ":" nc ; continue }
+    if (c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
+    bar=bar nc
+  }
+  printf bar nl
+}
+
 function draw_sbar( _sbar_str) {
   s=0 # so we always overwrite the array
   _sbar_str=nil
@@ -112,23 +132,7 @@ BEGIN {
   set_min()
   set_max()
 
-  pingtime_pc=pingtime/adj_max
-  avg_pc=avg/adj_max
-  posavg=int(avg_pc*adj_cols)
-  ping_cols=int(pingtime_pc*adj_cols)
-
-  if (defcol==nil) defcol=yel
-  bar=cr
-  # TODO spin out func, colour once via rx
-  bar=bar sprintf("%4s%1s",ipingtime,flag)
-  for(c=1;c<=adj_cols;c++) {
-    if (c<=ping_cols) { bar=bar defcol ion }
-    if (c==posavg) { bar=bar ":" nc ; continue }
-    if (c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
-    bar=bar nc
-  }
-  printf bar nl
-#  printf pingtime "^^^" nl
+  draw_pbar()
   draw_sbar()
   last=pingtime
 }
@@ -143,6 +147,6 @@ BEGIN {
 # [ ] colour bar, dead different colour
 # [x] FIXME maxout draws wrong after dead
 # [x] FIXME avg includes dead???
-# [x] FIXME min getting set wrong
-
+# [x] FIXME min getting set wrong 
+# [ ] TODO clear screen, pbar steps down, sbar at foot
 
