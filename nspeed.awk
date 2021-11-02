@@ -1,20 +1,20 @@
 #!/usr/bin/awk -f
 
 function set_min(){
-  if (min<0||pingtime<min) {
-#    print "min",min,"ping",pingtime,nl
-    min=pingtime}
+  if (min<0||ping<min) {
+#    print "min",min,"ping",ping,nl
+    min=ping}
 }
 function set_max(){
   maxmark=spc
-  if (pingtime>max) max=pingtime
-  if (pingtime>adj_max) {
-    if (pingtime>maxout_val) {
+  if (ping>max) max=ping
+  if (ping>adj_max) {
+    if (ping>maxout_val) {
       maxout_i++
       maxmark=">"
       adj_max=maxout_val
     } else {
-      adj_max=int(pingtime*1.1)
+      adj_max=int(ping*1.1)
     }
     # set flag, colour unless max changed from a reset
     if (flag==nil) flag="+"
@@ -22,32 +22,34 @@ function set_max(){
   }
 }
 
-function sbar_add( str, var){
-  sbar[s++]="[" sprintf(str,var) "]"
+function sbar_add( str, var, seg){
+  seg="[" sprintf(str,var) "]"
+  if (length(sbar_str "" seg)<=cols) {
+    sbar_str=sbar_str "" seg
+  } else {return}
 }
 
 function draw_pbar( _pbar_str) {
-  pingtime_pc=pingtime/adj_max
+  ping_pc=ping/adj_max
   avg_pc=avg/adj_max
-  posavg=int(avg_pc*adj_cols)
-  ping_cols=int(pingtime_pc*adj_cols)
+  avg_cols=int(avg_pc*adj_cols)
+  ping_cols=int(ping_pc*adj_cols)
 
   if (defcol==nil) defcol=yel
   bar=cr
   # TODO build up str, colour once via rx
-  bar=bar sprintf("%4s%1s",ipingtime,flag)
+  bar=bar sprintf("%4s%1s",ping_i,flag)
   for(c=1;c<=adj_cols;c++) {
     if (c<=ping_cols) { bar=bar defcol ion }
-    if (c==posavg) { bar=bar ":" nc ; continue }
+    if (c==avg_cols) { bar=bar ":" nc ; continue }
     if (c==adj_cols) { bar=bar maxmark } else { bar=bar spc }
     bar=bar nc
   }
   printf bar nl
 }
 
-function draw_sbar( _sbar_str) {
-  s=0 # so we always overwrite the array
-  _sbar_str=nil
+function draw_sbar() {
+  sbar_str=nil
   sbar_add("%s",state)
   sbar_add("avg:%.1f",avg)
   sbar_add("min:%.1f",min)
@@ -55,16 +57,13 @@ function draw_sbar( _sbar_str) {
   sbar_add("maxi:%d",maxout_i)
   sbar_add("dead:%d",dead_i)
   sbar_add("tot:%d",total)
-  sbar_add("col:%d",cols)
-  sbar_add("maxv:%d",maxout_val)
   sbar_add("i:%d",i)
-  for (s in sbar) {
-    if (length(_sbar_str sbar[s])<=cols) {
-      _sbar_str=_sbar_str "" sbar[s]
-    } else {break}
-  }
+  sbar_add("col:%d",cols)
+  sbar_add("pingc:%d",ping_cols)
+  sbar_add("avgc:%d",avg_cols)
+  sbar_add("maxv:%d",maxout_val)
   # FIXME doesn't display outside of ish, think need to do the cursor positioning
-  print _sbar_str cr
+  print sbar_str cr
 }
 function cline( _a){
   _a=sprintf("%%%ss",cols)
@@ -111,22 +110,22 @@ BEGIN {
   cols=$1
   time=$2
   cmd=$3
-  pingtime=$4
+  ping=$4
   adj_cols=cols-5
   flag=nil
   defcol=nil
   state="up"
   if (cmd == "r") reset()
   i++
-  gsub(/[^-[:digit:].]/,nil,pingtime)
-  pingtime=pingtime+0.0
-  if (pingtime<0||pingtime>5000) {
+  gsub(/[^-[:digit:].]/,nil,ping)
+  ping=ping+0.0
+  if (ping<0||ping>5000) {
     dead()
     next
   }
   if (last<0) { printf nl }
-  ipingtime=int(pingtime)
-  total+=pingtime
+  ping_i=int(ping)
+  total+=ping
   avg=total/(i-dead_i)
 
   set_min()
@@ -134,7 +133,7 @@ BEGIN {
 
   draw_pbar()
   draw_sbar()
-  last=pingtime
+  last=ping
 }
 
 # TODO
