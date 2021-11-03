@@ -70,20 +70,25 @@ function cline( _a){
   printf(cr _a cr,spc)
 }
 
-function reset(){
-  adj_max=0
-  avg=0.0
-  ping_cols=0
-  dead_i=0
-  defcol=grn
-  flag="-"
-  i=0
-  max=0.0
-  maxout_i=0
-  min=-1.0
-  time_pc=0
-  total=0.0
+function reset(type){
+  if (type == "max" || type == nil) {
+    max=0.0
+    adj_max=0
+    defcol=grn
+    flag="m"
   }
+  if (type == nil) {
+    avg=0.0
+    ping_cols=0
+    dead_i=0
+    flag="a"
+    i=0
+    maxout_i=0
+    min=-1.0
+    time_pc=0
+    total=0.0
+  }
+}
 
 function dead(){
   state="dead"
@@ -116,6 +121,7 @@ BEGIN {
   defcol=nil
   state="up"
   if (cmd == "r") reset()
+  if (cmd == "m") reset("max")
   i++
   gsub(/[^-[:digit:].]/,nil,ping)
   ping=ping+0.0

@@ -17,8 +17,8 @@ isleep(){
     : $((i--))
     REPLY=''
     read -n1 -s -t1
-    case "$REPLY" in
-      ([qQrR]) break ;;
+    case "${REPLY}" in
+      ([qQrRmM]) break ;;
       (*     ) REPLY='' ;;
     esac
   done
@@ -36,7 +36,7 @@ ping() {
   esac
   : "${wait:?"${uname} is not handled"}"
   while true ; do
-    printf "%s %s %-2s" $(tput cols) $(date +%F_%T) ${REPLY:-x}
+    printf "%s %s %s " $(tput cols) $(date +%F_%T) "${REPLY:-none}"
     REPLY=''
     # TODO start timer here
     #      read time at end of loop and sleep for remainder of loop
@@ -46,7 +46,7 @@ ping() {
     # isleep should read the timer we started
     # and return once enough time has elapsed
     isleep 3
-    [ "$REPLY" = q ] && return
+    [ "${REPLY}" = q ] && return
   done
 }
 
