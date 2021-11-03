@@ -18,7 +18,7 @@ isleep(){
     REPLY=''
     read -n1 -s -t1
     case "${REPLY}" in
-      ([qQrRmM]) break ;;
+      ([qQrRmMaA]) break ;;
       (*     ) REPLY='' ;;
     esac
   done
@@ -61,7 +61,8 @@ main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
   printf "${CUR_OFF}"
-  ping 8.8.8.8 \
+  #ping 8.8.8.8
+  ping 192.168.1.1 \
     | awk \
     -vred="${RED}" \
     -vyel="${YELLOW}" \

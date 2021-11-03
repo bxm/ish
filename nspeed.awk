@@ -71,22 +71,25 @@ function cline( _a){
 }
 
 function reset(type){
-  if (type == "max" || type == nil) {
+  defcol=grn
+  if (type == "minmax" || type == nil) {
     max=0.0
     adj_max=0
-    defcol=grn
     flag="m"
+    min=-1.0
+  }
+  if (type == "avg" || type == nil) {
+    flag="a"
+    avg=0.0
+    total=0.0
+    i=0
   }
   if (type == nil) {
-    avg=0.0
     ping_cols=0
     dead_i=0
-    flag="a"
-    i=0
+    flag="-"
     maxout_i=0
-    min=-1.0
     time_pc=0
-    total=0.0
   }
 }
 
@@ -121,7 +124,8 @@ BEGIN {
   defcol=nil
   state="up"
   if (cmd == "r") reset()
-  if (cmd == "m") reset("max")
+  if (cmd == "m") reset("minmax")
+  if (cmd == "a") reset("avg")
   i++
   gsub(/[^-[:digit:].]/,nil,ping)
   ping=ping+0.0
