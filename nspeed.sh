@@ -61,8 +61,8 @@ main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
   printf "${CUR_OFF}"
-  #ping 8.8.8.8
-  ping 192.168.1.1 \
+  # ping 192.168.1.1 \
+  ping 8.8.8.8 \
     | awk \
     -vred="${RED}" \
     -vyel="${YELLOW}" \
