@@ -60,9 +60,13 @@ trap "before_exit" 0
 main(){
   debug -f main "$@"
   local realname="$(readlink -f "${0}")"
+  local ip
   printf "${CUR_OFF}"
-  # ping 192.168.1.1 \
-  ping 8.8.8.8 \
+  case "${1}" in
+    (r*) ip=192.168.1.1 ;;
+    (* ) ip=8.8.8.8 ;;
+  esac
+  ping ${ip} \
     | awk \
     -vred="${RED}" \
     -vyel="${YELLOW}" \
