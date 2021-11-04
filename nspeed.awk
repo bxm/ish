@@ -28,7 +28,12 @@ function sbar_add( str, var, seg){
     sbar_str=sbar_str "" seg
   } else {return}
 }
-
+# TODO use sprintf padding to create avg mark, use
+# difference of that and whole bar to create rest
+# trim to width incase avg is out of range
+# use sub to colour bar
+# alt
+# include values in the bar use diff colour for avg
 function draw_pbar( _pbar_str) {
   ping_pc=ping/adj_max
   avg_pc=avg/adj_max
