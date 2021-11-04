@@ -28,6 +28,18 @@ function sbar_add( str, var, seg){
     sbar_str=sbar_str "" seg
   } else {return}
 }
+
+function pbar_calc() {
+  ping_pc=ping/adj_max
+  avg_pc=avg/adj_max
+  avg_cols=int(avg_pc*adj_cols)
+  ping_cols=int(ping_pc*adj_cols)
+}
+
+function new_pbar( _pbar_str) {
+  pbar_calc()
+  if (defcol==nil) defcol=yel
+}
 # TODO use sprintf padding to create avg mark, use
 # difference of that and whole bar to create rest
 # trim to width incase avg is out of range
@@ -35,11 +47,7 @@ function sbar_add( str, var, seg){
 # alt
 # include values in the bar use diff colour for avg
 function draw_pbar( _pbar_str) {
-  ping_pc=ping/adj_max
-  avg_pc=avg/adj_max
-  avg_cols=int(avg_pc*adj_cols)
-  ping_cols=int(ping_pc*adj_cols)
-
+  pbar_calc()
   if (defcol==nil) defcol=yel
   bar=cr
   # TODO build up str, colour once via rx
