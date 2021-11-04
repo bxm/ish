@@ -40,8 +40,8 @@ function new_pbar( pbar) {
   pbar_calc()
   if (defcol==nil) defcol=yel
   pbar=sprintf("%" avg_cols "s", ":")
-  pbar=sprintf("%-" adj_cols "s", pbar)
-  rx="^.{" ping_cols "}"
+  pbar=pbar sprintf("%" adj_cols-avg_cols "s", maxmark)
+  rx="^.{1," ping_cols "}"
   sub(rx, defcol ion "&" nc, pbar)
   pbar=sprintf("%4s%1s",ping_i,flag) pbar
   print cr pbar nl
@@ -162,7 +162,7 @@ BEGIN {
   set_max()
 
   draw_pbar()
-  new_pbar()
+  #new_pbar()
   draw_sbar()
   last=ping
 }
