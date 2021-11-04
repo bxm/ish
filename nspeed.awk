@@ -36,9 +36,16 @@ function pbar_calc() {
   ping_cols=int(ping_pc*adj_cols)
 }
 
-function new_pbar( _pbar_str) {
+function new_pbar( pbar) {
   pbar_calc()
   if (defcol==nil) defcol=yel
+  pbar=sprintf("%" avg_cols "s", ":")
+  pbar=sprintf("%-" adj_cols "s", pbar)
+  rx="^.{" ping_cols "}"
+  sub(rx, defcol ion "&" nc, pbar)
+  pbar=sprintf("%4s%1s",ping_i,flag) pbar
+  print cr pbar nl
+  #pbar=pbar sprintf("%" 
 }
 # TODO use sprintf padding to create avg mark, use
 # difference of that and whole bar to create rest
@@ -155,6 +162,7 @@ BEGIN {
   set_max()
 
   draw_pbar()
+  new_pbar()
   draw_sbar()
   last=ping
 }
