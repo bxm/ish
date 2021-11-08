@@ -1,5 +1,6 @@
 # vi: set ft=bash
-export TZ=GMT0BST
+#export TZ=GMT0BST
+export TZ=GMT0
 source /root/code/ish/lib/decor.sh
 export PS1="${WHITE}[${LBLUE}\t${WHITE}][${YELLOW}\w${WHITE}]${_NC_}\n\$ "
 export EDITOR=nvim
