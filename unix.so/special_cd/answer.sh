@@ -1,8 +1,4 @@
-#!/bin/sh
-
-alias cd='__cd'
-__cd(){
-
+cd(){
   case "$1" in
     (projects|projects/*)
       local dir="$1"
@@ -11,5 +7,4 @@ __cd(){
     (*)
       command cd "$@" ;;
   esac
-
 }
