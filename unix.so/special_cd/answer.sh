@@ -1,10 +1,14 @@
 cd(){
-  case "$1" in
-    (projects|projects/*)
-      local dir="$1"
-      shift
-      command cd "/some/dir/${dir}" "$@"  ;;
+  local dir=''
+  local input="${1}/"
+  case "${input}" in
+    (projects/*) dir="/some/dir/$input" ;;
+    (:/*)        dir="/some/dir/projects/${input#*/}" ;;
     (*)
-      command cd "$@" ;;
+      command cd "$@"
+      return
+      ;;
   esac
+  shift
+  command cd "${dir}" "$@"
 }
