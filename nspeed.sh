@@ -76,7 +76,7 @@ main(){
     -vnc="${_NC_}" \
     -vmaxout_val=500 \
     -f "${realname%.sh}.awk"
-  }
+}
 
 adlib debug install decor
 
