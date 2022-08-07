@@ -86,6 +86,7 @@ main(){
   case "${1}" in
     (p*) shift ; speed_ping "$@" ;;
     (d*) shift ; speed_dl   "$@" ;;
+    (* ) printf "Use ping or dl [small|medium|large]\n" ;;
   esac
 }
 
