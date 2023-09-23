@@ -32,7 +32,7 @@ ll(){
   ls -l -F --full-time --color=always "$@" \
     | awk '{
        sub(/.{6}$/,"",$1)
-       sub(/\e\[1;32m/,"\e[0;33m",$9)
+       #sub(/\e\[1;32m/,"\e[0;33m",$9)
        print
        }' \
     | column -t -H2,3,4,8 -R5 -o' '
