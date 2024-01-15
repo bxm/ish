@@ -6,7 +6,11 @@ export PS1="${WHITE}[${LBLUE}\t${WHITE}][${YELLOW}\w${WHITE}]${_NC_}\n\$ "
 export EDITOR=nvim
 export GIT_PAGER=pgr
 alias ..='_cd ..'
-alias -='_cd -'
+if alias -- >/dev/null 2>&1 ; then
+  alias -- -='_cd -'
+else
+  alias -='_cd -'
+fi
 alias lll='ls -l'
 alias lla='ll -a'
 alias lltr='ll -tr'
