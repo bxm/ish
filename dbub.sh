@@ -34,6 +34,14 @@ block(){
   esac
 }
 
+column(){
+  local length=$1
+  local full=$((length / 2))
+  local half=$((length % 2))
+  local col
+  printf -v '%s%s' $(block full) $(block half)
+}
+
 adlib debug install
 install
 

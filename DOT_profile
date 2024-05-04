@@ -21,6 +21,7 @@ alias f=fg
 alias st=stat
 alias tma='tmux attach'
 alias tmd='tmux detach'
+alias b='bash -l'
 
 _cd(){
   case "$1" in
