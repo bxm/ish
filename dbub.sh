@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 adlib(){
   local realname="$(readlink -f "${0}")"
@@ -13,16 +13,29 @@ adlib(){
 
 make_list(){
   test -e ${list} && return
-  shuf -i1-22
+  shuf -i1-22 > ${list}
 }
 
 main(){
   debug -f main "$@"
   local list=/tmp/list
+  make_list
+  cat ${list}
+
   
 }
 
+block(){
+  case $1 in
+    (half)
+      printf "\u2584" ;;
+    (full)
+      printf "\u2588" ;;
+  esac
+}
+
 adlib debug install
+install
 
 main "$@"
 
