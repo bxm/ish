@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# this is going kinda wrong
+# so we have our numbers
+# we need to fill an array with blocks
+# we need another array filled with
+# the respective lengths. do that first
+# from the list.
+# we need a third array which has the index
+# numbers of the first two arrays
+# then we process this--
+# no, just the two arrays. we go through
+# the lengths array, deciding if we need to
+# swap, if we swap we peeform same op on the
+# block array
+
 adlib(){
   local realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
