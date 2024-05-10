@@ -31,26 +31,28 @@ make_list(){
 }
 
 block(){
+  local chr
   case $1 in
     (half)
-      printf "\u2584" ;;
+      printf -vchr "\u2584" ;;
     (full)
-      printf "\u2588" ;;
+      printf -vchr "\u2588" ;;
   esac
+  char[$1]=$chr
 }
 
 col(){
   local length=$1
   local full=$((length / 2))
   local half=$((length % 2))
-  local col
+  local -a col
   #local seq="{0..$full}"
   #printf %s. $seq
   echo $length
   #for i in ((i=1;i++;i>length)) ; do
-  test $half -eq 1 && col+=($(block half))
+  test $half -eq 1 && col+=(${char[half]})
   for i in $(seq 1 $full) ; do
-    col+=($(block full))
+    col+=(${char[full]})
   done
   printf %s"\n" ${col[*]}
   #printf '%s' $(block full) $(block half)
@@ -59,7 +61,11 @@ col(){
 main(){
   debug -f main "$@"
   local list=/tmp/list
+  local -A char
   make_list
+  block half
+  block full
+  printf '%s\n' ${char[*]}
   #cat ${list}
   col 1
   col 2
