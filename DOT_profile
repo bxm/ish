@@ -2,6 +2,7 @@
 #export TZ=GMT0BST
 export TZ=GMT0
 source /root/code/ish/lib/decor.sh
+
 export PS1="${WHITE}[${LBLUE}\t${WHITE}][${YELLOW}\w${WHITE}]${_NC_}\n\$ "
 export EDITOR=nvim
 export GIT_PAGER=pgr
@@ -21,7 +22,10 @@ alias f=fg
 alias st=stat
 alias tma='tmux attach'
 alias tmd='tmux detach'
-alias b='bash -l'
+
+b(){
+  exec bash -l "$@"
+}
 
 _cd(){
   case "$1" in
