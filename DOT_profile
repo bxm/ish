@@ -24,7 +24,7 @@ alias tma='tmux attach'
 alias tmd='tmux detach'
 
 b(){
-  exec bash -l "$@"
+  bash -l "$@"
 }
 
 _cd(){
