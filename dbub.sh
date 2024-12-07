@@ -54,7 +54,9 @@ col(){
   for i in $(seq 1 $full) ; do
     col+=(${char[full]})
   done
-  printf %s"\n" ${col[*]}
+  #printf %s"\n" ${col[*]}
+
+
   #printf '%s' $(block full) $(block half)
 }
 
@@ -65,12 +67,13 @@ main(){
   make_list
   block half
   block full
-  printf '%s\n' ${char[*]}
+  # printf '%s\n' ${char[*]}
   #cat ${list}
-  col 1
-  col 2
-  col 3
-  col 15
+  local -a col_c
+  local -a col_l
+  while read -r item ; do
+    col $item
+  done < $list
   
 }
 
