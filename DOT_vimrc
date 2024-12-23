@@ -8,6 +8,7 @@ let config_files=[
       \ "lineform",
       \ "colour",
       \ "commands",
+      \ "session",
       \ ]
 for c in config_files
   exec 'source ' . config_dir . '/' . c . '.vim'
