@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 adlib(){
   local realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
@@ -15,15 +17,28 @@ ensure_repo(){
   mkdir -p "${repo}"
   cd "${repo}"
   if [ -e .git ] ; then
+    echo repo here, fetching
     git fetch
   else
-    git clone git@bitbucket.org:bxm/clap.git .
+    echo no repo, cloning
+    git clone git@bitbucket.org:bxm/clap-cnc.git .
   fi
 }
 
 main(){
   debug -f main "$@"
-  repo="${home}/clap"
+  local repo="${HOME}/clap-cnc"
+  ensure_repo
+  case "${mode:=cmd}" in
+    (cmd)
+      git checkout cmd
+      printf '"%s" ' "${@}"
+      # start with a single command, but we should be able to stage multiple
+      # in subordinate mode we should take the sha1 of the cmd commit, and create a new branch from master (damn made the repo wrong) containing names for datetime andbthe sha1, command responses should be placed in file/files in there
+
+  esac
+  mode_action "${@}"
+
   # in git repo
   # pull branch
   # check file
