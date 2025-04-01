@@ -4,4 +4,7 @@ let session_file = stdpath('data') . '/session.vim'
 autocmd VimLeavePre * execute 'mksession!' session_file
 
 " Automatically load the last session on startup if no file is specified
-autocmd VimEnter * if argc() == 0 && filereadable(session_file) | execute 'source' session_file | endif
+autocmd VimEnter * if argc() == 0 && filereadable(session_file)
+  \ | execute 'source' session_file
+  \ | silent! bufdo setfiletype
+  \ | endif
