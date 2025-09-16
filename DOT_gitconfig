@@ -12,7 +12,9 @@
 
 [alias]
   co = checkout
+  cp = cherry-pick
   f = fetch
+  b = branch
   lg = log --pretty=format:'%C(bold cyan)%h%Creset %C(brightyellow)%ad %Cgreen%<(29,trunc)%s%Creset %Cblue[%an]%Creset' --date=short
   l = lg -7
   oops = reset HEAD~1

@@ -3,9 +3,9 @@
 multi_thread(){
   seq -s $'\n'192.168.1. 0 254 \
     | tail +2 \
-    | xargs -n1 -P64 -I% \
+    | xargs -n1 -P8 -I% \
        $0 do $* % \
-    | sort -V
+#    | sort -V
   true
 # flip params around so ip comes first
 # then we could have multiple ports
