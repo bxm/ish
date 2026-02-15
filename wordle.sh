@@ -14,6 +14,7 @@ adlib(){
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
+      (-2|--two) two="${two}${two:+|}.*${2}.*${2}" ;;
       (-n|--no) no="${no}${2}" ;;
       (-y|--yes) yes="${yes}${2}" ;;
       (-a|--anti) anti="${anti}${anti:+|}${2}" ;;
@@ -36,21 +37,23 @@ spoiler(){
 # yes needs to ensure each letter
 # is a match, not just any
 # could have a recursive func 
+# two needs to do similar
 
 main(){
 
   debug -f main "$@"
   process_args "${@}"
-  grep ..... -x english-words/words.txt \
+  grep ..... -x "${realdir}/english-words/words.txt" \
     | grep -vi [^a-z] \
     | grep -i "[${yes:-a-z}]" \
     | grep -vi "[${no:-0}]" \
     | grep -i "^${pattern:-.}" \
+    | grep -iE "${two:-.}" \
     | grep -viE "^(${anti:-0})" \
     | spoiler
 }
 
-adlib debug install
+adlib debug install paths
 install
 
 main "$@"
