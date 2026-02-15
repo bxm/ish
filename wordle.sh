@@ -42,11 +42,11 @@ main(){
   debug -f main "$@"
   process_args "${@}"
   grep ..... -x english-words/words.txt \
-    | grep -v [^a-z] \
-    | grep "[${yes:-a-z}]" \
-    | grep -v "[${no:-0}]" \
-    | grep "^${pattern:-.....}" \
-    | grep -vE "^(${anti})" \
+    | grep -vi [^a-z] \
+    | grep -i "[${yes:-a-z}]" \
+    | grep -vi "[${no:-0}]" \
+    | grep -i "^${pattern:-.}" \
+    | grep -viE "^(${anti:-0})" \
     | spoiler
 }
 
