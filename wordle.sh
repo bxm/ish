@@ -16,6 +16,7 @@ process_args(){
     case "${1}" in
       (-n|--no) no="${no}${2}" ;;
       (-y|--yes) yes="${yes}${2}" ;;
+      (-a|--anti) anti="${anti}${anti:+|}${2}" ;;
       (-p|--pattern) pattern="${2}" ;;
       ([a-z.]*) pattern="${1}" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
@@ -45,6 +46,7 @@ main(){
     | grep "[${yes:-a-z}]" \
     | grep -v "[${no:-0}]" \
     | grep "^${pattern:-.....}" \
+    | grep -vE "^(${anti})" \
     | spoiler
 }
 
