@@ -21,7 +21,7 @@ process_args(){
       ([a-z.]*) pattern="${1}" ; shift ; continue ;;
       (/?*) no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
       (:?*) yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
-      (@?*) anti="${anti}${anti:+|}${1#/}" ; shift ; continue ;;
+      (@?*) anti="${anti}${anti:+|}${1#@}" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
     esac
     shift;shift
@@ -37,6 +37,9 @@ process_args(){
   if [ "${#yes}" -gt 5 ] ; then
     printf 'impossible yes: %s\n' "${yes}" >&2
     exit 1
+  fi
+  if [ "${pattern//[${no}${anti//.}]}" != "${pattern}" ] ; then
+    error "conflict"
   fi
 }
 
