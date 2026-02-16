@@ -42,6 +42,7 @@ ll(){
   ls -l -F --full-time --color=always "$@" \
     | awk '{
        sub(/.{6}$/,"",$1)
+       sub(/.{6}$/,"",$7)
        #sub(/\e\[1;32m/,"\e[0;33m",$9)
        print
        }' \
