@@ -14,7 +14,6 @@ adlib(){
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      (-2|--two) two="${two}${two:+|}.*${2}.*${2}" ;;
       (-n|--no) no="${no}${2}" ;;
       (-y|--yes) yes="${yes}${2//[^a-z]}" ;;
       (-a|--anti) anti="${anti}${anti:+|}${2}" ;;
@@ -75,7 +74,6 @@ main(){
     | grep -vi [^a-z] \
     | grep -vi "[${no:-00000}]" \
     | grep -i "^${pattern:-.}" \
-    | grep -iE "${two:-.}" \
     | grep -viE "^(${anti:-00000})" \
     | agrep "${yes}" \
     | spoiler
