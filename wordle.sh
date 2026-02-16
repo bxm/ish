@@ -37,11 +37,16 @@ spoiler(){
 agrep(){
   if [ ! "${1}" ] ; then cat ; return ; fi
   awk -vp="${1}" '
-    BEGIN {split(tolower(p), ap, "")}
+    BEGIN {
+      nil = ""
+      split(tolower(p), ap, "")
+    }
     $0 !~ "[" p "]" {next}
     {
+      w = tolower($0)
       for (i in ap) {
-        if (tolower($0) !~ ap[i]) {next}
+        if (w !~ ap[i]) {next}
+        sub(ap[i], nil, w)
       }
     }
     1
