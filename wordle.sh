@@ -19,6 +19,9 @@ process_args(){
       (-a|--anti) anti="${anti}${anti:+|}${2}" ;;
       (-p|--pattern) pattern="${2}" ;;
       ([a-z.]*) pattern="${1}" ; shift ; continue ;;
+      (/?*) no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
+      (:?*) yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
+      (@?*) anti="${anti}${anti:+|}${1#/}" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
     esac
     shift;shift
