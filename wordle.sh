@@ -23,7 +23,7 @@ process_args(){
     esac
     shift;shift
   done
-  if [ "${pattern//[^A-Za-z.]}" ] ; then
+  if [ "${pattern//[A-Za-z.]}" ] ; then
     printf 'illegal pattern char(s): %s\n' "${pattern//[A-Za-z.]}">&2
     exit 1
   fi
