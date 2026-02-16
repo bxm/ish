@@ -35,8 +35,10 @@ spoiler(){
 }
 
 agrep(){
+  if [ ! "${1}" ] ; then cat ; return ; fi
   awk -vp="${1}" '
     BEGIN {split(tolower(p), ap, "")}
+    $0 !~ "[" p "]" {next}
     {
       for (i in ap) {
         if (tolower($0) !~ ap[i]) {next}
@@ -52,12 +54,11 @@ main(){
   process_args "${@}"
   grep -Ex .{5} "${realdir}/english-words/words.txt" \
     | grep -vi [^a-z] \
-    | grep -i "[${yes:-a-z}]" \
     | grep -vi "[${no:-00000}]" \
     | grep -i "^${pattern:-.}" \
     | grep -iE "${two:-.}" \
     | grep -viE "^(${anti:-00000})" \
-    | agrep "${yes:-.}" \
+    | agrep "${yes}" \
     | spoiler
 }
 
