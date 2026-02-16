@@ -11,6 +11,10 @@ adlib(){
   done
 }
 
+error(){ 
+  printf '%s: %s\n' "${@}" >&2
+  exit 1
+}
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
@@ -27,19 +31,16 @@ process_args(){
     shift;shift
   done
   if [ "${pattern//[A-Za-z.]}" ] ; then
-    printf 'illegal pattern char(s): %s\n' "${pattern//[A-Za-z.]}">&2
-    exit 1
+    error 'illegal pattern char(s)' "${pattern//[A-Za-z.]}"
   fi
   if [ "${#pattern}" -gt 5 ] ; then
-    printf 'impossible pattern : %s\n' "${pattern}">&2
-    exit 1
+    error 'impossible pattern' "${pattern}"
   fi
   if [ "${#yes}" -gt 5 ] ; then
-    printf 'impossible yes: %s\n' "${yes}" >&2
-    exit 1
+    error 'impossible yes' "${yes}"
   fi
   if [ "${pattern//[${no}${anti//.}]}" != "${pattern}" ] ; then
-    error "conflict"
+    error "conflict" "${pattern}"
   fi
 }
 
