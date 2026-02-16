@@ -14,8 +14,8 @@ adlib(){
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      (-n|--no) no="${no}${2}" ;;
-      (-y|--yes) yes="${yes}${2//[^a-z]}" ;;
+      (-n|--no) no="${no}${2//[^a-zA-Z]}" ;;
+      (-y|--yes) yes="${yes}${2//[^a-zA-Z]}" ;;
       (-a|--anti) anti="${anti}${anti:+|}${2}" ;;
       (-p|--pattern) pattern="${2}" ;;
       ([a-z.]*) pattern="${1}" ; shift ; continue ;;
