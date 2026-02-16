@@ -23,12 +23,16 @@ process_args(){
     esac
     shift;shift
   done
-  if [ "${#yes}" -gt 5 ] ; then
-    printf 'impossible yes: %s\n' "${yes}" >&2
+  if [ "${pattern//[^A-Za-z.]}" ] ; then
+    printf 'illegal pattern char(s): %s\n' "${pattern//[A-Za-z.]}">&2
     exit 1
   fi
   if [ "${#pattern}" -gt 5 ] ; then
     printf 'impossible pattern : %s\n' "${pattern}">&2
+    exit 1
+  fi
+  if [ "${#yes}" -gt 5 ] ; then
+    printf 'impossible yes: %s\n' "${yes}" >&2
     exit 1
   fi
 }
