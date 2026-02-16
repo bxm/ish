@@ -34,22 +34,30 @@ spoiler(){
   fi
 }
 
-# yes needs to ensure each letter
-# is a match, not just any
-# could have a recursive func 
-# two needs to do similar
+agrep(){
+  awk -vp="${1}" '
+    BEGIN {split(tolower(p), ap, "")}
+    {
+      for (i in ap) {
+        if (tolower($0) !~ ap[i]) {next}
+      }
+    }
+    1
+  '
+}
 
 main(){
 
   debug -f main "$@"
   process_args "${@}"
-  grep ..... -x "${realdir}/english-words/words.txt" \
+  grep -Ex .{5} "${realdir}/english-words/words.txt" \
     | grep -vi [^a-z] \
     | grep -i "[${yes:-a-z}]" \
-    | grep -vi "[${no:-0}]" \
+    | grep -vi "[${no:-00000}]" \
     | grep -i "^${pattern:-.}" \
     | grep -iE "${two:-.}" \
-    | grep -viE "^(${anti:-0})" \
+    | grep -viE "^(${anti:-00000})" \
+    | agrep "${yes:-.}" \
     | spoiler
 }
 
