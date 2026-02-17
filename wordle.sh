@@ -15,6 +15,7 @@ error(){
   printf '%s: %s\n' "${@}" >&2
   exit 1
 }
+
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
@@ -30,17 +31,16 @@ process_args(){
     esac
     shift;shift
   done
-  if [ "${pattern//[A-Za-z.]}" ] ; then
-    error 'illegal pattern char(s)' "${pattern//[A-Za-z.]}"
-  fi
-  if [ "${#pattern}" -gt 5 ] ; then
-    error 'impossible pattern' "${pattern}"
-  fi
-  if [ "${#yes}" -gt 5 ] ; then
-    error 'impossible yes' "${yes}"
-  fi
-  if [ "${pattern//[${no}${anti//.}]}" != "${pattern}" ] ; then
-    error "conflict" "${pattern}"
+
+  [ "${pattern//[A-Za-z.]}" ] && error 'illegal pattern char(s)' "${pattern//[A-Za-z.]}"
+  [ "${#pattern}" -gt 5 ] && error 'impossible pattern' "${pattern}"
+  [ "${#yes}" -gt 5 ] && error 'impossible yes' "${yes}"
+  # check that pattern and anti down overlap
+  [ "${pattern//[${no}]}" != "${pattern}" ] && error "conflict" "${pattern}"
+  if [ "${anti}" ] ; then
+  awk -vp="${pattern}" -va="${anti}" '
+    BEGIN {if (p !~ "^"a) {exit 1}}
+  ' && error "conflict" "${pattern} / ${anti}"
   fi
 }
 
