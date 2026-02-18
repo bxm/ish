@@ -39,7 +39,7 @@ process_args(){
   [ "${pattern//[${no}]}" != "${pattern}" ] && error "conflict" "${pattern}"
   if [ "${anti}" ] ; then
   awk -vp="${pattern}" -va="${anti}" '
-    BEGIN {if (p !~ "^"a) {exit 1}}
+    BEGIN {if (p !~ "^(" a ")") {exit 1}}
   ' && error "conflict" "${pattern} / ${anti}"
   fi
 }
