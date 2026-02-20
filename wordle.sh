@@ -27,6 +27,7 @@ process_args(){
       ([a-z.]*) spoil=false ; pattern="${1}" ; shift ; continue ;;
       (/?*) spoil=false ; no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
       (:?*) spoil=false ; yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
+      (@??????*) error 'anti too long' "${1}" ;;
       (@?*) spoil=false ; anti="${anti}${anti:+|}${1#@}" ; elab "${1#@}" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
     esac
@@ -65,29 +66,18 @@ spoiler(){
 elab(){
   echo elab $1
   printf '%s\n' "${1}" | grep -o . | awk -vpat="$1" '
-    {
-      print NR, $0
-      out = ""
+    tolower($0) ~ /[a-z]/{
+  #    print NR, $0
       for (x=1;x<NR;x++) {
         out = out "."
       }
-      out = out "" $0
-      print out
+      out = out "" $0 "|"
+
     }
     END {
+      sub(/[|]$/, "", out)
+      print out
     }
-    # BEGIN {
-      # split(tolower(pat), apat, "") # ..aa
-      # for (idx in apat) {
-        #if (apat[idx] == ".")
-        # got to emit enough dots for
-        # our idx value followed by 
-        # letter. if we are at an input
-        # dot we should just skip to next char
-        # if we just saw a letter, do we act?
-        # will need another for loop to count uo to idx value -1 prob
-      # }
-#    }
   '
 }
 
