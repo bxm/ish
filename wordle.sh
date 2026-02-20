@@ -28,6 +28,7 @@ process_args(){
       (/?*) spoil=false ; no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
       (:?*) spoil=false ; yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
       (@?*) spoil=false ; anti="${anti}${anti:+|}${1#@}" ; shift ; continue ;;
+      (@?*) spoil=false ; anti="${anti}${anti:+ }${1#@}" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
     esac
     shift;shift
@@ -62,8 +63,20 @@ spoiler(){
 # single letter filters like a|.a|....b|etc
 # and just neg match it once with grep -Evi
 
-agrep2(){
-  :
+elab(){
+  awk -vpat="$1" '
+    BEGIN {
+      split(tolower(pat), apat, "")
+      for (idx in apat) {
+        # got to emit enough dots for
+        # our idx value followed by 
+        # letter. if we are at an input
+        # dot we should just skip to next char
+        # if we just saw a letter, do we act?
+        # will need another for loop to count uo to idx value -1 prob
+      }
+    }
+  '
 }
 
 
