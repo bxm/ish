@@ -52,6 +52,20 @@ spoiler(){
   fi
 }
 
+# compile all the @ into an array
+# each element contains the @ letters
+# for positions 1 to 5
+# use each position as a neg filter
+# against each word, one at a time
+# no ... just reform @aa..b into a bunch of
+# single letter filters like a|.a|....b|etc
+# and just neg match it once with grep -Evi
+
+agrep2(){
+  :
+}
+
+
 agrep(){
   if [ ! "${1}" ] ; then cat ; return ; fi
   awk -vp="${1}" '
