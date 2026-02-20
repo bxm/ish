@@ -1,7 +1,8 @@
 #!/bin/sh
 
 adlib(){
-  local realname="$(readlink -f "${0}")"
+  local realname
+  realname="$(readlink -f "${0}")"
   local libdir="${realname%/*}/lib"
   while [ $# -gt 0 ] ; do
     local libname="${1%.sh}.sh"
@@ -19,14 +20,14 @@ error(){
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      (-n|--no) no="${no}${2//[^a-zA-Z]}" ;;
-      (-y|--yes) yes="${yes}${2//[^a-zA-Z]}" ;;
-      (-a|--anti) anti="${anti}${anti:+|}${2}" ;;
-      (-p|--pattern) pattern="${2}" ;;
-      ([a-z.]*) pattern="${1}" ; shift ; continue ;;
-      (/?*) no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
-      (:?*) yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
-      (@?*) anti="${anti}${anti:+|}${1#@}" ; shift ; continue ;;
+      (-n|--no) spoil=false ; no="${no}${2//[^a-zA-Z]}" ;;
+      (-y|--yes) spoil=false ; yes="${yes}${2//[^a-zA-Z]}" ;;
+      (-a|--anti) spoil=false ; anti="${anti}${anti:+|}${2}" ;;
+      (-p|--pattern) spoil=false ; pattern="${2}" ;;
+      ([a-z.]*) spoil=false ; pattern="${1}" ; shift ; continue ;;
+      (/?*) spoil=false ; no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
+      (:?*) spoil=false ; yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
+      (@?*) spoil=false ; anti="${anti}${anti:+|}${1#@}" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
     esac
     shift;shift
@@ -91,11 +92,22 @@ agrep(){
   ' || exit
 }
 
+get_word_list(){
+  [ -e "${word_list}" ] && return
+  curl -Ss -o \
+    "${realdir}/words.txt" \
+    https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words.txt
+}
+
 main(){
 
   debug -f main "$@"
+  local word_list="${realdir}/words.txt"
   process_args "${@}"
-  grep -Ex .{5} "${realdir}/english-words/words.txt" \
+
+  get_word_list || return
+
+  grep -Ex .{5} "${word_list}" \
     | grep -vi [^a-z] \
     | grep -vi "[${no:-00000}]" \
     | grep -i "^${pattern:-.}" \
