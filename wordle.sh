@@ -109,15 +109,15 @@ agrep(){
 
 get_word_list(){
   [ -e "${word_list}" ] && return
-  curl -Ss -o \
-    "${realdir}/words.txt" \
+  curl -Ss \
+     -o "${word_list}" \
     https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words.txt
 }
 
 main(){
 
   debug -f main "$@"
-  local word_list="${realdir}/words.txt"
+  local word_list="${realdir}/eng-words.txt"
   process_args "${@}"
 
   get_word_list || return
