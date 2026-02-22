@@ -24,15 +24,17 @@ process_args(){
       #(-y|--yes) spoil=false ; yes="${yes}${2//[^a-zA-Z]}" ;;
       #(-a|--anti) spoil=false ; anti="${anti}${anti:+|}${2}" ;;
       #(-p|--pattern) spoil=false ; pattern="${2}" ;;
-      ([a-z.]*) spoil=false ; pattern="${1}" ; shift ; continue ;;
-      (/?*) spoil=false ; no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
-      (:?*) spoil=false ; yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
+      ([a-z.]*) spoil=false ; pattern="${1}" ;;
+      (/?*) spoil=false ; no="${no}${1//[^a-zA-Z]}" ;;
+      (:?*) spoil=false ; yes="${yes}${1//[^a-zA-Z]}" ;;
       (@??????*) error 'anti too long' "${1}" ;;
-      (@[a-z.]*) spoil=false ; anti="${anti}${anti:+|}$(elab "${1#@}")" ; shift ; continue ;;
-      (-s|--spoil) spoil=true ; shift ; continue ;;
+      (@*[^a-z.]*) error 'anti bad char' "${1}" ;;
+      (@*[a-z]*) spoil=false ; anti="${anti}${anti:+|}$(elab "${1#@}")" ;;
+      (-s|--spoil) spoil=true ;;
     esac
-    shift;shift
+    shift
   done
+
 
   [ "${pattern//[A-Za-z.]}" ] && error 'illegal pattern char(s)' "${pattern//[A-Za-z.]}"
   [ "${#pattern}" -gt 5 ] && error 'impossible pattern' "${pattern}"
