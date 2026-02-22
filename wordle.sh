@@ -20,15 +20,15 @@ error(){
 process_args(){
   while [ $# -gt 0 ] ; do
     case "${1}" in
-      (-n|--no) spoil=false ; no="${no}${2//[^a-zA-Z]}" ;;
-      (-y|--yes) spoil=false ; yes="${yes}${2//[^a-zA-Z]}" ;;
-      (-a|--anti) spoil=false ; anti="${anti}${anti:+|}${2}" ;;
-      (-p|--pattern) spoil=false ; pattern="${2}" ;;
+      #(-n|--no) spoil=false ; no="${no}${2//[^a-zA-Z]}" ;;
+      #(-y|--yes) spoil=false ; yes="${yes}${2//[^a-zA-Z]}" ;;
+      #(-a|--anti) spoil=false ; anti="${anti}${anti:+|}${2}" ;;
+      #(-p|--pattern) spoil=false ; pattern="${2}" ;;
       ([a-z.]*) spoil=false ; pattern="${1}" ; shift ; continue ;;
       (/?*) spoil=false ; no="${no}${1//[^a-zA-Z]}" ; shift ; continue ;;
       (:?*) spoil=false ; yes="${yes}${1//[^a-zA-Z]}" ; shift ; continue ;;
       (@??????*) error 'anti too long' "${1}" ;;
-      (@?*) spoil=false ; anti="${anti}${anti:+|}${1#@}" ; elab "${1#@}" ; shift ; continue ;;
+      (@[a-z.]*) spoil=false ; anti="${anti}${anti:+|}$(elab "${1#@}")" ; shift ; continue ;;
       (-s|--spoil) spoil=true ; shift ; continue ;;
     esac
     shift;shift
@@ -64,10 +64,8 @@ spoiler(){
 # and just neg match it once with grep -Evi
 
 elab(){
-  echo elab $1
   printf '%s\n' "${1}" | grep -o . | awk -vpat="$1" '
     tolower($0) ~ /[a-z]/{
-  #    print NR, $0
       for (x=1;x<NR;x++) {
         out = out "."
       }
