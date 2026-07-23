@@ -19,12 +19,14 @@ main(){
   debug -f main "$@"
   s=${1:?need temp}
   for h in $(seq 48) ; do
-    t=$(awk -v T0=$s -v half=9 -v hours=$h -f kiln.awk)
-    if [ ${t//.*} -lt 95 ] ; then
-      echo $h hours $t C
-      abs_date "${h}"
-      break
-    fi
+    for q in 0 25 50 75 ; do
+      t=$(awk -v T0=$s -v half=10 -v hours=$h.$q -f kiln.awk)
+      if [ ${t//.*} -lt 95 ] ; then
+        echo $h.$q hours $t C
+        abs_date "${h}"
+        return
+      fi
+    done
   done
 }
 
