@@ -23,7 +23,7 @@ main(){
   cd "${realname%/*}" || exit
   for h in $(seq 48) ; do
     for q in 0 25 50 75 ; do
-      # if h ++ is is enough, do q
+      # only if h ++ is is enough, do q
       t=$(awk -v T0=${temp} -v half=${half} -v hours=$h.$q -f _kiln.awk)
       if [ ${t//.*} -lt 95 ] ; then
         printf "$h.$q hours $t C "

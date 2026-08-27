@@ -12,5 +12,5 @@ BEGIN {
         T = T0 * (2 ^ (-t))
           # Print temperature (edit format as you like)
           printf "%.10g\n", T
-        }
+      }
 
