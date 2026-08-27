@@ -12,7 +12,8 @@ adlib(){
 }
 
 abs_date() {
-  date '+%a %H:%M' -d"+${1} hours"
+  : $(( mins = ($2 * 60)/100 ))
+  date '+%a %H:%M' -d"+${1:-0} hours +${mins} minutes"
 }
 
 main(){
@@ -25,8 +26,8 @@ main(){
       # if h ++ is is enough, do q
       t=$(awk -v T0=${temp} -v half=${half} -v hours=$h.$q -f _kiln.awk)
       if [ ${t//.*} -lt 95 ] ; then
-        echo $h.$q hours $t C
-        abs_date "${h}"
+        printf "$h.$q hours $t C "
+        abs_date "${h}" "${q}"
         return
       fi
     done
