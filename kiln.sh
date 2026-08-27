@@ -18,9 +18,10 @@ abs_date() {
 main(){
   debug -f main "$@"
   s=${1:?need temp}
+  cd "${realname%/*}" || exit
   for h in $(seq 48) ; do
     for q in 0 25 50 75 ; do
-      t=$(awk -v T0=$s -v half=10 -v hours=$h.$q -f kiln.awk)
+      t=$(awk -v T0=$s -v half=11 -v hours=$h.$q -f _kiln.awk)
       if [ ${t//.*} -lt 95 ] ; then
         echo $h.$q hours $t C
         abs_date "${h}"
