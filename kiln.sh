@@ -12,21 +12,23 @@ adlib(){
 }
 
 abs_date() {
-  : $(( mins = ($2 * 60)/100 ))
+  : $(( mins = (${2} * 60)/100 ))
   date '+%a %H:%M' -d"+${1:-0} hours +${mins} minutes"
 }
 
 main(){
   debug -f main "$@"
   temp=${1:?need temp}
-  half=${2:-11}
+  half=${2:-.}
+  [ ${half} = . ] && half=11
+  cool=${3:-95}
   cd "${realname%/*}" || exit
   for h in $(seq 48) ; do
     for q in 0 25 50 75 ; do
       # only if h ++ is is enough, do q
-      t=$(awk -v T0=${temp} -v half=${half} -v hours=$h.$q -f _kiln.awk)
-      if [ ${t//.*} -lt 95 ] ; then
-        printf "$h.$q hours $t C "
+      t=$(awk -v T0=${temp} -v half=${half} -v hours=${h}.${q} -f _kiln.awk)
+      if [ ${t//.*} -lt ${cool} ] ; then
+        printf "${h}.${q} hours ${t} C "
         abs_date "${h}" "${q}"
         return
       fi
